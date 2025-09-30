@@ -1,12 +1,68 @@
+/* Smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
 
+/* Fixed navbar */
+#navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: #fff;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#navbar ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  margin: 0;
+}
+
+#navbar li {
+  margin: 0 20px;
+}
+
+#navbar a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #007bff;
+}
+
+#navbar a:hover {
+  text-decoration: underline;
+}
+
+/* Sections */
 section {
-  padding: 80px 20px;
+  padding: 100px 20px; /* extra top padding for fixed navbar */
   border-bottom: 1px solid #ddd;
+  text-align: center;
 }
 
 section h1, section h2 {
-  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Home title */
+#home h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+#home p {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+/* Links in projects/blog */
+section a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+section a:hover {
+  text-decoration: underline;
 }
