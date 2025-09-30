@@ -4,7 +4,9 @@ title: Home
 ---
 
 # Welcome
-Hi, I'm Hariganesh Tangirala. This is my personal website.
+Hello!
+
+I am a third year undergraduate from India.
 ## Quick Links
 
 - [Projects](/projects/)
