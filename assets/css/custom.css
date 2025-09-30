@@ -1,23 +1,37 @@
-body {
-  font-family: 'Roboto', sans-serif; /* optional font */
-}
-
-h1, h2 {
-  text-align: center;
-}
-
-ul {
-  max-width: 600px;
-  margin: auto;
-  padding: 0;
-  list-style-type: none;
-}
-
-ul li {
-  margin: 10px 0;
-}
-/* Hide the bottom page title and description rendered by minima */
-.page-footer .page-title,
-.page-footer .page-description {
+/* Hide the bottom page title and description only */
+.page-header,
+.page-footer {
     display: none;
+}
+
+/* Optional: style your home content */
+.home-content {
+    text-align: center;
+    margin-top: 100px;
+}
+
+.home-title {
+    font-size: 3em;
+}
+
+.home-description {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+.home-links {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.home-links li {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.home-links a {
+    text-decoration: none;
+    color: #007acc;
+    font-weight: bold;
 }
