@@ -1,6 +1,8 @@
 theme: minima
 title: Hariganesh Tangirala
 description: Hello!
+
+# Navigation menu (order matters)
 nav:
   - name: Home
     link: /
