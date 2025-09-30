@@ -16,11 +16,8 @@ ul {
 ul li {
   margin: 10px 0;
 }
-/* Hide page title and description automatically rendered by minima */
-.page-header {
-    display: none;
-}
-
-.page-description {
+/* Hide the bottom page title and description rendered by minima */
+.page-footer .page-title,
+.page-footer .page-description {
     display: none;
 }
