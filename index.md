@@ -3,7 +3,7 @@ layout: page
 title: Home
 permalink: /
 ---
-<h1 class="hidden-title">Home</h1>
+
 # Hello!
 
 I am a third year undergraduate. My interests sit at the intersection of Bayesian modeling, AI alignment, and cognitive science.
