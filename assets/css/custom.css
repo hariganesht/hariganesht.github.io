@@ -16,3 +16,7 @@ ul {
 ul li {
   margin: 10px 0;
 }
+
+.hidden-title {
+  display: none;
+}
