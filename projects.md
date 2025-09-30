@@ -4,8 +4,8 @@ title: Projects
 permalink: /projects/
 ---
 
-## My Projects
+# Projects
 
-- [Pulse Oximeter Project](link)
-- [Bayesian Cognition Notes](link)
-- [Debate Casefiles Repo](link)
+- Pulse Oximeter Project  
+- Bayesian Cognition Notes  
+- Debate Casefiles Repo
