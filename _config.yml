@@ -2,11 +2,11 @@ theme: minima
 title: Hariganesh Tangirala
 description: Hello!
 nav:
-- name: Home
-link: /
-- name: Projects
-link: /projects/
-- name: Blog
-link: /blog/
-- name: CV
-link: https://drive.google.com/file/d/1d6lKtPy-cd1OhS_BeaMKqAjuw0RzObWw/view?usp=sharing
+  - name: Home
+    link: /
+  - name: Projects
+    link: /projects/
+  - name: Blog
+    link: /blog/
+  - name: CV
+    link: https://drive.google.com/file/d/1d6lKtPy-cd1OhS_BeaMKqAjuw0RzObWw/view?usp=sharing
