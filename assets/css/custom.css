@@ -1,34 +1,18 @@
-.home-content {
+body {
+  font-family: 'Roboto', sans-serif; /* optional font */
+}
+
+h1, h2 {
   text-align: center;
-  padding: 50px;
 }
 
-.home-title {
-  font-size: 2.5rem;
-  font-weight: bold;
-}
-
-.home-description {
-  font-size: 1.2rem;
-  margin: 10px 0;
-}
-
-.home-links {
-  list-style-type: none;
+ul {
+  max-width: 600px;
+  margin: auto;
   padding: 0;
+  list-style-type: none;
 }
 
-.home-links li {
-  display: inline;
-  margin: 0 15px;
-}
-
-.home-links a {
-  text-decoration: none;
-  color: #007bff;
-  font-weight: bold;
-}
-
-.home-links a:hover {
-  text-decoration: underline;
+ul li {
+  margin: 10px 0;
 }
