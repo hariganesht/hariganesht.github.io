@@ -1,4 +1,3 @@
-```markdown
 ---
 layout: page
 title: Blog
@@ -13,4 +12,3 @@ permalink: /blog/
 
 {{ post.excerpt }}
 {% endfor %}
-```
