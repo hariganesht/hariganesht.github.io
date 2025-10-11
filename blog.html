@@ -4,14 +4,14 @@ title: Blog
 ---
 
 <h1>Blog</h1>
-
-<!-- Keep any existing content here -->
 <p>Welcome to my blog! Here are my latest posts:</p>
 
-<ul>
+<ul class="blog-list">
   {% for post in site.posts %}
     <li>
-      <a href="{{ post.url }}">{{ post.title }}</a> - {{ post.date | date: "%B %d, %Y" }}
+      <a href="{{ post.url }}"><strong>{{ post.title }}</strong></a>
+      <span class="post-date">{{ post.date | date: "%B %d, %Y" }}</span>
+      <p class="post-excerpt">{{ post.content | strip_html | truncate: 150 }}</p>
     </li>
   {% endfor %}
 </ul>
