@@ -6,8 +6,4 @@ permalink: /
 
 # Hello!
 
-I am a third year undergraduate. My interests sit at the intersection of Bayesian modeling, AI alignment, and cognitive science.
-
-Previously, I studied neurological imaging models to detect the early onset of Dementia in Alzheimer's patients on a collaborative project between IIT Madras and UIUC.
-
-Here you can find my **projects**, **blog**, and **CV**.
+I'm a third year undergraduate. My interests sit at the intersection of Bayesian modeling, computational cognitive science, and intelligence in autonomous systems. Currently, I'm trying to figure out how to learn my way into these fields. I write about this on a daily basis in my blog!
