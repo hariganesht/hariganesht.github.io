@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>CV — Hariganesh Tangirala</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --text:#1a1a18;--text-muted:#5a5a55;--text-faint:#8a8a84;
+  --bg:#faf9f6;--bg-card:#f3f1ec;--border:#dedad3;
+  --accent:#3b5a8a;--accent-light:#e8edf5;--accent-border:#c5d2e8;
+  --font-serif:'EB Garamond',Georgia,serif;
+  --font-mono:'DM Mono','Courier New',monospace;
+}
+html{font-size:17px}
+body{font-family:var(--font-serif);background:var(--bg);color:var(--text);line-height:1.75;min-height:100vh}
+nav{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:0 2rem}
+.nav-inner{max-width:820px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nav-name{font-family:var(--font-serif);font-size:1rem;font-weight:500;color:var(--text);text-decoration:none}
+.nav-links{display:flex;gap:1.8rem;list-style:none}
+.nav-links a{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.06em;color:var(--text-muted);text-decoration:none;transition:color .15s}
+.nav-links a:hover,.nav-links a.active{color:var(--accent)}
+main{max-width:820px;margin:0 auto;padding:4rem 2rem 6rem}
+a{color:var(--accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+
+/* CV HEADER */
+.cv-head{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:2rem;border-bottom:1px solid var(--border);margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem}
+.cv-head h1{font-size:1.9rem;font-weight:400}
+.cv-head .contact{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.04em;color:var(--text-muted);line-height:2;text-align:right}
+.cv-head .contact a{color:var(--text-muted);text-decoration:none}
+.cv-head .contact a:hover{color:var(--accent)}
+.pdf-link{font-family:var(--font-mono);font-size:.68rem;color:var(--accent);background:var(--accent-light);border:1px solid var(--accent-border);padding:4px 12px;border-radius:2px;text-decoration:none;margin-top:.5rem;display:inline-block}
+.pdf-link:hover{background:#dbe4f0;text-decoration:none}
+
+/* SECTIONS */
+section{margin-bottom:2.5rem}
+.sec-label{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);margin-bottom:1rem;padding-bottom:.45rem;border-bottom:1px solid var(--border)}
+
+/* CV ROW — two-column date + content */
+.cv-row{display:grid;grid-template-columns:110px 1fr;gap:1rem;padding:.7rem 0;border-bottom:1px solid var(--border)}
+.cv-row:last-child{border-bottom:none}
+.cv-row:first-child{padding-top:0}
+.cv-date{font-family:var(--font-mono);font-size:.67rem;color:var(--text-faint);padding-top:3px;letter-spacing:.02em}
+.cv-main{}
+.cv-title{font-size:1rem;font-weight:500;margin-bottom:.1rem}
+.cv-sub{font-size:.9rem;color:var(--text-muted);font-style:italic;margin-bottom:.05rem}
+.cv-loc{font-family:var(--font-mono);font-size:.67rem;color:var(--text-faint)}
+.cv-desc{font-size:.88rem;color:var(--text-muted);margin-top:.3rem;line-height:1.6}
+.cv-desc ul{padding-left:1.2rem;margin-top:.2rem}
+.cv-desc li{margin-bottom:.15rem}
+
+/* SKILLS TABLE */
+.skills-table{width:100%;font-size:.9rem;border-collapse:collapse}
+.skills-table td{padding:.4rem 0;vertical-align:top}
+.skills-table td:first-child{font-family:var(--font-mono);font-size:.68rem;color:var(--text-faint);letter-spacing:.04em;width:140px;padding-top:5px}
+.skills-table tr{border-bottom:1px solid var(--border)}
+.skills-table tr:last-child td{border-bottom:none}
+
+footer{border-top:1px solid var(--border);text-align:center;padding:2rem;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.06em;color:var(--text-faint)}
+
+@media print{
+  nav,footer,.pdf-link{display:none}
+  body{background:#fff;font-size:11pt}
+  main{padding:1cm;max-width:100%}
+  .cv-head{padding-bottom:1rem;margin-bottom:1.5rem}
+  section{margin-bottom:1.5rem;page-break-inside:avoid}
+}
+@media(max-width:600px){.cv-row{grid-template-columns:1fr;gap:.15rem}.cv-head .contact{text-align:left}}
+</style>
+</head>
+<body>
+<nav><div class="nav-inner">
+  <a class="nav-name" href="index.html">hariganesh tangirala</a>
+  <ul class="nav-links">
+    <li><a href="index.html">home</a></li>
+    <li><a href="research.html">research</a></li>
+    <li><a href="cv.html" class="active">cv</a></li>
+    <li><a href="blog.html">blog</a></li>
+  </ul>
+</div></nav>
+
+<main>
+  <div class="cv-head">
+    <div>
+      <h1>Hariganesh Tangirala</h1>
+      <a class="pdf-link" href="cv/hariganesh_cv.pdf">↓ download pdf</a>
+    </div>
+    <div class="contact">
+      <a href="mailto:you@example.com">you@example.com</a><br>
+      <a href="https://hariganesht.github.io" target="_blank">hariganesht.github.io</a><br>
+      <a href="https://github.com/hariganesht" target="_blank">github.com/hariganesht</a><br>
+      [City, Country]
+    </div>
+  </div>
+
+  <!-- EDUCATION -->
+  <section>
+    <div class="sec-label">education</div>
+    <div class="cv-row">
+      <div class="cv-date">2022 – 2026</div>
+      <div class="cv-main">
+        <div class="cv-title">B.Tech / B.Sc in [Degree]</div>
+        <div class="cv-sub">[Your University], [City]</div>
+        <div class="cv-loc">GPA: [X.X / 10] &nbsp;&middot;&nbsp; Advisor: <a href="#">[Advisor Name]</a></div>
+        <div class="cv-desc">Relevant coursework: Probability &amp; Statistics, Linear Algebra, Machine Learning, Cognitive Science, Algorithms, Signal Processing</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESEARCH EXPERIENCE -->
+  <section>
+    <div class="sec-label">research experience</div>
+    <div class="cv-row">
+      <div class="cv-date">Sep 2025 – present</div>
+      <div class="cv-main">
+        <div class="cv-title">Undergraduate Researcher</div>
+        <div class="cv-sub">[Lab Name], [University]</div>
+        <div class="cv-loc">Supervisor: <a href="#">[Advisor Name]</a></div>
+        <div class="cv-desc"><ul>
+          <li>Developed a hierarchical Bayesian model of belief updating under uncertainty</li>
+          <li>Implemented inference routines in WebPPL and Gen.jl; validated against behavioral data</li>
+          <li>Contributed to [specific project / paper]</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="cv-row">
+      <div class="cv-date">May – Aug 2025</div>
+      <div class="cv-main">
+        <div class="cv-title">Research Intern</div>
+        <div class="cv-sub">[Lab / Institute], [University or Company]</div>
+        <div class="cv-loc">Supervisor: <a href="#">[Name]</a></div>
+        <div class="cv-desc"><ul>
+          <li>Worked on [topic / project], focusing on [specific contribution]</li>
+          <li>Wrote clean, reproducible code in Python (NumPy, PyTorch, Pyro)</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="cv-row">
+      <div class="cv-date">Jan – May 2025</div>
+      <div class="cv-main">
+        <div class="cv-title">Independent Study</div>
+        <div class="cv-sub">[Department], [University]</div>
+        <div class="cv-desc"><ul>
+          <li>Self-directed reading and implementation in Bayesian nonparametrics and probabilistic programming</li>
+          <li>Reproduced key results from [paper]; wrote detailed notes available <a href="blog.html">here</a></li>
+        </ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PUBLICATIONS -->
+  <section>
+    <div class="sec-label">publications &amp; preprints</div>
+    <div class="cv-row">
+      <div class="cv-date">2026</div>
+      <div class="cv-main">
+        <div class="cv-title"><a href="#">Your Paper Title Here</a></div>
+        <div class="cv-desc"><strong>Hariganesh Tangirala</strong>, Collaborator, Advisor.
+        <em>Proceedings of the Annual Conference on Cognitive Science</em>, 2026.</div>
+      </div>
+    </div>
+    <div class="cv-row">
+      <div class="cv-date">2025</div>
+      <div class="cv-main">
+        <div class="cv-title"><a href="#">A Second Paper or Preprint Title</a></div>
+        <div class="cv-desc"><strong>Hariganesh Tangirala</strong>, Advisor.
+        <em>Preprint on arXiv</em>, 2025.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TALKS -->
+  <section>
+    <div class="sec-label">talks &amp; posters</div>
+    <div class="cv-row">
+      <div class="cv-date">Apr 2026</div>
+      <div class="cv-main">
+        <div class="cv-title">Talk: [Title]</div>
+        <div class="cv-sub">[Conference / Seminar], [Location]</div>
+      </div>
+    </div>
+    <div class="cv-row">
+      <div class="cv-date">Nov 2025</div>
+      <div class="cv-main">
+        <div class="cv-title">Poster: [Title]</div>
+        <div class="cv-sub">[Symposium / Workshop], [University]</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AWARDS -->
+  <section>
+    <div class="sec-label">awards &amp; honors</div>
+    <div class="cv-row">
+      <div class="cv-date">2025</div>
+      <div class="cv-main">
+        <div class="cv-title">[Scholarship / Award Name]</div>
+        <div class="cv-sub">[Awarding institution]</div>
+      </div>
+    </div>
+    <div class="cv-row">
+      <div class="cv-date">2023</div>
+      <div class="cv-main">
+        <div class="cv-title">[Merit / Dean's List / Other recognition]</div>
+        <div class="cv-sub">[University], for academic year 2022–23</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section>
+    <div class="sec-label">skills &amp; tools</div>
+    <table class="skills-table">
+      <tr>
+        <td>languages</td>
+        <td>Python, Julia, MATLAB, R, JavaScript</td>
+      </tr>
+      <tr>
+        <td>probabilistic</td>
+        <td>PyTorch, Pyro, WebPPL, Gen.jl, Stan, NumPyro</td>
+      </tr>
+      <tr>
+        <td>ml / dl</td>
+        <td>JAX, scikit-learn, HuggingFace Transformers</td>
+      </tr>
+      <tr>
+        <td>tools</td>
+        <td>Git, LaTeX, Jupyter, VS Code, Unix</td>
+      </tr>
+      <tr>
+        <td>languages (human)</td>
+        <td>Telugu (native), English (fluent), Hindi (working)</td>
+      </tr>
+    </table>
+  </section>
+
+  <!-- SERVICE -->
+  <section>
+    <div class="sec-label">service &amp; teaching</div>
+    <div class="cv-row">
+      <div class="cv-date">2025 – 2026</div>
+      <div class="cv-main">
+        <div class="cv-title">Teaching Assistant — [Course Name]</div>
+        <div class="cv-sub">[University Department]</div>
+        <div class="cv-desc">Weekly tutorials, grading, office hours for [N] students.</div>
+      </div>
+    </div>
+    <div class="cv-row">
+      <div class="cv-date">2025</div>
+      <div class="cv-main">
+        <div class="cv-title">Reviewer — [Workshop / Journal name]</div>
+        <div class="cv-sub"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+<footer>hariganesh tangirala &middot; updated april 2026</footer>
+</body>
+</html>
