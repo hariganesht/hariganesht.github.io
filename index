@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Hariganesh Tangirala</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --text:#1a1a18;--text-muted:#5a5a55;--text-faint:#8a8a84;
+  --bg:#faf9f6;--bg-card:#f3f1ec;--border:#dedad3;
+  --accent:#3b5a8a;--accent-light:#e8edf5;--accent-border:#c5d2e8;
+  --font-serif:'EB Garamond',Georgia,serif;
+  --font-mono:'DM Mono','Courier New',monospace;
+}
+html{font-size:17px}
+body{font-family:var(--font-serif);background:var(--bg);color:var(--text);line-height:1.75;min-height:100vh}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:0 2rem}
+.nav-inner{max-width:820px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nav-name{font-family:var(--font-serif);font-size:1rem;font-weight:500;color:var(--text);text-decoration:none}
+.nav-links{display:flex;gap:1.8rem;list-style:none}
+.nav-links a{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.06em;color:var(--text-muted);text-decoration:none;transition:color .15s}
+.nav-links a:hover,.nav-links a.active{color:var(--accent)}
+
+/* LAYOUT */
+main{max-width:820px;margin:0 auto;padding:4rem 2rem 6rem}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:1fr 170px;gap:3rem;align-items:start;padding-bottom:3rem;border-bottom:1px solid var(--border);margin-bottom:3rem}
+.hero h1{font-size:2rem;font-weight:400;letter-spacing:-0.01em;margin-bottom:.3rem}
+.hero .pos{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:.06em;color:var(--text-muted);margin-bottom:1.4rem}
+.hero p{font-size:1rem;margin-bottom:1rem}
+.hero p:last-of-type{margin-bottom:0}
+a{color:var(--accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+
+/* PHOTO */
+.photo-wrap img{width:160px;height:200px;object-fit:cover;border-radius:3px;display:block;border:1px solid var(--border)}
+.photo-placeholder{width:160px;height:200px;background:var(--bg-card);border:1px solid var(--border);border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--text-faint);font-family:var(--font-mono);font-size:.65rem;letter-spacing:.04em;text-align:center}
+
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.6rem}
+.chip{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.04em;color:var(--accent);background:var(--accent-light);border:1px solid var(--accent-border);padding:3px 10px;border-radius:2px;text-decoration:none;transition:background .15s}
+.chip:hover{background:#dbe4f0;text-decoration:none}
+
+/* SECTIONS */
+section{margin-bottom:3rem}
+.sec-label{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);margin-bottom:1.1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+
+/* NEWS */
+.news{list-style:none}
+.news li{display:grid;grid-template-columns:90px 1fr;gap:1rem;padding:.65rem 0;border-bottom:1px solid var(--border);font-size:.93rem}
+.news li:last-child{border-bottom:none}
+.ndate{font-family:var(--font-mono);font-size:.67rem;color:var(--text-faint);padding-top:3px}
+
+/* PAPERS */
+.paper{padding:1rem 0;border-bottom:1px solid var(--border)}
+.paper:first-child{padding-top:0}
+.paper:last-child{border-bottom:none}
+.ptitle{font-size:1rem;font-weight:500;margin-bottom:.2rem}
+.ptitle a{color:var(--text);text-decoration:none}
+.ptitle a:hover{color:var(--accent)}
+.pauthors{font-size:.88rem;color:var(--text-muted);margin-bottom:.15rem}
+.pvenue{font-family:var(--font-mono);font-size:.67rem;color:var(--text-faint)}
+.plinks{display:flex;gap:.6rem;margin-top:.4rem}
+.plinks a{font-family:var(--font-mono);font-size:.65rem;color:var(--accent);background:var(--accent-light);border:1px solid var(--accent-border);padding:2px 8px;border-radius:2px;text-decoration:none}
+.plinks a:hover{background:#dbe4f0}
+
+/* INTERESTS */
+.igrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:1rem}
+.icard{background:var(--bg-card);border:1px solid var(--border);border-radius:2px;padding:1rem 1.1rem}
+.icard h4{font-size:.9rem;font-weight:500;margin-bottom:.35rem}
+.icard p{font-size:.82rem;color:var(--text-muted);line-height:1.6}
+
+footer{border-top:1px solid var(--border);text-align:center;padding:2rem;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.06em;color:var(--text-faint)}
+
+@media(max-width:600px){
+  .hero{grid-template-columns:1fr}
+  .photo-wrap,.photo-placeholder{width:120px;height:150px}
+  .news li{grid-template-columns:1fr;gap:.15rem}
+}
+</style>
+</head>
+<body>
+<nav><div class="nav-inner">
+  <a class="nav-name" href="index.html">hariganesh tangirala</a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">home</a></li>
+    <li><a href="research.html">research</a></li>
+    <li><a href="cv.html">cv</a></li>
+    <li><a href="blog.html">blog</a></li>
+  </ul>
+</div></nav>
+
+<main>
+  <div class="hero">
+    <div>
+      <h1>Hariganesh Tangirala</h1>
+      <p class="pos">undergraduate researcher &middot; [your university]</p>
+      <p>
+        I am a final-year undergraduate interested in the computational basis of cognition
+        and rational behavior. My work sits at the intersection of
+        <strong>Bayesian modeling</strong>, <strong>probabilistic programming</strong>,
+        and <strong>computational cognitive science</strong>.
+      </p>
+      <p>
+        I am broadly curious about how minds&mdash;biological and artificial&mdash;represent
+        uncertainty, form beliefs, and make decisions under resource constraints. I am applying
+        to PhD programs in computational cognitive science for Fall 2026.
+      </p>
+      <p>
+        I currently study at <a href="#">[Your University]</a>, where I work with
+        <a href="#">[Advisor Name]</a> in the <a href="#">[Lab Name]</a>.
+        Previously I have been fortunate to collaborate with researchers at
+        [Institute / Lab / Summer program].
+      </p>
+      <div class="chips">
+        <a class="chip" href="mailto:you@example.com">email</a>
+        <a class="chip" href="https://github.com/hariganesht" target="_blank">github</a>
+        <a class="chip" href="https://twitter.com/" target="_blank">twitter / x</a>
+        <a class="chip" href="https://scholar.google.com/" target="_blank">google scholar</a>
+        <a class="chip" href="cv.html">cv</a>
+      </div>
+    </div>
+    <div class="photo-wrap">
+      <!-- Replace the div below with:
+           <img src="img/photo.jpg" alt="Hariganesh Tangirala"> -->
+      <div class="photo-placeholder">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".35"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <span>add photo</span>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="sec-label">news</div>
+    <ul class="news">
+      <li><span class="ndate">Apr 2026</span><span>Submitted application to [Program / Fellowship]. Fingers crossed.</span></li>
+      <li><span class="ndate">Mar 2026</span><span>Presented work on [topic] at [event/seminar]. <a href="#">Slides.</a></span></li>
+      <li><span class="ndate">Jan 2026</span><span>Started new project on probabilistic models of [X] with [Collaborator].</span></li>
+      <li><span class="ndate">Sep 2025</span><span>Joined <a href="#">[Lab Name]</a> as an undergraduate researcher.</span></li>
+      <li><span class="ndate">May 2025</span><span>Completed coursework in [relevant course]. Write-up <a href="blog.html">here</a>.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sec-label">selected research</div>
+    <div class="paper">
+      <div class="ptitle"><a href="research.html">Your Paper / Project Title Here</a></div>
+      <div class="pauthors"><strong>Hariganesh Tangirala</strong>, Collaborator Name, Advisor Name</div>
+      <div class="pvenue">Conference / Venue, 2026</div>
+      <div class="plinks"><a href="#">paper</a><a href="#">code</a><a href="#">poster</a></div>
+    </div>
+    <div class="paper">
+      <div class="ptitle"><a href="research.html">A Second Project or Ongoing Work</a></div>
+      <div class="pauthors"><strong>Hariganesh Tangirala</strong>, Advisor Name</div>
+      <div class="pvenue">In preparation, 2026</div>
+      <div class="plinks"><a href="#">preprint</a><a href="#">slides</a></div>
+    </div>
+    <p style="margin-top:1rem;font-size:.88rem;color:var(--text-muted)">→ <a href="research.html">Full list of projects and papers</a></p>
+  </section>
+
+  <section>
+    <div class="sec-label">research interests</div>
+    <div class="igrid">
+      <div class="icard"><h4>Bayesian cognition</h4><p>Probabilistic models of perception, learning, and reasoning. How do minds represent and update beliefs?</p></div>
+      <div class="icard"><h4>Probabilistic programming</h4><p>Languages for expressing generative models — WebPPL, Gen.jl, Pyro, and the inference engines underneath.</p></div>
+      <div class="icard"><h4>Decision making</h4><p>Normative and descriptive accounts of choice; reinforcement learning; resource-rational agents.</p></div>
+      <div class="icard"><h4>Computational modeling</h4><p>Building and fitting process-level models to behavioral data; model comparison; identifiability.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer>hariganesh tangirala &middot; updated april 2026</footer>
+</body>
+</html>
