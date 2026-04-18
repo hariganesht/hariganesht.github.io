@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Variational Inference from Scratch — Hariganesh Tangirala</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    tags: 'ams',
+    macros: {
+      R: '\\mathbb{R}',
+      E: '\\mathbb{E}',
+      KL: '\\mathrm{KL}',
+      N: '\\mathcal{N}',
+    }
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --text:#1a1a18;--text-muted:#5a5a55;--text-faint:#8a8a84;
+  --bg:#faf9f6;--bg-card:#f3f1ec;--border:#dedad3;
+  --accent:#3b5a8a;--accent-light:#e8edf5;--accent-border:#c5d2e8;
+  --font-serif:'EB Garamond',Georgia,serif;
+  --font-mono:'DM Mono','Courier New',monospace;
+}
+html{font-size:17px}
+body{font-family:var(--font-serif);background:var(--bg);color:var(--text);line-height:1.75;min-height:100vh}
+nav{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:0 2rem}
+.nav-inner{max-width:820px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nav-name{font-family:var(--font-serif);font-size:1rem;font-weight:500;color:var(--text);text-decoration:none}
+.nav-links{display:flex;gap:1.8rem;list-style:none}
+.nav-links a{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.06em;color:var(--text-muted);text-decoration:none;transition:color .15s}
+.nav-links a:hover,.nav-links a.active{color:var(--accent)}
+main{max-width:680px;margin:0 auto;padding:4rem 2rem 6rem}
+a{color:var(--accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+.post-back{font-family:var(--font-mono);font-size:.68rem;color:var(--text-muted);text-decoration:none;letter-spacing:.04em;display:inline-block;margin-bottom:2rem}
+.post-back:hover{color:var(--accent);text-decoration:none}
+.post-header{margin-bottom:2.5rem;padding-bottom:2rem;border-bottom:1px solid var(--border)}
+.post-tags{display:flex;gap:.5rem;margin-bottom:.9rem;flex-wrap:wrap}
+.post-tag{font-family:var(--font-mono);font-size:.63rem;letter-spacing:.04em;padding:2px 8px;border-radius:2px}
+.tag-ml{color:#4a4098;background:#eeedf8;border:1px solid #c8c4ee}
+.tag-bayes{color:#2d6645;background:#e6f2ec;border:1px solid #b8dcc8}
+.post-title{font-size:1.9rem;font-weight:400;line-height:1.25;margin-bottom:.6rem;letter-spacing:-.01em}
+.post-date{font-family:var(--font-mono);font-size:.67rem;color:var(--text-faint)}
+article h2{font-size:1.35rem;font-weight:500;margin:2.2rem 0 .7rem}
+article h3{font-size:1.1rem;font-weight:500;margin:1.8rem 0 .5rem}
+article p{margin-bottom:1.1rem;font-size:1rem}
+article ul,article ol{padding-left:1.4rem;margin-bottom:1.1rem}
+article li{margin-bottom:.3rem;font-size:1rem}
+article strong{font-weight:500}
+article hr{border:none;border-top:1px solid var(--border);margin:2.5rem 0}
+.MathJax_Display,mjx-container[display="true"]{margin:1.5rem 0 !important;overflow-x:auto}
+article code{font-family:var(--font-mono);font-size:.82rem;background:var(--bg-card);border:1px solid var(--border);padding:1px 5px;border-radius:2px}
+article pre{background:var(--bg-card);border:1px solid var(--border);border-radius:3px;padding:1.1rem 1.2rem;overflow-x:auto;margin:1.3rem 0}
+article pre code{background:none;border:none;padding:0;font-size:.82rem;line-height:1.6}
+article blockquote{border-left:3px solid var(--accent-border);margin:1.5rem 0;padding:.2rem 0 .2rem 1.2rem;color:var(--text-muted);font-style:italic}
+.note{background:var(--accent-light);border:1px solid var(--accent-border);border-radius:3px;padding:.9rem 1.1rem;margin:1.5rem 0;font-size:.92rem}
+.note strong{color:var(--accent)}
+.defn{background:var(--bg-card);border:1px solid var(--border);border-left:3px solid var(--accent-border);border-radius:0 3px 3px 0;padding:.9rem 1.1rem;margin:1.5rem 0;font-size:.92rem}
+.defn .defn-label{font-family:var(--font-mono);font-size:.67rem;color:var(--accent);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.3rem}
+.toc{background:var(--bg-card);border:1px solid var(--border);border-radius:3px;padding:1rem 1.2rem;margin-bottom:2.5rem;font-size:.88rem}
+.toc-label{font-family:var(--font-mono);font-size:.67rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-faint);margin-bottom:.6rem}
+.toc ol{padding-left:1.2rem}
+.toc li{margin-bottom:.2rem}
+.toc a{color:var(--text-muted);text-decoration:none}
+.toc a:hover{color:var(--accent)}
+.references{margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+.references h2{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);margin-bottom:1rem}
+.references ol{padding-left:1.3rem;font-size:.88rem;color:var(--text-muted)}
+.references li{margin-bottom:.5rem}
+footer{border-top:1px solid var(--border);text-align:center;padding:2rem;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.06em;color:var(--text-faint)}
+</style>
+</head>
+<body>
+<nav><div class="nav-inner">
+  <a class="nav-name" href="../index.html">hariganesh tangirala</a>
+  <ul class="nav-links">
+    <li><a href="../index.html">home</a></li>
+    <li><a href="../research.html">research</a></li>
+    <li><a href="../cv.html">cv</a></li>
+    <li><a href="../blog.html" class="active">blog</a></li>
+  </ul>
+</div></nav>
+
+<main>
+  <a class="post-back" href="../blog.html">← back to blog</a>
+
+  <div class="post-header">
+    <div class="post-tags">
+      <span class="post-tag tag-ml">ml / probabilistic</span>
+      <span class="post-tag tag-bayes">bayesian</span>
+    </div>
+    <h1 class="post-title">Variational Inference from Scratch: ELBO, Mean-Field, and Why It Works</h1>
+    <div class="post-date">28 March 2026 &nbsp;&middot;&nbsp; ~20 min read</div>
+  </div>
+
+  <div class="toc">
+    <div class="toc-label">contents</div>
+    <ol>
+      <li><a href="#problem">The problem with exact inference</a></li>
+      <li><a href="#kl">KL divergence</a></li>
+      <li><a href="#elbo">Deriving the ELBO</a></li>
+      <li><a href="#mean-field">Mean-field variational inference</a></li>
+      <li><a href="#cavi">Coordinate ascent VI (CAVI)</a></li>
+      <li><a href="#code">A minimal Python implementation</a></li>
+      <li><a href="#beyond">Beyond mean-field</a></li>
+    </ol>
+  </div>
+
+  <article>
+
+    <h2 id="problem">1. The problem with exact inference</h2>
+    <p>
+      Bayesian inference requires computing the posterior $p(\mathbf{z} \mid \mathbf{x})$ over
+      latent variables $\mathbf{z}$ given observations $\mathbf{x}$. By Bayes' theorem:
+    </p>
+
+    $$
+    p(\mathbf{z} \mid \mathbf{x}) = \frac{p(\mathbf{x} \mid \mathbf{z})\, p(\mathbf{z})}{p(\mathbf{x})}
+    $$
+
+    <p>
+      The denominator, the marginal likelihood $p(\mathbf{x}) = \int p(\mathbf{x} \mid \mathbf{z})\, p(\mathbf{z})\, d\mathbf{z}$,
+      is the problem. For all but the simplest models (conjugate families), this integral is
+      intractable. Variational inference replaces this integration problem with an optimization problem.
+    </p>
+
+    <h2 id="kl">2. KL divergence</h2>
+    <p>
+      The Kullback–Leibler divergence from a distribution $q$ to a distribution $p$ measures how
+      much information is lost when $q$ is used to approximate $p$:
+    </p>
+
+    $$
+    \KL(q \| p) = \E_{q(\mathbf{z})}\!\left[\log \frac{q(\mathbf{z})}{p(\mathbf{z})}\right]
+    = \int q(\mathbf{z}) \log \frac{q(\mathbf{z})}{p(\mathbf{z})}\, d\mathbf{z}
+    \tag{1}
+    $$
+
+    <p>
+      Two key properties: $\KL(q \| p) \geq 0$ always (by Jensen's inequality), with equality
+      iff $q = p$ almost everywhere. Note it is <em>asymmetric</em>: $\KL(q\|p) \neq \KL(p\|q)$
+      in general. This asymmetry has important consequences — $\KL(q\|p)$ is zero-avoiding
+      (it penalizes placing mass where $p$ is zero), while $\KL(p\|q)$ is mass-covering.
+    </p>
+
+    <h2 id="elbo">3. Deriving the ELBO</h2>
+    <p>
+      We want to find an approximation $q(\mathbf{z})$ from some tractable family $\mathcal{Q}$ that
+      is close to the true posterior $p(\mathbf{z} \mid \mathbf{x})$. We minimize $\KL(q \| p(\cdot \mid \mathbf{x}))$:
+    </p>
+
+    $$
+    \KL\!\left(q(\mathbf{z}) \,\|\, p(\mathbf{z} \mid \mathbf{x})\right)
+    = \E_q\!\left[\log q(\mathbf{z})\right] - \E_q\!\left[\log p(\mathbf{z}, \mathbf{x})\right] + \log p(\mathbf{x})
+    \tag{2}
+    $$
+
+    <p>
+      Rearranging (and noting $\log p(\mathbf{x})$ doesn't depend on $q$):
+    </p>
+
+    $$
+    \log p(\mathbf{x}) = \underbrace{\E_q\!\left[\log p(\mathbf{z}, \mathbf{x})\right] - \E_q\!\left[\log q(\mathbf{z})\right]}_{\mathcal{L}(q) \;=\; \text{ELBO}} + \underbrace{\KL\!\left(q \,\|\, p(\cdot \mid \mathbf{x})\right)}_{\geq\, 0}
+    \tag{3}
+    $$
+
+    <p>
+      Since $\KL \geq 0$, the ELBO $\mathcal{L}(q)$ is a lower bound on the log marginal likelihood
+      $\log p(\mathbf{x})$. Maximizing $\mathcal{L}(q)$ simultaneously minimizes the KL and tightens
+      the bound. We can also write the ELBO as:
+    </p>
+
+    $$
+    \mathcal{L}(q) = \underbrace{\E_q\!\left[\log p(\mathbf{x} \mid \mathbf{z})\right]}_{\text{reconstruction}} - \underbrace{\KL\!\left(q(\mathbf{z}) \,\|\, p(\mathbf{z})\right)}_{\text{complexity}}
+    \tag{4}
+    $$
+
+    <p>
+      This decomposition is intuitive: the first term rewards the variational posterior for
+      explaining the observations; the second term penalizes it for being too different from the prior.
+    </p>
+
+    <div class="note">
+      <strong>Connection to VAEs.</strong> Equation (4) is exactly the objective of a Variational
+      Autoencoder (Kingma &amp; Welling, 2014). The encoder $q_\phi(\mathbf{z} \mid \mathbf{x})$
+      is the variational posterior, the decoder $p_\theta(\mathbf{x} \mid \mathbf{z})$ is the
+      likelihood, and the ELBO is what you maximize via the reparameterization trick.
+    </div>
+
+    <h2 id="mean-field">4. Mean-field variational inference</h2>
+    <p>
+      To make the optimization tractable, we restrict $q$ to a fully factored (mean-field) family:
+    </p>
+
+    $$
+    q(\mathbf{z}) = \prod_{j=1}^{m} q_j(z_j)
+    \tag{5}
+    $$
+
+    <p>
+      Each factor $q_j$ is optimized independently. Under the mean-field assumption, the ELBO
+      decomposes, and the optimal $q_j$ is given by:
+    </p>
+
+    $$
+    \log q_j^*(z_j) = \E_{-j}\!\left[\log p(\mathbf{z}, \mathbf{x})\right] + \text{const}
+    \tag{6}
+    $$
+
+    <p>
+      where the expectation $\E_{-j}[\cdot]$ is taken over all factors except $q_j$. This is the
+      key result of mean-field VI: the optimal factor for $z_j$ is an unnormalized exponential
+      of the expected log joint, averaged over the other factors.
+    </p>
+
+    <h2 id="cavi">5. Coordinate ascent VI (CAVI)</h2>
+    <p>
+      Equation (6) suggests an algorithm: cycle through each factor $q_j$, update it to
+      $q_j^*$ using the current estimates of the other factors, and repeat until convergence.
+      This is <strong>Coordinate Ascent Variational Inference</strong>:
+    </p>
+
+    <pre><code>while not converged:
+    for j in 1, ..., m:
+        q_j ← exp( E_{-j}[ log p(z, x) ] )   # eq. (6)
+        q_j ← q_j / Z_j                        # normalize
+    compute ELBO; check convergence</code></pre>
+
+    <p>
+      Under the mean-field assumption, each step is guaranteed to increase (or leave unchanged)
+      the ELBO. CAVI therefore converges to a local optimum.
+    </p>
+
+    <h2 id="code">6. A minimal Python implementation</h2>
+    <p>
+      Below is a minimal CAVI implementation for a Gaussian mixture model with $K$ components,
+      $N$ observations, and mean-field variational posterior. I'm using NumPy only.
+    </p>
+
+    <pre><code>import numpy as np
+from scipy.special import digamma, logsumexp
+
+def cavi_gmm(X, K, n_iter=100, seed=0):
+    """
+    Mean-field VI for a Gaussian mixture model.
+    X: (N, D) observations
+    K: number of components
+    Returns: phi (N x K responsibilities), mu (K x D means)
+    """
+    rng = np.random.default_rng(seed)
+    N, D = X.shape
+
+    # Initialize responsibilities uniformly + noise
+    phi = rng.dirichlet(np.ones(K), size=N)      # (N, K)
+    elbo_history = []
+
+    for _ in range(n_iter):
+        # ---- M-like step: update component parameters ----
+        Nk = phi.sum(axis=0) + 1e-10             # (K,)
+        mu = (phi.T @ X) / Nk[:, None]           # (K, D)
+        sigma2 = np.ones(K)                       # fixed variance (simplification)
+
+        # ---- E-like step: update responsibilities ----
+        log_rho = np.zeros((N, K))
+        for k in range(K):
+            diff = X - mu[k]                      # (N, D)
+            log_rho[:, k] = (
+                -0.5 * np.sum(diff**2, axis=1) / sigma2[k]
+                - 0.5 * D * np.log(2 * np.pi * sigma2[k])
+                + np.log(Nk[k] / N)
+            )
+        log_phi = log_rho - logsumexp(log_rho, axis=1, keepdims=True)
+        phi = np.exp(log_phi)
+
+        # ---- ELBO (approximate) ----
+        elbo = (
+            np.sum(phi * log_rho)
+            - np.sum(phi * log_phi)           # entropy
+        )
+        elbo_history.append(elbo)
+
+    return phi, mu, elbo_history</code></pre>
+
+    <h2 id="beyond">7. Beyond mean-field</h2>
+    <p>
+      Mean-field VI is fast and scalable but has well-known failure modes. Because we minimize
+      $\KL(q \| p)$, the variational posterior tends to be <em>underconfident</em> and can
+      miss modes of the true posterior entirely. Alternative approaches include:
+    </p>
+    <ul>
+      <li><strong>Stochastic VI (SVI)</strong> — use minibatches and stochastic gradients to scale to large datasets (Hoffman et al., 2013).</li>
+      <li><strong>Normalizing flows</strong> — transform a simple base distribution through a series of invertible maps to get a flexible $q$.</li>
+      <li><strong>Monte Carlo VI / ELBO gradients</strong> — use the reparameterization trick or score-function estimators to compute gradients through $\mathcal{L}(q)$. This is what Pyro and NumPyro do.</li>
+      <li><strong>Sequential Monte Carlo / importance sampling</strong> — when you need exact (asymptotically) samples rather than an approximate posterior mean.</li>
+    </ul>
+
+    <hr>
+    <p style="color:var(--text-muted);font-size:.92rem">
+      The code above is simplified for clarity. A production implementation would track ELBO convergence
+      more carefully and handle numerical issues. See <a href="https://github.com/hariganesht">my GitHub</a>
+      for cleaner versions.
+    </p>
+
+    <div class="references">
+      <h2>References</h2>
+      <ol>
+        <li>Blei, D. M., Kucukelbir, A., &amp; McAuliffe, J. D. (2017). Variational inference: A review for statisticians. <em>Journal of the American Statistical Association</em>, 112(518), 859–877.</li>
+        <li>Kingma, D. P., &amp; Welling, M. (2014). Auto-encoding variational Bayes. <em>ICLR 2014</em>.</li>
+        <li>Hoffman, M. D., Blei, D. M., Wang, C., &amp; Paisley, J. (2013). Stochastic variational inference. <em>JMLR</em>, 14, 1303–1347.</li>
+        <li>Bishop, C. M. (2006). <em>Pattern Recognition and Machine Learning</em>. Springer. (Chapter 10)</li>
+      </ol>
+    </div>
+
+  </article>
+</main>
+
+<footer>hariganesh tangirala &middot; updated april 2026</footer>
+</body>
+</html>
