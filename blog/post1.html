@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>The Bayesian Brain — Hariganesh Tangirala</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
+<!-- MathJax for LaTeX rendering -->
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    tags: 'ams',
+    packages: {'[+]': ['ams']},
+    macros: {
+      R: '\\mathbb{R}',
+      E: '\\mathbb{E}',
+      P: '\\mathbb{P}',
+      KL: '\\mathrm{KL}',
+      argmax: '\\operatorname{argmax}',
+      argmin: '\\operatorname{argmin}',
+    }
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --text:#1a1a18;--text-muted:#5a5a55;--text-faint:#8a8a84;
+  --bg:#faf9f6;--bg-card:#f3f1ec;--border:#dedad3;
+  --accent:#3b5a8a;--accent-light:#e8edf5;--accent-border:#c5d2e8;
+  --font-serif:'EB Garamond',Georgia,serif;
+  --font-mono:'DM Mono','Courier New',monospace;
+}
+html{font-size:17px}
+body{font-family:var(--font-serif);background:var(--bg);color:var(--text);line-height:1.75;min-height:100vh}
+nav{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:0 2rem}
+.nav-inner{max-width:820px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nav-name{font-family:var(--font-serif);font-size:1rem;font-weight:500;color:var(--text);text-decoration:none}
+.nav-links{display:flex;gap:1.8rem;list-style:none}
+.nav-links a{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.06em;color:var(--text-muted);text-decoration:none;transition:color .15s}
+.nav-links a:hover,.nav-links a.active{color:var(--accent)}
+main{max-width:680px;margin:0 auto;padding:4rem 2rem 6rem}
+a{color:var(--accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+
+/* POST HEADER */
+.post-back{font-family:var(--font-mono);font-size:.68rem;color:var(--text-muted);text-decoration:none;letter-spacing:.04em;display:inline-block;margin-bottom:2rem}
+.post-back:hover{color:var(--accent);text-decoration:none}
+.post-header{margin-bottom:2.5rem;padding-bottom:2rem;border-bottom:1px solid var(--border)}
+.post-tags{display:flex;gap:.5rem;margin-bottom:.9rem;flex-wrap:wrap}
+.post-tag{font-family:var(--font-mono);font-size:.63rem;letter-spacing:.04em;padding:2px 8px;border-radius:2px}
+.tag-bayes{color:#2d6645;background:#e6f2ec;border:1px solid #b8dcc8}
+.tag-notes{color:#7a5c1e;background:#fdf3df;border:1px solid #f0d9a0}
+.post-title{font-size:1.9rem;font-weight:400;line-height:1.25;margin-bottom:.6rem;letter-spacing:-0.01em}
+.post-date{font-family:var(--font-mono);font-size:.67rem;color:var(--text-faint)}
+
+/* ARTICLE BODY */
+article h2{font-size:1.35rem;font-weight:500;margin:2.2rem 0 .7rem;color:var(--text)}
+article h3{font-size:1.1rem;font-weight:500;margin:1.8rem 0 .5rem;color:var(--text)}
+article p{margin-bottom:1.1rem;font-size:1rem}
+article p:last-child{margin-bottom:0}
+article ul,article ol{padding-left:1.4rem;margin-bottom:1.1rem}
+article li{margin-bottom:.3rem;font-size:1rem}
+article strong{font-weight:500}
+article em{font-style:italic}
+article hr{border:none;border-top:1px solid var(--border);margin:2.5rem 0}
+
+/* BLOCK MATH — give display equations breathing room */
+.MathJax_Display,mjx-container[display="true"]{
+  margin:1.5rem 0 !important;
+  overflow-x:auto;
+}
+
+/* INLINE CODE */
+article code{font-family:var(--font-mono);font-size:.82rem;background:var(--bg-card);border:1px solid var(--border);padding:1px 5px;border-radius:2px}
+
+/* CODE BLOCKS */
+article pre{background:var(--bg-card);border:1px solid var(--border);border-radius:3px;padding:1.1rem 1.2rem;overflow-x:auto;margin:1.3rem 0}
+article pre code{background:none;border:none;padding:0;font-size:.82rem;line-height:1.6}
+
+/* BLOCKQUOTE */
+article blockquote{border-left:3px solid var(--accent-border);margin:1.5rem 0;padding:.2rem 0 .2rem 1.2rem;color:var(--text-muted);font-style:italic}
+
+/* FIGURES */
+article figure{margin:2rem 0;text-align:center}
+article figcaption{font-size:.82rem;color:var(--text-faint);margin-top:.5rem;font-style:italic}
+
+/* CALLOUT / NOTE BOX */
+.note{background:var(--accent-light);border:1px solid var(--accent-border);border-radius:3px;padding:.9rem 1.1rem;margin:1.5rem 0;font-size:.92rem}
+.note strong{color:var(--accent)}
+
+/* DEFINITION BOX */
+.defn{background:var(--bg-card);border:1px solid var(--border);border-left:3px solid var(--accent-border);border-radius:0 3px 3px 0;padding:.9rem 1.1rem;margin:1.5rem 0;font-size:.92rem}
+.defn .defn-label{font-family:var(--font-mono);font-size:.67rem;color:var(--accent);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.3rem}
+
+/* FOOTNOTES */
+.footnotes{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:.85rem;color:var(--text-muted)}
+.footnotes ol{padding-left:1.3rem}
+.footnotes li{margin-bottom:.4rem}
+
+/* REFERENCES */
+.references{margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+.references h2{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);margin-bottom:1rem}
+.references ol{padding-left:1.3rem;font-size:.88rem;color:var(--text-muted)}
+.references li{margin-bottom:.5rem}
+
+/* TABLE OF CONTENTS */
+.toc{background:var(--bg-card);border:1px solid var(--border);border-radius:3px;padding:1rem 1.2rem;margin-bottom:2.5rem;font-size:.88rem}
+.toc-label{font-family:var(--font-mono);font-size:.67rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-faint);margin-bottom:.6rem}
+.toc ol{padding-left:1.2rem}
+.toc li{margin-bottom:.2rem}
+.toc a{color:var(--text-muted);text-decoration:none}
+.toc a:hover{color:var(--accent)}
+
+footer{border-top:1px solid var(--border);text-align:center;padding:2rem;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.06em;color:var(--text-faint)}
+</style>
+</head>
+<body>
+<nav><div class="nav-inner">
+  <a class="nav-name" href="../index.html">hariganesh tangirala</a>
+  <ul class="nav-links">
+    <li><a href="../index.html">home</a></li>
+    <li><a href="../research.html">research</a></li>
+    <li><a href="../cv.html">cv</a></li>
+    <li><a href="../blog.html" class="active">blog</a></li>
+  </ul>
+</div></nav>
+
+<main>
+  <a class="post-back" href="../blog.html">← back to blog</a>
+
+  <div class="post-header">
+    <div class="post-tags">
+      <span class="post-tag tag-bayes">bayesian</span>
+      <span class="post-tag tag-notes">reading notes</span>
+    </div>
+    <h1 class="post-title">The Bayesian Brain: Notes on Helmholtz, Bayes, and the Free Energy Principle</h1>
+    <div class="post-date">12 April 2026 &nbsp;&middot;&nbsp; ~18 min read</div>
+  </div>
+
+  <div class="toc">
+    <div class="toc-label">contents</div>
+    <ol>
+      <li><a href="#intro">Introduction: perception as inference</a></li>
+      <li><a href="#bayes-theorem">Bayes' theorem, briefly</a></li>
+      <li><a href="#generative">Generative models and the likelihood</a></li>
+      <li><a href="#predictive-coding">Predictive coding</a></li>
+      <li><a href="#free-energy">The Free Energy Principle</a></li>
+      <li><a href="#caveats">Caveats and open questions</a></li>
+    </ol>
+  </div>
+
+  <article>
+
+    <h2 id="intro">1. Introduction: perception as inference</h2>
+    <p>
+      Hermann von Helmholtz, writing in the 1860s, proposed that perception is a process of
+      <em>unconscious inference</em> — the visual system does not passively record the world but
+      actively constructs a hypothesis about what caused the sensory data. This was a prescient
+      idea, and it sits at the heart of what we now call the Bayesian brain hypothesis.
+    </p>
+    <p>
+      The central claim is simple: the brain is, in some sense, a probabilistic inference machine.
+      Rather than mapping sensory inputs directly to percepts, it maintains a generative model of
+      the world and uses incoming data to update beliefs about hidden causes. Perception, cognition,
+      and action are all instances of inference under this model.
+    </p>
+
+    <div class="note">
+      <strong>Note:</strong> This post is mostly expository — I'm working through ideas from
+      Clark (2016), Friston (2010), and Rao &amp; Ballard (1999) for my own understanding. I'll
+      flag where I'm uncertain or where the story gets messy.
+    </div>
+
+    <h2 id="bayes-theorem">2. Bayes' theorem, briefly</h2>
+    <p>
+      Let $s$ denote a hidden state of the world (e.g., the identity of an object) and $x$ denote
+      sensory observations. The brain's goal, on this view, is to compute the posterior distribution
+      over $s$ given $x$:
+    </p>
+
+    $$
+    \underbrace{p(s \mid x)}_{\text{posterior}} = \frac{\underbrace{p(x \mid s)}_{\text{likelihood}} \; \underbrace{p(s)}_{\text{prior}}}{\underbrace{p(x)}_{\text{evidence}}}
+    \tag{1}
+    $$
+
+    <p>
+      The denominator $p(x) = \int p(x \mid s)\, p(s)\, ds$ is the <em>marginal likelihood</em> or
+      <em>model evidence</em> — the probability of the observations under the model, averaged over
+      all possible hidden states. This quantity is generally intractable, which is why exact Bayesian
+      inference is hard and why approximations (like variational inference) are necessary.
+    </p>
+
+    <div class="defn">
+      <div class="defn-label">Definition — Posterior belief</div>
+      The posterior $p(s \mid x)$ represents the brain's updated belief about the hidden state $s$
+      after observing data $x$. It balances the prior $p(s)$ (what the brain expected before seeing $x$)
+      with the likelihood $p(x \mid s)$ (how well different values of $s$ explain the observation).
+    </div>
+
+    <h2 id="generative">3. Generative models and the likelihood</h2>
+    <p>
+      A key concept is the <strong>generative model</strong>: a joint distribution over hidden
+      states and observations, $p(s, x) = p(x \mid s)\, p(s)$. The likelihood $p(x \mid s)$
+      specifies how hidden states generate observations — it is the model's theory of how the
+      world works.
+    </p>
+    <p>
+      In a hierarchical generative model, hidden states are organized into levels, with
+      higher levels generating (or constraining) lower levels. For a $K$-level hierarchy:
+    </p>
+
+    $$
+    p(x, s^{(1)}, \ldots, s^{(K)}) = p(x \mid s^{(1)}) \prod_{k=1}^{K-1} p(s^{(k)} \mid s^{(k+1)}) \cdot p(s^{(K)})
+    \tag{2}
+    $$
+
+    <p>
+      This factorization is important: it means that each level only needs to talk to its
+      immediate neighbors in the hierarchy. Rao and Ballard (1999) showed that this kind of
+      structure can be implemented in a biologically plausible neural architecture — one that
+      looks a lot like the visual cortex.
+    </p>
+
+    <h2 id="predictive-coding">4. Predictive coding</h2>
+    <p>
+      <strong>Predictive coding</strong> is an influential theory of how the brain might
+      implement approximate Bayesian inference in a hierarchical generative model. The basic idea:
+    </p>
+    <ul>
+      <li>Higher cortical areas send <em>predictions</em> (top-down) about what lower areas should
+          be seeing, based on the current beliefs about hidden causes.</li>
+      <li>Lower areas send back <em>prediction errors</em> (bottom-up) — the discrepancy between
+          what was predicted and what was actually observed.</li>
+      <li>The system minimizes prediction errors across the hierarchy.</li>
+    </ul>
+    <p>
+      Formally, if $\mu^{(k)}$ is the mean of the approximate posterior at level $k$, and
+      $g^{(k)}(\mu^{(k+1)})$ is the prediction from the level above, then the prediction error is:
+    </p>
+
+    $$
+    \varepsilon^{(k)} = \mu^{(k)} - g^{(k)}\!\left(\mu^{(k+1)}\right)
+    \tag{3}
+    $$
+
+    <p>
+      The system updates $\mu^{(k)}$ by gradient descent on the total prediction error — which,
+      under a Gaussian generative model, is equivalent to Bayesian inference. The update rule is:
+    </p>
+
+    $$
+    \dot{\mu}^{(k)} = -\frac{\partial \mathcal{F}}{\partial \mu^{(k)}}
+    = \underbrace{\Pi^{(k)} \varepsilon^{(k)}}_{\text{from below}} - \underbrace{\frac{\partial g^{(k)}}{\partial \mu^{(k)}}^\top \Pi^{(k-1)} \varepsilon^{(k-1)}}_{\text{from above}}
+    \tag{4}
+    $$
+
+    <p>
+      where $\Pi^{(k)}$ is the precision (inverse variance) at level $k$ and $\mathcal{F}$ is the
+      variational free energy (see below). The precision terms are crucial: they determine how much
+      weight the system gives to prediction errors vs. prior beliefs — effectively implementing
+      <em>attention</em> by modulating the gain on prediction error signals.
+    </p>
+
+    <h2 id="free-energy">5. The Free Energy Principle</h2>
+    <p>
+      Karl Friston's <strong>Free Energy Principle</strong> is a grand unification: it proposes
+      that all brain processes — perception, action, learning, attention — can be understood as
+      minimizing a single quantity called variational <em>free energy</em> $\mathcal{F}$.
+    </p>
+    <p>
+      Free energy is an upper bound on <em>surprise</em> (negative log evidence):
+    </p>
+
+    $$
+    \mathcal{F}[q, x] = \underbrace{\E_{q(s)}\!\left[\log \frac{q(s)}{p(s, x)}\right]}_{\text{variational free energy}}
+    = \underbrace{\KL\!\left[q(s) \,\|\, p(s \mid x)\right]}_{\geq\, 0} + \underbrace{(-\log p(x))}_{\text{surprise}}
+    \tag{5}
+    $$
+
+    <p>
+      Since $\KL[q \| p] \geq 0$, we have $\mathcal{F} \geq -\log p(x)$ — free energy is always an
+      upper bound on surprise. Minimizing $\mathcal{F}$ with respect to $q(s)$ pushes $q$ toward
+      the true posterior $p(s \mid x)$, and simultaneously minimizes surprise. This recovers the
+      ELBO from variational inference:
+    </p>
+
+    $$
+    -\mathcal{F} = \underbrace{\E_{q(s)}\!\left[\log p(x \mid s)\right]}_{\text{expected log-likelihood}} - \underbrace{\KL\!\left[q(s) \,\|\, p(s)\right]}_{\text{complexity cost}} = \mathcal{L}_{\text{ELBO}}
+    \tag{6}
+    $$
+
+    <p>
+      Minimizing free energy is therefore equivalent to maximizing the ELBO. The first term rewards
+      the approximate posterior for explaining the data well; the second term penalizes it for
+      deviating too far from the prior. This tradeoff between accuracy and complexity is a
+      recurring theme in Bayesian model comparison.
+    </p>
+
+    <blockquote>
+      "To exist is to resist surprise — or rather, to be the kind of system that acts to maintain
+      its existence in a world it can only partially observe." — roughly paraphrasing Friston
+    </blockquote>
+
+    <h2 id="caveats">6. Caveats and open questions</h2>
+    <p>
+      The Bayesian brain hypothesis is compelling but not uncontroversial. A few honest concerns:
+    </p>
+    <ul>
+      <li>
+        <strong>Tractability.</strong> Real Bayesian inference over the kinds of structured, high-dimensional
+        hypothesis spaces needed for human cognition is computationally intractable. The FEP says brains
+        minimize free energy — but it doesn't fully specify the approximate inference algorithm. That leaves
+        a lot of room.
+      </li>
+      <li>
+        <strong>Falsifiability.</strong> The FEP is sometimes criticized for being unfalsifiable — with the
+        right choice of generative model and priors, almost any behavior can be explained post-hoc.
+        This is not unique to FEP (any sufficiently flexible model has this problem), but it is worth keeping
+        in mind.
+      </li>
+      <li>
+        <strong>Priors.</strong> Where do the priors come from? Evolutionary pressure, development,
+        individual learning? The Bayesian framework is silent on this, and getting the priors right is
+        often where the real scientific work happens.
+      </li>
+    </ul>
+    <p>
+      Despite these caveats, the framework has been enormously productive. It gives a unified vocabulary
+      for talking about perception, learning, attention, and action — and it makes quantitative, testable
+      predictions when combined with specific generative models and behavioral tasks.
+    </p>
+
+    <hr>
+    <p style="color:var(--text-muted);font-size:.92rem">
+      If you find errors or have thoughts, I'd love to hear them — reach me at
+      <a href="mailto:you@example.com">you@example.com</a>.
+    </p>
+
+    <div class="references">
+      <h2>References</h2>
+      <ol>
+        <li>Friston, K. (2010). The free-energy principle: a unified brain theory? <em>Nature Reviews Neuroscience</em>, 11(2), 127–138.</li>
+        <li>Rao, R. P. N., &amp; Ballard, D. H. (1999). Predictive coding in the visual cortex. <em>Nature Neuroscience</em>, 2(1), 79–87.</li>
+        <li>Clark, A. (2016). <em>Surfing Uncertainty: Prediction, Action, and the Embodied Mind.</em> Oxford University Press.</li>
+        <li>Helmholtz, H. von (1867). <em>Handbuch der Physiologischen Optik.</em> Voss.</li>
+        <li>Knill, D. C., &amp; Pouget, A. (2004). The Bayesian brain: the role of uncertainty in neural coding and computation. <em>Trends in Neurosciences</em>, 27(12), 712–719.</li>
+      </ol>
+    </div>
+
+  </article>
+</main>
+
+<footer>hariganesh tangirala &middot; updated april 2026</footer>
+</body>
+</html>
