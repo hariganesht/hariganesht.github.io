@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Blog — Hariganesh Tangirala</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --text:#1a1a18;--text-muted:#5a5a55;--text-faint:#8a8a84;
+  --bg:#faf9f6;--bg-card:#f3f1ec;--border:#dedad3;
+  --accent:#3b5a8a;--accent-light:#e8edf5;--accent-border:#c5d2e8;
+  --font-serif:'EB Garamond',Georgia,serif;
+  --font-mono:'DM Mono','Courier New',monospace;
+}
+html{font-size:17px}
+body{font-family:var(--font-serif);background:var(--bg);color:var(--text);line-height:1.75;min-height:100vh}
+nav{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:0 2rem}
+.nav-inner{max-width:820px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nav-name{font-family:var(--font-serif);font-size:1rem;font-weight:500;color:var(--text);text-decoration:none}
+.nav-links{display:flex;gap:1.8rem;list-style:none}
+.nav-links a{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.06em;color:var(--text-muted);text-decoration:none;transition:color .15s}
+.nav-links a:hover,.nav-links a.active{color:var(--accent)}
+main{max-width:820px;margin:0 auto;padding:4rem 2rem 6rem}
+a{color:var(--accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+
+.page-title{font-size:1.8rem;font-weight:400;margin-bottom:.4rem}
+.page-desc{font-size:1rem;color:var(--text-muted);margin-bottom:3rem;max-width:500px}
+.sec-label{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);margin-bottom:1rem;padding-bottom:.45rem;border-bottom:1px solid var(--border)}
+
+/* POST LISTING */
+.post-list{list-style:none}
+.post-item{padding:1.2rem 0;border-bottom:1px solid var(--border)}
+.post-item:first-child{padding-top:0}
+.post-item:last-child{border-bottom:none}
+.post-meta{display:flex;align-items:center;gap:.8rem;margin-bottom:.3rem;flex-wrap:wrap}
+.post-date{font-family:var(--font-mono);font-size:.67rem;color:var(--text-faint)}
+.post-tag{font-family:var(--font-mono);font-size:.63rem;letter-spacing:.04em;padding:2px 8px;border-radius:2px}
+.tag-bayes{color:#2d6645;background:#e6f2ec;border:1px solid #b8dcc8}
+.tag-ml{color:#4a4098;background:#eeedf8;border:1px solid #c8c4ee}
+.tag-notes{color:#7a5c1e;background:#fdf3df;border:1px solid #f0d9a0}
+.tag-misc{color:#5a5a55;background:#f3f1ec;border:1px solid #dedad3}
+.post-title{font-size:1.1rem;font-weight:500;margin-bottom:.25rem}
+.post-title a{color:var(--text);text-decoration:none}
+.post-title a:hover{color:var(--accent)}
+.post-excerpt{font-size:.92rem;color:var(--text-muted);line-height:1.65}
+
+/* TAG FILTER */
+.tag-bar{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem}
+.tfilter{font-family:var(--font-mono);font-size:.67rem;letter-spacing:.04em;padding:3px 11px;border-radius:2px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-muted);cursor:pointer;transition:all .15s}
+.tfilter:hover,.tfilter.on{background:var(--accent-light);border-color:var(--accent-border);color:var(--accent)}
+
+footer{border-top:1px solid var(--border);text-align:center;padding:2rem;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.06em;color:var(--text-faint)}
+</style>
+</head>
+<body>
+<nav><div class="nav-inner">
+  <a class="nav-name" href="index.html">hariganesh tangirala</a>
+  <ul class="nav-links">
+    <li><a href="index.html">home</a></li>
+    <li><a href="research.html">research</a></li>
+    <li><a href="cv.html">cv</a></li>
+    <li><a href="blog.html" class="active">blog</a></li>
+  </ul>
+</div></nav>
+
+<main>
+  <h1 class="page-title">Blog</h1>
+  <p class="page-desc">Notes on papers I'm reading, things I'm learning, and half-formed ideas. Mostly for myself, but hopefully useful to others.</p>
+
+  <div class="tag-bar">
+    <button class="tfilter on" onclick="filterTag(this,'all')">all</button>
+    <button class="tfilter" onclick="filterTag(this,'bayes')">bayesian</button>
+    <button class="tfilter" onclick="filterTag(this,'ml')">ml / probabilistic</button>
+    <button class="tfilter" onclick="filterTag(this,'notes')">reading notes</button>
+    <button class="tfilter" onclick="filterTag(this,'misc')">misc</button>
+  </div>
+
+  <ul class="post-list" id="posts">
+
+    <li class="post-item" data-tags="bayes notes">
+      <div class="post-meta">
+        <span class="post-date">12 Apr 2026</span>
+        <span class="post-tag tag-bayes">bayesian</span>
+        <span class="post-tag tag-notes">reading notes</span>
+      </div>
+      <div class="post-title"><a href="blog/bayesian-brain.html">The Bayesian Brain: Notes on Helmholtz, Bayes, and the Free Energy Principle</a></div>
+      <div class="post-excerpt">What does it mean for the brain to be a Bayesian inference machine? I trace the idea from Helmholtz's unconscious inference through modern predictive coding and Karl Friston's Free Energy Principle — with the math spelled out.</div>
+    </li>
+
+    <li class="post-item" data-tags="ml bayes">
+      <div class="post-meta">
+        <span class="post-date">28 Mar 2026</span>
+        <span class="post-tag tag-ml">ml / probabilistic</span>
+        <span class="post-tag tag-bayes">bayesian</span>
+      </div>
+      <div class="post-title"><a href="blog/variational-inference.html">Variational Inference from Scratch: ELBO, Mean-Field, and Why It Works</a></div>
+      <div class="post-excerpt">A ground-up derivation of variational inference. We start from KL divergence, derive the evidence lower bound, and implement a simple mean-field VI for a Gaussian mixture model in Python.</div>
+    </li>
+
+    <li class="post-item" data-tags="notes">
+      <div class="post-meta">
+        <span class="post-date">10 Mar 2026</span>
+        <span class="post-tag tag-notes">reading notes</span>
+      </div>
+      <div class="post-title"><a href="blog/tenenbaum-kemp-2006.html">Notes on Tenenbaum &amp; Kemp (2006) — Theory-Based Bayesian Models of Inductive Learning</a></div>
+      <div class="post-excerpt">Detailed notes on the classic paper introducing structured probabilistic models for human inductive reasoning. What the "blessing of abstraction" actually means, and why it matters for cognitive science.</div>
+    </li>
+
+    <li class="post-item" data-tags="ml">
+      <div class="post-meta">
+        <span class="post-date">18 Feb 2026</span>
+        <span class="post-tag tag-ml">ml / probabilistic</span>
+      </div>
+      <div class="post-title"><a href="blog/probabilistic-programming.html">What Even Is Probabilistic Programming? A Short Introduction</a></div>
+      <div class="post-excerpt">An accessible introduction to probabilistic programming languages — what they are, why they exist, and how they relate to Bayesian inference. Includes toy examples in WebPPL and Python.</div>
+    </li>
+
+    <li class="post-item" data-tags="misc">
+      <div class="post-meta">
+        <span class="post-date">02 Feb 2026</span>
+        <span class="post-tag tag-misc">misc</span>
+      </div>
+      <div class="post-title"><a href="blog/why-cogsci.html">Why Computational Cognitive Science</a></div>
+      <div class="post-excerpt">A personal note on why I ended up here — at the intersection of computation, probability, and the mind — and what I hope to do with a PhD.</div>
+    </li>
+
+  </ul>
+</main>
+
+<footer>hariganesh tangirala &middot; updated april 2026</footer>
+
+<script>
+function filterTag(btn, tag) {
+  document.querySelectorAll('.tfilter').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.post-item').forEach(item => {
+    if (tag === 'all' || item.dataset.tags.includes(tag)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+</script>
+</body>
+</html>
