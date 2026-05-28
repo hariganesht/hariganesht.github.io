@@ -8,10 +8,6 @@ profile:
   align: right
   image: prof_pic.jpg
   image_circular: false # crops the image to make it circular
-  more_info: >
-    <p>555 your office number</p>
-    <p>123 your address street</p>
-    <p>Your City, State 12345</p>
 
 selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
@@ -27,4 +23,8 @@ latest_posts:
   limit: 3 # leave blank to include all the blog posts
 ---
 
-Hello! I'm a senior undergraduate interesting in the math behind human decision-making and how it changes under uncertainty. Currently, I'm interning at the [AlphaGrep Quantitative Research Lab](https://wsai.iitm.ac.in/research/alpha-research-lab/) at IIT Madras, researching the effect of human cognition on investments in skewed stocks. I'm also an incoming research intern (Fall 2026) with the [IRIS](https://nusgs.nus.edu.sg/irisnus/#) Fellowship at the National University of Singapore, working under the supervision of Prof Tan Zhi Xuan on modeling imperfect human behavior.
+Hello! I'm a senior undergraduate interesting in making use of Bayesian modeling to understand the math behind human decision-making and how it changes under uncertainty. 
+
+Currently, I'm interning at the [AlphaGrep Quantitative Research Lab](https://wsai.iitm.ac.in/research/alpha-research-lab/), researching the effects of human cognition on investments in skewed stocks. I'm also an incoming research intern (Fall 2026) with the [IRIS](https://nusgs.nus.edu.sg/irisnus/#) Fellowship at the National University of Singapore, working under the supervision of Prof Tan Zhi Xuan on modeling imperfect human behavior.
+
+Previously, I was a research intern at [Dept. of Medical Sciences and Technology, IIT Madras](https://mst.iitm.ac.in/), studying the applications of neurological models in diagnosing Dementia in Alzheimer's patients as part of a collaborative project with the University of Illinois Urbana-Champaign.
