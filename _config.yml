@@ -4,7 +4,6 @@
 
 title: blank # the website title (if blank, full name will be used instead)
 first_name: Hariganesh
-middle_name: R.
 last_name: Tangirala
 contact_note: >
   You can even add a little note about which of these is the best way to reach you.
@@ -83,7 +82,7 @@ al_folio:
 # Layout
 # -----------------------------------------------------------------------------
 
-navbar_fixed: true
+navbar_fixed: false
 footer_fixed: true
 search_enabled: true
 socials_in_search: true
