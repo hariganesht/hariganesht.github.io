@@ -24,10 +24,11 @@ pagination:
 {% if blog_name_size > 0 or blog_description_size > 0 %}
 
   <div class="header-bar">
-    <h1>{{ site.blog_name }}</h1>
-    <h2>{{ site.blog_description }}</h2>
+    <h1>Blog</h1>
+    The writing here consists of both my own notes and the occasional experiment I run every now and then. 
+
+I do this for for largely three reasons: first, I like making knowledge more accessible, even if the difference I can create is marginal; second - perhaps a tad more selfishly - writing helps me learn better; and finally, I think there is value in keeping an iterative record of learning over time. If you are browsing this website while evaluating my application for grad school, I hope you find it cool.
   </div>
-  The writing here consists of both my own notes and the occasional experiment I run every now and then. I do this for for largely three reasons: first, I like making knowledge more accessible, even if the difference I can create is marginal; second — perhaps a bit more selfishly — writing helps me learn better; and finally, I think there is value in keeping an iterative record of learning over time. If you are browsing this website while evaluating my application for grad school, I hope you find it cool.
   {% endif %}
 
 {% if site.display_tags and site.display_tags.size > 0 or site.display_categories and site.display_categories.size > 0 %}
