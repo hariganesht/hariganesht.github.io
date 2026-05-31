@@ -25,7 +25,9 @@ pagination:
 
   <div class="header-bar">
     <h1>Blog</h1>
-    The writing here consists of both my own notes and the occasional experiment I run every now and then. 
+    
+The writing here consists of both my own notes and the occasional experiment I run every now and then. 
+
 
 I do this for for largely three reasons: first, I like making knowledge more accessible, even if the difference I can create is marginal; second - perhaps a tad more selfishly - writing helps me learn better; and finally, I think there is value in keeping an iterative record of learning over time. If you are browsing this website while evaluating my application for grad school, I hope you find it cool.
   </div>
