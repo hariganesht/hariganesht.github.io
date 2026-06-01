@@ -26,7 +26,7 @@ pagination:
   <div class="header-bar">
     <h1>Blog</h1>
     
-The writing here consists of both my own notes and the occasional experiment I run every now and then. 
+The writing here consists of both my own notes, and the occasional idea I test occasionally. 
 
 
 I do this for for largely three reasons: first, I like making knowledge more accessible, even if the difference I can create is marginal; second - perhaps a tad more selfishly - writing helps me learn better; and finally, I think there is some value in keeping an iterative record of my learning. There is also an excellent [blog post by Rachel Thomas](https://medium.com/@racheltho/why-you-yes-you-should-blog-7d2544ac1045) on why this might be a good use of your time in academia.
