@@ -61,7 +61,7 @@ To reverse-engineer the mind, we frame some questions:
 3. How are world models themselves acquired or constructed?
 
 We may question this further:
-
+{: start="4"}
 4. How do we use our world models to make decisions and act in the world successfully?
 5. How can learning and inference with complex world models be implemented efficiently in minds with bounded computational resources?
 6. How are complex world models implemented in a physical machine, brain, or computer?
