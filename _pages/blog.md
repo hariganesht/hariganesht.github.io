@@ -26,7 +26,7 @@ pagination:
   <div class="header-bar">
     <h1 style="margin-bottom: 1rem;">Blog</h1>
     <p style="text-align: left;">
-The writing here consists of my own notes, as well as ideas I test occasionally. 
+The writing here consists of my own notes, as well as ideas I mess around with. 
 
 I do this for for largely three reasons: first, I like making knowledge more accessible, even if the difference I can create is marginal; second - perhaps a tad more selfishly - writing helps me learn better; and finally, I think there is some value in keeping an iterative record of my learning. There is also an excellent <a href="https://medium.com/@racheltho/why-you-yes-you-should-blog-7d2544ac1045">blog post by Rachel Thomas</a> on why this might be a good use of your time in academia.
 </p>
