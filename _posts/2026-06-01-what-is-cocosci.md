@@ -10,8 +10,9 @@ bibliography: 2026-06-01-what-is-cocosci.bib
 
 toc:
   - name: Introduction
-  - name: Models
-  - name: Bayes
+    subsections:
+    - name: Models
+    - name: Bayes
 ---
 
 *These notes are adapted and framed almost entirely from <d-cite key="griffiths2008bayesian"></d-cite>, <d-cite key="navarro2024compcogsci"></d-cite>, <d-cite key="annualreview2024cocosci"></d-cite>, <d-cite key="probmods"></d-cite>.*
@@ -61,11 +62,11 @@ To reverse-engineer the mind, we frame some questions:
 
 We may question this further:
 
-1. How do we use our world models to make decisions and act in the world successfully?
-2. How can learning and inference with complex world models be implemented efficiently in minds with bounded computational resources?
-3. How are complex world models implemented in a physical machine, brain, or computer?
-4. What are the origins of our world models in evolution and development - what is built into our mind, and how do we learn within and beyond that starting point?
-5. What is needed to scale up learning to all the knowledge that a human being acquires over their lifetime and human cultures have built over generations?
+4. How do we use our world models to make decisions and act in the world successfully?
+5. How can learning and inference with complex world models be implemented efficiently in minds with bounded computational resources?
+6. How are complex world models implemented in a physical machine, brain, or computer?
+7. What are the origins of our world models in evolution and development - what is built into our mind, and how do we learn within and beyond that starting point?
+8. What is needed to scale up learning to all the knowledge that a human being acquires over their lifetime and human cultures have built over generations?
 
 While there are several approaches to reverse-engineering the mind, these notes will largely continue to deal with the Bayesian and probabilistic approach, in which world models are mental representations or beliefs. Like any realistic knowledge that any realistic agent has, they will be incomplete and imperfect in many ways. Furthermore, they are approximate and probabilistic. But as we acknowledge; these are the best guesses we can make.
 
@@ -106,3 +107,5 @@ To achieve a more complete, complementary explanation of behavior, we may also c
 1. *Computational*: what are the abstract problems the mind needs to solve, and what would a solution look like?
 2. *Algorithmic*: what informational processing steps are followed to arrive at the solution?
 3. *Implementation*: how does the brain carry these steps out?
+
+<d-bibliography></d-bibliography>
