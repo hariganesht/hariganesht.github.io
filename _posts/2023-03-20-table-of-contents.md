@@ -6,6 +6,7 @@ description: an example of a blog post with table of contents
 tags: formatting toc
 categories: sample-posts
 giscus_comments: true
+published: false
 related_posts: false
 toc:
   beginning: true
