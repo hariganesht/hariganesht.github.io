@@ -14,6 +14,8 @@ toc:
   - name: Bayes
 ---
 
+*These notes are adapted and framed almost entirely from <d-cite key="griffiths2008bayesian"></d-cite>, <d-cite key="navarro2024compcogsci"></d-cite>, <d-cite key="annualreview2024cocosci"></d-cite>, <d-cite key="probmods"></d-cite>.*
+
 ## Introduction
 
 Humans are incredibly smart - incomparably to other living beings that we know of.
@@ -43,7 +45,7 @@ A third example: suppose you are asked to think of a rule that picks out any sub
 
 But why? This could just as easily be a subset of even numbers, or a set of numbers from 20 to 90. *Why is one way of representing data so much more compelling than others?* Perhaps even more interestingly; why would that same rule not have been nearly as compelling if you had been given only two samples, say 20 and 50, and asked to generalize at that point?
 
-## Models
+### Models
 
 The deepest form of the generalization we discuss above is perhaps human learning over cognitive development - as we construct large-scale systems of knowledge for physics, biology, or even morality and social structure. These are known as *world models*, i.e. the human mind's models of causality in the world. Since we are not able to capture the entire state of the world, these models are inherently probabilistic and inferential. Any intuitive theory can then be quite transformative, in the sense that a single demonstration is enough to suggest that the world could work differently than previously perceived, and that this observation is eventually understood.
 
@@ -67,7 +69,7 @@ We may question this further:
 
 While there are several approaches to reverse-engineering the mind, these notes will largely continue to deal with the Bayesian and probabilistic approach, in which world models are mental representations or beliefs. Like any realistic knowledge that any realistic agent has, they will be incomplete and imperfect in many ways. Furthermore, they are approximate and probabilistic. But as we acknowledge; these are the best guesses we can make.
 
-## Bayes
+### Why Bayes?
 
 Abstract knowledge is encoded in a probabilistic generative model, a kind of mental model that describes the causal processes in the world that give rise to the learner's observations, as well as unobserved latent variables that support effective prediction and action - but only if the learner can infer their hidden state.
 
