@@ -21,7 +21,6 @@ Humans are incredibly smart - incomparably to other living beings that we know o
 <aside>
 <p>We have an unusually high <i>encephalisation ratio</i>, i.e. the ratio of brain mass to expected brain mass for any body mass.</p>
 </aside>
-
 But what is this intelligence used for?
 
 The world is built on inherent structure. Our sensory systems work to detect that structure, despite being able to access only a small part of this data (for example, we do not have x-ray vision). To put this computation into context, a second of brain activity would be enough to exhaust forty thousand 300GB hard drives. However, we do not perceive the world as it exists; we instead perceive it in terms of a set of structures extrapolated from sense data. To do this, we form beliefs that go beyond the immediate sensory data available to us. We hear a squishy thwack and believe our daughter dropped an egg in the kitchen; we see a fleeting expression and believe our spouse has tired of these dinner guests; we smell a mix of rotten food and wet fur and believe our dog buried a bone in the compost heap.
