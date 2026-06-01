@@ -6,7 +6,7 @@ tags: notes
 date: 2026-06-01
 giscus_comments: false
 
-bibliography: cocosci.bib
+bibliography: 2026-06-01-what-is-cocosci.bib
 
 toc:
   - name: Introduction
@@ -106,5 +106,3 @@ To achieve a more complete, complementary explanation of behavior, we may also c
 1. *Computational*: what are the abstract problems the mind needs to solve, and what would a solution look like?
 2. *Algorithmic*: what informational processing steps are followed to arrive at the solution?
 3. *Implementation*: how does the brain carry these steps out?
-
-<d-bibliography></d-bibliography>
