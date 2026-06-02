@@ -15,7 +15,7 @@ toc:
     - name: Bayes
 ---
 
-*These notes are adapted and framed almost entirely from <d-cite key="griffiths2008bayesian"></d-cite>, <d-cite key="navarro2024compcogsci"></d-cite>, <d-cite key="annualreview2024cocosci"></d-cite>, <d-cite key="probmods"></d-cite>.*
+These notes are adapted and framed almost entirely from <d-cite key="griffiths2008bayesian"></d-cite>, <d-cite key="navarro2024compcogsci"></d-cite>, <d-cite key="annualreview2024cocosci"></d-cite>, <d-cite key="probmods"></d-cite>.
 
 ## Introduction
 
