@@ -11,10 +11,10 @@ bibliography: 2026-06-02-genmodels.bib
 toc:
   - name: Generative Models
   - name: Prediction, Simulation, and Probabilities
-  - name: Marginal Distributions: `infer`
+  - name: Marginal Distributions
   - name: Rules of Probability
   - name: Stochastic Recursion
-  - name: Persistent Randomness: `mem`
+  - name: Persistent Randomness
 ---
 
 ### Generative Models
