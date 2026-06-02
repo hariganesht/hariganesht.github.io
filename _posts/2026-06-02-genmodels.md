@@ -6,7 +6,7 @@ tags: notes
 date: 2026-06-02
 giscus_comments: false
 
-bibliography: 2026-06-02-genmodels.bib
+bibliography: /_bibliography/2026-06-02-genmodels.bib
 
 toc:
   - name: Generative Models
