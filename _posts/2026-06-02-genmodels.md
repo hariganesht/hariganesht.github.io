@@ -10,14 +10,15 @@ bibliography: 2026-06-02-genmodels.bib
 
 toc:
   - name: Generative Models
-  - name: Prediction, Simulation, and Probabilities
-  - name: Marginal Distributions
-  - name: Rules of Probability
+  subsections:
+    - name: Prediction, Simulation, and Probabilities
+    - name: Marginal Distributions
+    - name: Rules of Probability
   - name: Stochastic Recursion
   - name: Persistent Randomness
 ---
-
-### Generative Models
+These are notes from Chapter 1 of <d-cite key="goodman2016probmods"></d-cite>
+## Generative Models
 
 We would like to generate states of the world, or more specifically steps that unfold and lead to some potentially observable states. These processes can be described as computations - those that involve random choices to capture uncertainty about the process.
 
@@ -243,7 +244,7 @@ As a rule of thumb, we add the probabilities for individual paths for `||`, and 
 flip() || flip() // adds to 0.25 + 0.25 + 0.25 for TF+FT+TT probabilities
 ~~~~
 
-### Stochastic Recursion
+## Stochastic Recursion
 
 Recursion functions, where the solution depends on solutions to smaller instances of the same problem, are useful for computational problems. In WebPPL we can have stochastic recursion that randomly decides when to stop. 
 
@@ -257,7 +258,7 @@ var g = Infer({method: 'forward', samples: 1000}, function() {return geometric(0
 viz(g)
 ~~~~
 
-### Persistent Randomness: `mem`
+## Persistent Randomness: `mem`
 
 This is used to model a set of objects that have a randomly chosen property. For instance, to describe the eye colors of a set of people, we may implement the following.
 
