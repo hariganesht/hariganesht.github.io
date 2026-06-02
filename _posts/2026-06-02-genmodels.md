@@ -6,7 +6,7 @@ tags: notes
 date: 2026-06-02
 giscus_comments: false
 
-bibliography: /_bibliography/2026-06-02-genmodels.bib
+bibliography: 2026-06-02-genmodels.bib
 
 toc:
   - name: Generative Models
@@ -17,7 +17,7 @@ toc:
   - name: Stochastic Recursion
   - name: Persistent Randomness
 ---
-These are notes from Chapter 1 of <d-cite key="goodman2016probmods"></d-cite>
+These are notes from Chapter 1 of [@goodman2016probmods]
 ## Generative Models
 
 We would like to generate states of the world, or more specifically steps that unfold and lead to some potentially observable states. These processes can be described as computations - those that involve random choices to capture uncertainty about the process.
