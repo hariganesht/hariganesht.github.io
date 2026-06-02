@@ -94,7 +94,7 @@ print(b.score(true))
 
 // visualize distribution
 viz(b)
-</code></pre></div></div> <h3 id="marginal-distributions-infer">Marginal distributions: <code class="language-plaintext highlighter-rouge">infer</code> </h3> <p>Marginal distributions are constructed using the <code class="language-plaintext highlighter-rouge">infer</code> operator, which lets us reify the distribution implicitly with a sampling process.</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// create a gaussian distribution with mean mu and std dev sigma
+</code></pre></div></div> <h3 id="marginal-distributions-infer">Marginal Distributions: <code class="language-plaintext highlighter-rouge">infer</code> </h3> <p>Marginal distributions are constructed using the <code class="language-plaintext highlighter-rouge">infer</code> operator, which lets us reify the distribution implicitly with a sampling process.</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// create a gaussian distribution with mean mu and std dev sigma
 var g = Gaussian({mu: 0, sigma: 1})
 
 // sample a random number from the deviation by initially creating a distribution
