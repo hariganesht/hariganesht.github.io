@@ -296,7 +296,7 @@ We can use this for _lazy construction_. For example, to compute the result of t
 var flipAlot = mem(function (n) {
   return flip()
 });
-
 [[flipAlot(1), flipAlot(12), flipAlot(47), flipAlot(1548)],
  [flipAlot(1), flipAlot(12), flipAlot(47), flipAlot(1548)]]
 ~~~~
+{% bibliography %}
