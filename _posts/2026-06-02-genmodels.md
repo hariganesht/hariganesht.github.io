@@ -10,7 +10,7 @@ bibliography: 2026-06-02-genmodels.bib
 
 toc:
   - name: Generative Models
-  subsections:
+    subsections:
     - name: Prediction, Simulation, and Probabilities
     - name: Marginal Distributions
     - name: Rules of Probability
