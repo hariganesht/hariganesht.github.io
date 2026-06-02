@@ -23,22 +23,22 @@ We would like to generate states of the world, or more specifically steps that u
 
 For example, the `flip` function can simulate a (possibly biased) coin toss. Although, we note that technically it samples from a Bernoulli distribution.
 
-~~~~
+~~~~javascript
 flip()
 ~~~~
 
-~~~~
+~~~~javascript
 // visualization and repetition
 viz(repeat(1000,flip))
 ~~~~
 
 We can also construct more complex expressions, for example: sampling up a number adding up several flips. In JavaScript, a boolean will be turned into a number, 0 or 1, by the `+` operator:
 
-~~~~
+~~~~javascript
 flip() + flip() + flip()
 ~~~~
 
-~~~~
+~~~~javascript
 var sumflips = function() {
   return flip() + flip() + flip()
 }
@@ -49,7 +49,7 @@ Here is a stochastic function that will only sometimes double its input x:
 
 (Structure: `condition ? value-if-true : value-if-false`)
 
-~~~~
+~~~~javascript
 var noisydouble = function(x) {
   return flip() ? x+x : x
 }
@@ -58,7 +58,7 @@ noisydouble(3)
 
 The following program defines a fair coin, and flips it 20 times:
 
-~~~~
+~~~~javascript
 // making a coin
 var faircoin = function() {
   return flip(0.5) ? 'h' : 't'
@@ -66,7 +66,7 @@ var faircoin = function() {
 viz(repeat(20,faircoin))
 ~~~~
 
-~~~~
+~~~~javascript
 var trickcoin = function() {
   return flip(0.9) ? 'h' : 't'
 }
@@ -75,7 +75,7 @@ viz(repeat(20,trickcoin))
 
 We can also define functions within functions. For example, to manufacture a coin:
 
-~~~~
+~~~~javascript
 var makecoin = function(weight) {
   return function() {
     return flip(weight) ? 'h' : 't'
@@ -97,7 +97,7 @@ It first specifies the base rates of two diseases the patient could have: lung c
 
 The following program specifies a process for generating a common symptom of these diseases - an effect with two possible causes. The patient coughs if they have a cold or lung cancer (or both).
 
-~~~~
+~~~~javascript
 // defining probabilities
 var lungcancer = flip(0.01)
 var cold = flip(0.2)
@@ -108,7 +108,7 @@ cough
 
 Now we define four possible diseases and four symptoms. Each disease causes a different pattern of symptoms. The causal relations are probabilistic: only some patients with a cold have a cough (50%), or a fever (30%). The initial variables define the probability of you having each affliction, and we further go into each symptom to check for causation.
 
-~~~~
+~~~~javascript
 // independent probabilities of afflictions
 var lungcancer = flip(0.01)
 var tb = flip(0.005)
@@ -155,13 +155,13 @@ symptoms
 
 Suppose we flip two fair coins and return the list of their values.
 
-~~~~
+~~~~javascript
 [flip(), flip()]
 ~~~~
 
 How can we predict the return value of this program? For instance, how likely is it that we will see `[true, false]`? We can examine the probability distribution on values that can be returned by the above program by sampling many times and examining the histogram of return values.
 
-~~~~
+~~~~javascript
 var randompair = function() {
   return [flip(), flip()]
 }
@@ -172,7 +172,7 @@ We can think of `flip` in two different ways. From one perspective, it is a proc
 
 From another perspective, `flip` is itself a characterization of the probability distribution over `true` and `false`. To make this view explicit, WebPPL has a special type of distribution objects. These are objects that can be sampled with the `sample` operator, and that can explicitly return the probability of a return value using the `score` method.
 
-~~~~
+~~~~javascript
 // make a Bernoulli distribution
 var b = Bernoulli({p: 0.5})
 
@@ -190,7 +190,7 @@ viz(b)
 
 Marginal distributions are constructed using the `infer` operator, which lets us reify the distribution implicitly with a sampling process.
 
-~~~~
+~~~~javascript
 // create a gaussian distribution with mean mu and std dev sigma
 var g = Gaussian({mu: 0, sigma: 1})
 
@@ -217,7 +217,7 @@ The probability of two random choices is the product of their individual probabi
 
 We now know `C` being `[true, false]` to have a probability of 0.25, since this follows from the product rule of probability.
 
-~~~~
+~~~~javascript
 var A = flip()
 var B = flip()
 var C= [A, B] // since both are independent, we simply just multiply
@@ -226,7 +226,7 @@ C
 
 We should be careful here, since the probability of a choice can depend on the probabilities of previous choices. For example: to visualize the exact probability of `[true, false]` using `Infer`:
 
-~~~~
+~~~~javascript
 Infer({method: 'forward', samples: 10000}, function() {
   var A = flip()
   var B = flip(A ? 0.3 : 0.7) 
@@ -239,7 +239,7 @@ When multiple paths lead to the same outcome, we add them.
 
 As a rule of thumb, we add the probabilities for individual paths for `||`, and multiply for `&&`.
 
-~~~~
+~~~~javascript
 flip() || flip() // adds to 0.25 + 0.25 + 0.25 for TF+FT+TT probabilities
 ~~~~
 
@@ -249,7 +249,7 @@ Recursion functions, where the solution depends on solutions to smaller instance
 
 For example, the _geometric distribution_ is a probability distribution over the non-negative integers. We imagine flipping a weighted coin, returning N-1 if the first `true` is on the Nth flip.
 
-~~~~
+~~~~javascript
 var geometric = function (p) {
   return flip(p) ? 0 : 1 + geometric(p)
 }
@@ -261,7 +261,7 @@ viz(g)
 
 This is used to model a set of objects that have a randomly chosen property. For instance, to describe the eye colors of a set of people, we may implement the following.
 
-~~~~
+~~~~javascript
 var eyeColor = function (person) {
   return uniformDraw(['blue', 'green', 'brown'])
 };
@@ -271,7 +271,7 @@ var eyeColor = function (person) {
 
 However, this process is inconsistent; we get a different color for each's eyes every time we run this. We want a model that gives us random, but persistent colors. `memo` helps us do this by storing initial outputs. Below, we notice that Bob's eyes stay the same color for each run.
 
-~~~~
+~~~~javascript
 var eyeColor = mem(function (person) {
   return uniformDraw(['blue', 'green', 'brown'])
 });
@@ -279,19 +279,19 @@ var eyeColor = mem(function (person) {
 [eyeColor('bob'), eyeColor('alice'), eyeColor('bob')]
 ~~~~
 
-~~~~
+~~~~javascript
 // a simple example to drive the point home
 flip() == flip()
 ~~~~
 
-~~~~
+~~~~javascript
 var memflip = mem(flip)
 memflip() == memflip()
 ~~~~
 
 We can use this for _lazy construction_. For example, to compute the result of the nth coin flip without having to flip the coin n times. Here, we notice that `flipAlot` gives us the same result for the first flip both times, and likewise for the rest.
 
-~~~~
+~~~~javascript
 var flipAlot = mem(function (n) {
   return flip()
 });
