@@ -6,7 +6,7 @@ tags: notes
 date: 2026-06-01
 giscus_comments: false
 
-bibliography: 2026-06-01-what-is-cocosci.bib
+bibliography: papers.bib
 
 toc:
   - name: Introduction
