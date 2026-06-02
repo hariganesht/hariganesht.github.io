@@ -17,7 +17,7 @@ toc:
   - name: Stochastic Recursion
   - name: Persistent Randomness
 ---
-These are notes from Chapter 1 of % cite goodman2016probmods %}
+These are notes from Chapter 1 of {% cite goodman2016probmods %}
 ## Generative Models
 
 We would like to generate states of the world, or more specifically steps that unfold and lead to some potentially observable states. These processes can be described as computations - those that involve random choices to capture uncertainty about the process.
