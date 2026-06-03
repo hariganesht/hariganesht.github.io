@@ -38,3 +38,31 @@ I do this for for largely three reasons: first, I like making knowledge more acc
 {% endif %}
 
 </div>
+
+<ul class="post-list">
+
+  {% if page.pagination.enabled %}
+    {% assign postlist = paginator.posts %}
+  {% else %}
+    {% assign postlist = site.posts %}
+  {% endif %}
+
+  {% for post in postlist %}
+    <li>
+      <h3>
+        <a class="post-title" href="{{ post.url | relative_url }}">
+          {{ post.title }}
+        </a>
+      </h3>
+
+      {% if post.description %}
+        <p>{{ post.description }}</p>
+      {% endif %}
+
+      <p class="post-meta">
+        {{ post.date | date: '%B %d, %Y' }}
+      </p>
+    </li>
+  {% endfor %}
+
+</ul>
