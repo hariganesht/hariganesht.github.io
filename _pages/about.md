@@ -31,6 +31,6 @@ Previously, I interned at the [Dept. of Medical Sciences and Technology, IIT Mad
 
 <style>
   .social .contact-icons {
-    font-size: 2.5rem; /* theme default is 4rem — tune to taste */
+    font-size: 2rem; /* theme default is 4rem — tune to taste */
   }
 </style>
