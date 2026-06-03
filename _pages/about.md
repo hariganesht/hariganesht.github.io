@@ -46,7 +46,7 @@ Previously, I interned at the [Dept. of Medical Sciences and Technology, IIT Mad
   /* desktop (>= 576px): original theme layout, just resized */
   @media (min-width: 576px) {
     .profile {
-      width: 22%;
+      width: 26%;
     }
   }
 </style>
