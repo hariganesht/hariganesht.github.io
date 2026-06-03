@@ -24,7 +24,7 @@ pagination:
 {% if blog_name_size > 0 or blog_description_size > 0 %}
 
   <div class="header-bar">
-    <h1 style="margin-bottom: 1rem;">Blog</h1>
+    <h1 style="margin-bottom: 1rem;">Writing</h1>
     <p style="text-align: left;">
 The writing here consists of my own notes, as well as ideas I mess around with. 
 
