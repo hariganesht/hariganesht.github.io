@@ -30,13 +30,14 @@ I am an intern at the [AlphaGrep Quantitative Research Lab](https://wsai.iitm.ac
 Previously, I interned at the [Dept. of Medical Sciences and Technology, IIT Madras](https://mst.iitm.ac.in/), studying the applications of neurological models in diagnosing Dementia in Alzheimer's patients as part of a collaborative project with the University of Illinois Urbana-Champaign.
 
 <style>
+  /* contact icons (email / LinkedIn / CV) */
   .social .contact-icons {
-    font-size: 2rem; /* theme default is 4rem — tune to taste */
+    font-size: 2rem; /* theme default is 4rem */
   }
-</style>
-/* profile picture — mobile (< 576px) */
+
+  /* profile picture — mobile (< 576px) */
   .profile {
-    width: 80%; /* theme default is 100% on mobile */
+    width: 80%; /* theme default is 100% */
   }
 
   /* profile picture — desktop (>= 576px) */
