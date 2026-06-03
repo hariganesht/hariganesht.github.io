@@ -49,7 +49,7 @@ Previously, I interned at the [Dept. of Medical Sciences and Technology, IIT Mad
   /* desktop (>= 576px) — unchanged */
   @media (min-width: 576px) {
     .profile {
-      width: 30%;
+      width: 27%;
     }
   }
 </style>
