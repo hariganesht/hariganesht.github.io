@@ -37,7 +37,7 @@ Previously, I interned at the [Dept. of Medical Sciences and Technology, IIT Mad
 
   /* profile picture — mobile (< 576px) */
   .profile {
-    width: 80%; /* theme default is 100% */
+    width: 95%; /* theme default is 100% */
   }
 
   /* profile picture — desktop (>= 576px) */
