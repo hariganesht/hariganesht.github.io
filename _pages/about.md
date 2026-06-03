@@ -34,22 +34,19 @@ Previously, I interned at the [Dept. of Medical Sciences and Technology, IIT Mad
     font-size: 2rem;
   }
 
-  .profile {
-    float: none !important;   /* photo on its own line, text below */
-    margin: 0 auto 1.5rem;    /* centered */
-  }
-
-  /* phone only (< 576px) — shrink so it doesn't fill the screen */
+  /* phone only (< 576px): centered, on its own line, smaller */
   @media (max-width: 575.98px) {
     .profile {
+      float: none !important;
       width: 45%;
+      margin: 0 auto 1.5rem !important;
     }
   }
 
-  /* desktop (>= 576px) — unchanged */
+  /* desktop (>= 576px): original theme layout, just resized */
   @media (min-width: 576px) {
     .profile {
-      width: 27%;
+      width: 22%;
     }
   }
 </style>
