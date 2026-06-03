@@ -34,16 +34,10 @@ Previously, I interned at the [Dept. of Medical Sciences and Technology, IIT Mad
   .social .contact-icons {
     font-size: 2rem; /* theme default is 4rem */
   }
-
-  /* profile picture — mobile (< 576px) */
-  .profile {
-    width: 95%; /* theme default is 100% */
-  }
-
   /* profile picture — desktop (>= 576px) */
   @media (min-width: 576px) {
     .profile {
-      width: 22%; /* theme default is 30% */
+      width: 18%; /* theme default is 30% */
     }
   }
 </style>
