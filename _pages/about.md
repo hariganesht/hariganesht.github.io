@@ -23,9 +23,9 @@ latest_posts:
   limit: 3 # leave blank to include all the blog posts
 ---
 
-Hello! I am a senior undergraduate interested in making use of Bayesian modeling to understand the math behind human decision-making and how it changes under uncertainty. 
+Hello! I am a senior undergraduate interested in making use of Bayesian modeling to understand the mathematics underlying human decision-making, particularly under uncertainty and how human behavior compares to perfectly rational systems.
 
-I am an intern at the [AlphaGrep Quantitative Research Lab](https://wsai.iitm.ac.in/research/alpha-research-lab/), researching the effects of human cognition and decision-making on financial markets. I am also an incoming research intern (Fall 2026) with the [IRIS](https://nusgs.nus.edu.sg/irisnus/#) Fellowship at the National University of Singapore, working under the supervision of Prof Tan Zhi Xuan on modeling imperfect human behavior.
+I am an intern at the [AlphaGrep Quantitative Research Lab](https://wsai.iitm.ac.in/research/alpha-research-lab/), researching the effects of human cognition and decision-making on financial markets. I am also fortunate to be awarded the [IRIS](https://nusgs.nus.edu.sg/irisnus/#) Fellowship at the National University of Singapore over Fall 2026, where I will be a research intern under the supervision of Prof Tan Zhi Xuan on modeling imperfect human behavior.
 
 Previously, I interned at the [Dept. of Medical Sciences and Technology, IIT Madras](https://mst.iitm.ac.in/), studying the applications of neurological models in diagnosing Dementia in Alzheimer's patients as part of a collaborative project with the University of Illinois Urbana-Champaign.
 
