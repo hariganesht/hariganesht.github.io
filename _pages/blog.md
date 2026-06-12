@@ -28,7 +28,7 @@ pagination:
     <p style="text-align: left;">
 The writing here consists of my own notes, as well as occasional attempts at answering some interesting questions.
 
-I do this for largely two reasons: firstly, I like making knowledge more accessible, even if the difference I can create is marginal. I believe that the way research and knowledge are presented can be made far better, and my thoughts on this are beautifully justified in <a href="https://distill.pub/2017/research-debt/">this Distill post by Chris Olah and Shan Carter</a>; and secondly, I think there is value in keeping an iterative record of my learning - articulating thoughts forces me to think and write more carefully. There is also an excellent <a href="https://medium.com/@racheltho/why-you-yes-you-should-blog-7d2544ac1045">blog post by Rachel Thomas</a> on why this might be a good use of your time in academia!
+I do this for largely two reasons: firstly, I like making knowledge more accessible, even if the difference I can create is marginal. I believe that the way research and knowledge are presented can be made far better, and my thoughts on this are beautifully justified in <a href="https://distill.pub/2017/research-debt/">this Distill post by Chris Olah and Shan Carter</a>; secondly, I think there is value in keeping an iterative record of my learning - articulating thoughts forces me to think and write more carefully. There is also an excellent <a href="https://medium.com/@racheltho/why-you-yes-you-should-blog-7d2544ac1045">blog post by Rachel Thomas</a> on why this might be a good use of your time in academia!
 </p>
 </div>
   {% endif %}
