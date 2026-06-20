@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>What is CoCoSci? — Hariganesh Tangirala</title>
+<title>What is CoCoSci? - Hariganesh Tangirala</title>
 <meta name="description" content="An introduction to Computational Cognitive Science.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,10 +38,10 @@
 
   <header class="post-header">
     <h1>What is CoCoSci?</h1>
-    <p class="desc">An introduction to Computational Cognitive Science.</p>
+    <p class="desc">An introduction to computational cognitive science.</p>
     <p class="meta">Notes &middot; 1 June 2026</p>
     <p class="source-note">These notes are adapted and framed almost entirely from
-      <a href="#ref-griffiths">(Griffiths, Kemp &amp; Tenenbaum, 2008)</a>,
+      <a href="#ref-griffiths">(Griffiths, Chater &amp; Tenenbaum, 2024)</a>,
       <a href="#ref-navarro">(Navarro, 2024)</a>,
       <a href="#ref-annual">(Annual Review, 2024)</a>, and
       <a href="#ref-probmods">(Goodman et&nbsp;al., ProbMods)</a>.</p>
@@ -61,7 +61,7 @@
   <section>
     <h2 id="introduction">Introduction</h2>
 
-    <p>Humans are incredibly smart — incomparably to other living beings that we know of.<sup class="fnref" id="fnref-1"><a href="#fn-1">1</a></sup></p>
+    <p>Humans are incredibly smart - incomparably to other living beings that we know of.<sup class="fnref" id="fnref-1"><a href="#fn-1">1</a></sup></p>
 
     <p>But what is this intelligence used for?</p>
 
@@ -69,7 +69,7 @@
 
     <p><em>How can we know so much from so little? How is this intelligence engineered?</em> We can see that there is often a strong mismatch between the information (input through our senses) and the outputs of cognition.<sup class="fnref" id="fnref-3"><a href="#fn-3">3</a></sup></p>
 
-    <p>Regardless, we are able to build rich causal models of the world, by making strong generalizations and abstractions — to the extent that we even create new worlds and attempt to understand them. <em>Given that input data is often sparse, noisy, and incomplete — how does this happen?</em> For example: consider a child able to classify things and learn their names in new situations, despite conventional algorithmic approaches from statistics and machine learning requiring far more effort to train.</p>
+    <p>Regardless, we are able to build rich causal models of the world, by making strong generalizations and abstractions - to the extent that we even create new worlds and attempt to understand them. <em>Given that input data is often sparse, noisy, and incomplete - how does this happen?</em> For example: consider a child able to classify things and learn their names in new situations, despite conventional algorithmic approaches from statistics and machine learning requiring far more effort to train.</p>
 
     <p>A similar example: people are usually able to understand the rules of a board game by observing a few played rounds. Even if these inferences were mildly inaccurate guesses with some uncertainty, these would still be far better than you would have made before seeing any play at all.</p>
 
@@ -99,7 +99,7 @@
         </div>
       </div>
       <figcaption>
-        The number game, live. With the four samples \(\{50, 20, 80, 90\}\) the posterior puts almost all of its mass on <em>multiples of 10</em>, even though <em>even numbers</em> and the intervals fit the data just as well. This is the <em>size principle</em>: the likelihood of a hypothesis \(h\) under \(n\) examples drawn from within it is \((1/\lvert h\rvert)^{n}\), so a smaller rule that still covers every example is exponentially better supported. Switch to \(\{20, 50\}\) and the gradient smears out — two samples cannot pin the rule down, which is exactly why the four-sample case feels so much more compelling. <span class="dim">(Illustrative hypothesis set with a uniform prior, not the full model of <a href="#ref-griffiths">Griffiths et&nbsp;al.</a>)</span>
+        You can play around with the visualization by testing different combinations! <span class="dim">(Illustrative hypothesis set with a uniform prior, not the full model of <a href="#ref-griffiths">Griffiths et&nbsp;al.</a>)</span>
       </figcaption>
     </figure>
   </section>
@@ -107,9 +107,9 @@
   <section>
     <h3 id="models">Models</h3>
 
-    <p>The deepest form of the generalization we discuss above is perhaps human learning over cognitive development — as we construct large-scale systems of knowledge for physics, biology, or even morality and social structure. These are known as <em>world models</em>, i.e. the human mind's models of causality in the world. Since we are not able to capture the entire state of the world, these models are inherently probabilistic and inferential. Any intuitive theory can then be quite transformative, in the sense that a single demonstration is enough to suggest that the world could work differently than previously perceived, and that this observation is eventually understood.</p>
+    <p>The deepest form of the generalization we discuss above is perhaps human learning over cognitive development - as we construct large-scale systems of knowledge for physics, biology, or even morality and social structure. These are known as <em>world models</em>, i.e. the human mind's models of causality in the world. Since we are not able to capture the entire state of the world, these models are inherently probabilistic and inferential. Any intuitive theory can then be quite transformative, in the sense that a single demonstration is enough to suggest that the world could work differently than previously perceived, and that this observation is eventually understood.</p>
 
-    <p>How do we then know, sometimes only from a single example — which observed generalization should hold and which should not? These questions continue to drive discussions about the origins of knowledge and philosophy of science. <em>What does it mean for a property to endure, or to be a law of nature? What is our justification for believing that a universal concept that has held everywhere and always will not be falsified some day?</em></p>
+    <p>How do we then know, sometimes only from a single example - which observed generalization should hold and which should not? These questions continue to drive discussions about the origins of knowledge and philosophy of science. <em>What does it mean for a property to endure, or to be a law of nature? What is our justification for believing that a universal concept that has held everywhere and always will not be falsified some day?</em></p>
 
     <p>If the mind goes beyond the given data, then surely some other source of information must make up the difference.</p>
 
@@ -125,7 +125,7 @@
       <li>How do we use our world models to make decisions and act in the world successfully?</li>
       <li>How can learning and inference with complex world models be implemented efficiently in minds with bounded computational resources?</li>
       <li>How are complex world models implemented in a physical machine, brain, or computer?</li>
-      <li>What are the origins of our world models in evolution and development — what is built into our mind, and how do we learn within and beyond that starting point?</li>
+      <li>What are the origins of our world models in evolution and development - what is built into our mind, and how do we learn within and beyond that starting point?</li>
       <li>What is needed to scale up learning to all the knowledge that a human being acquires over their lifetime and human cultures have built over generations?</li>
     </ol>
 
@@ -135,54 +135,15 @@
   <section>
     <h3 id="why-bayes">Why Bayes?</h3>
 
-    <p>Abstract knowledge is encoded in a probabilistic generative model, a kind of mental model that describes the causal processes in the world that give rise to the learner's observations, as well as unobserved latent variables that support effective prediction and action — but only if the learner can infer their hidden state.<sup class="fnref" id="fnref-4"><a href="#fn-4">4</a></sup><sup class="fnref" id="fnref-5"><a href="#fn-5">5</a></sup></p>
+    <p>Abstract knowledge is encoded in a probabilistic generative model, a kind of mental model that describes the causal processes in the world that give rise to the learner's observations, as well as unobserved latent variables that support effective prediction and action - but only if the learner can infer their hidden state.<sup class="fnref" id="fnref-4"><a href="#fn-4">4</a></sup><sup class="fnref" id="fnref-5"><a href="#fn-5">5</a></sup></p>
 
-    <p>Bayesian inference provides a rational framework for updating beliefs about latent variables in generative models given observed data. Background knowledge is encoded through a constrained space of hypothesis \(\mathcal{H}\) about possible values for latent variables — candidate world structures that could explain the observed data. Finer-grained knowledge comes in the prior probabilities \(P(h)\) that specify the learner's degree of belief in each hypothesis \(h\) prior to (or independent of) the observations. Bayes' rule updates these prior probabilities to posterior probabilities \(P(h\mid d)\) conditional on the observed data \(d\):</p>
+    <p>Bayesian inference provides a rational framework for updating beliefs about latent variables in generative models given observed data. Background knowledge is encoded through a constrained space of hypothesis \(\mathcal{H}\) about possible values for latent variables - candidate world structures that could explain the observed data. Finer-grained knowledge comes in the prior probabilities \(P(h)\) that specify the learner's degree of belief in each hypothesis \(h\) prior to (or independent of) the observations. Bayes' rule updates these prior probabilities to posterior probabilities \(P(h\mid d)\) conditional on the observed data \(d\):</p>
 
     <div class="equation">
       $$ P(h\mid d)=\frac{P(d\mid h)\,P(h)}{\sum_{h' \in \mathcal{H}} P(d\mid h')\,P(h')} $$
     </div>
 
-    <p>For example: if the data is a thwack, one hypothesis is a dropped egg in the kitchen, another hypothesis is a dropped water balloon in the kitchen, and a third hypothesis is a dropped loaf of bread. The first and third have high priors \(P(h)\), while the second does not — eggs and bread are often dropped in kitchens, but water balloons only rarely. The first and second have high likelihoods \(P(d\mid h)\), while the third does not — dropped eggs and water balloons often thwack, but dropped bread rarely does. On this comparative basis, then, the first hypothesis is assigned the highest probability given the data \(P(h\mid d)\).</p>
-
-    <figure class="fig" style="text-align:center;">
-      <svg viewBox="0 0 720 200" width="100%" style="max-width:680px; height:auto;" role="img" aria-label="Prior times likelihood gives the posterior for the thwack example" xmlns="http://www.w3.org/2000/svg">
-        <text x="172" y="26" text-anchor="middle" font-size="14" fill="currentColor">prior&#8201;&#8201;P(h)</text>
-        <text x="336" y="26" text-anchor="middle" font-size="14" fill="currentColor">likelihood&#8201;&#8201;P(d&#8201;|&#8201;h)</text>
-        <text x="502" y="26" text-anchor="middle" font-size="14" fill="currentColor">posterior&#8201;&#8201;P(h&#8201;|&#8201;d)</text>
-
-        <text x="248" y="118" text-anchor="middle" font-size="20" fill="currentColor" opacity="0.55">&#215;</text>
-        <text x="414" y="118" text-anchor="middle" font-size="20" fill="currentColor" opacity="0.55">&#8733;</text>
-
-        <text x="8" y="82"  font-size="13" fill="currentColor">dropped egg</text>
-        <text x="8" y="120" font-size="13" fill="currentColor">water balloon</text>
-        <text x="8" y="158" font-size="13" fill="currentColor">dropped bread</text>
-
-        <rect x="112" y="68"  width="120"   height="20" rx="3" fill="#9a9a9a"/>
-        <rect x="112" y="106" width="26.7"  height="20" rx="3" fill="#9a9a9a"/>
-        <rect x="112" y="144" width="120"   height="20" rx="3" fill="#9a9a9a"/>
-        <text x="238" y="82"  font-size="11" fill="currentColor" opacity="0.7" font-family="'DM Mono', monospace">.45</text>
-        <text x="145" y="120" font-size="11" fill="currentColor" opacity="0.7" font-family="'DM Mono', monospace">.10</text>
-        <text x="238" y="158" font-size="11" fill="currentColor" opacity="0.7" font-family="'DM Mono', monospace">.45</text>
-
-        <rect x="276" y="68"  width="120" height="20" rx="3" fill="#9a9a9a"/>
-        <rect x="276" y="106" width="120" height="20" rx="3" fill="#9a9a9a"/>
-        <rect x="276" y="144" width="15"  height="20" rx="3" fill="#9a9a9a"/>
-        <text x="402" y="82"  font-size="11" fill="currentColor" opacity="0.7" font-family="'DM Mono', monospace">.80</text>
-        <text x="402" y="120" font-size="11" fill="currentColor" opacity="0.7" font-family="'DM Mono', monospace">.80</text>
-        <text x="297" y="158" font-size="11" fill="currentColor" opacity="0.7" font-family="'DM Mono', monospace">.10</text>
-
-        <rect x="442" y="68"  width="120"  height="20" rx="3" fill="#1d9e75"/>
-        <rect x="442" y="106" width="26.7" height="20" rx="3" fill="#1d9e75"/>
-        <rect x="442" y="144" width="15"   height="20" rx="3" fill="#1d9e75"/>
-        <text x="568" y="82"  font-size="11" fill="currentColor" opacity="0.85" font-family="'DM Mono', monospace">.74</text>
-        <text x="475" y="120" font-size="11" fill="currentColor" opacity="0.85" font-family="'DM Mono', monospace">.17</text>
-        <text x="463" y="158" font-size="11" fill="currentColor" opacity="0.85" font-family="'DM Mono', monospace">.09</text>
-      </svg>
-      <figcaption style="margin-left:auto; margin-right:auto;">
-        The same arithmetic behind the kitchen thwack. Bread shares the egg's high prior but loses on the likelihood (bread rarely thwacks); the balloon shares the egg's high likelihood but loses on the prior (we rarely drop balloons in kitchens). Only the egg scores well on both, so prior \(\times\) likelihood leaves it with most of the posterior. <span class="dim">(Numbers are illustrative.)</span>
-      </figcaption>
-    </figure>
+    <p>For example: if the data is a thwack, one hypothesis is a dropped egg in the kitchen, another hypothesis is a dropped water balloon in the kitchen, and a third hypothesis is a dropped loaf of bread. The first and third have high priors \(P(h)\), while the second does not - eggs and bread are often dropped in kitchens, but water balloons only rarely. The first and second have high likelihoods \(P(d\mid h)\), while the third does not - dropped eggs and water balloons often thwack, but dropped bread rarely does. On this comparative basis, then, the first hypothesis is assigned the highest probability given the data \(P(h\mid d)\).</p>
 
     <p>What form does our abstract world knowledge take across different circumstances? Bayesian models are able to do two fascinating things.</p>
 
@@ -204,9 +165,9 @@
       <li><em>Implementation</em>: how does the brain carry these steps out?</li>
     </ol>
 
-    <p>Learning is impossible from data alone; it requires constraints. When we are handed new information, we are never certain how to classify it — instead we assume the world is organised in some structured way, and that assumption <em>is</em> abstract knowledge. So in the Bayesian approach we represent knowledge as structures — trees, graphs, logical rules — and place probabilities over them. Traditional machine learning tends to read structure off the data; here we run it the other way, generating data <em>through</em> structure: chains for political ideologies, trees for species, two-dimensional rings for geography. Intelligence then collapses to minimising the hypothesis space, i.e. knowing which hypotheses are even worth considering.</p>
+    <p>Learning is impossible from data alone; it requires constraints. When we are handed new information, we are never certain how to classify it - instead we assume the world is organised in some structured way, and that assumption <em>is</em> abstract knowledge. So in the Bayesian approach we represent knowledge as structures - trees, graphs, logical rules - and place probabilities over them. Traditional machine learning tends to read structure off the data; here we run it the other way, generating data <em>through</em> structure: chains for political ideologies, trees for species, two-dimensional rings for geography. Intelligence then collapses to minimising the hypothesis space, i.e. knowing which hypotheses are even worth considering.</p>
 
-    <p>To study how people <em>learn how to learn</em>, we use <em>Hierarchical Bayesian Models</em> (HBMs), which posit several levels of hypotheses and priors at once. Suppose you have many bags of balls and notice that the first three each hold balls of a single colour. You infer that bags tend to be uniform; so when a new bag yields a single blue ball, you immediately predict the rest are blue too — not because the data demand it, but because you have learned a higher-level rule. HBMs learn the data, the structure, and the priors over structures simultaneously: this object is a dog (level 1), dogs form a category (level 2), categories are shape-based (level 3).</p>
+    <p>To study how people <em>learn how to learn</em>, we use <em>Hierarchical Bayesian Models</em> (HBMs), which posit several levels of hypotheses and priors at once. Suppose you have many bags of balls and notice that the first three each hold balls of a single colour. You infer that bags tend to be uniform; so when a new bag yields a single blue ball, you immediately predict the rest are blue too - not because the data demand it, but because you have learned a higher-level rule. HBMs learn the data, the structure, and the priors over structures simultaneously: this object is a dog (level 1), dogs form a category (level 2), categories are shape-based (level 3).</p>
 
     <p>Sometimes the right move is not to sort an object into an existing category but to invent a new one. <em>Nonparametric</em> Bayesian models handle this without committing to a fixed number of groups in advance; the Chinese Restaurant Process, for instance, formalises exactly the choice between joining an existing category and starting a fresh one.</p>
 
@@ -216,21 +177,21 @@
   <section>
     <h3 id="knowledge-informing-actions">Knowledge informing actions</h3>
 
-    <p><em>How do we use our world models to make decisions and act in the world successfully?</em> If our preferences over outcomes obey a few simple rules, they can be summarised by assigning each outcome a <em>utility</em>, where higher utility means more desirable. A rational agent — holding beliefs as a probability distribution over hypotheses — then acts to maximise the <em>expected</em> utility of the outcomes its actions produce.</p>
+    <p><em>How do we use our world models to make decisions and act in the world successfully?</em> If our preferences over outcomes obey a few simple rules, they can be summarised by assigning each outcome a <em>utility</em>, where higher utility means more desirable. A rational agent - holding beliefs as a probability distribution over hypotheses - then acts to maximise the <em>expected</em> utility of the outcomes its actions produce.</p>
 
-    <p>We can scale this past single decisions. A sequence of interdependent actions is captured by a <em>Markov decision process</em> (MDP): the agent's situation is encoded as a state, actions change that state, reaching the goal yields reward, and each step along the way carries a cost. The aim is to maximise expected long-run reward summed over the whole trajectory. MDPs also allow actions to influence states only probabilistically — an attempted move may simply fail.</p>
+    <p>We can scale this past single decisions. A sequence of interdependent actions is captured by a <em>Markov decision process</em> (MDP): the agent's situation is encoded as a state, actions change that state, reaching the goal yields reward, and each step along the way carries a cost. The aim is to maximise expected long-run reward summed over the whole trajectory. MDPs also allow actions to influence states only probabilistically - an attempted move may simply fail.</p>
 
-    <p>More uncertainty still is handled by <em>partially observable</em> MDPs (POMDPs), where the agent does not even know which state it is in and must infer it from whatever it can observe. And <em>reinforcement learning</em> (RL) adds a further layer: the agent does not begin knowing how actions change states, or what rewards follow, and has to learn these consequences from experience — whether by building a model of the environment (<em>model-based</em>) or by caching values directly from trial and error (<em>model-free</em>).</p>
+    <p>More uncertainty still is handled by <em>partially observable</em> MDPs (POMDPs), where the agent does not even know which state it is in and must infer it from whatever it can observe. And <em>reinforcement learning</em> (RL) adds a further layer: the agent does not begin knowing how actions change states, or what rewards follow, and has to learn these consequences from experience - whether by building a model of the environment (<em>model-based</em>) or by caching values directly from trial and error (<em>model-free</em>).</p>
   </section>
 
   <section>
     <h3 id="limited-cognitive-resources">Limited cognitive resources</h3>
 
-    <p>Every solution so far has been ideal — optimal, and for that very reason unreachable. <em>How can learning and inference with complex world models be carried out efficiently in minds with bounded computational resources?</em></p>
+    <p>Every solution so far has been ideal - optimal, and for that very reason unreachable. <em>How can learning and inference with complex world models be carried out efficiently in minds with bounded computational resources?</em></p>
 
-    <p>Here we have to look at the approximations the mind actually uses, and how they echo the approximations engineered into AI. Two broad strategies recur. The first leans on <em>Monte Carlo</em> or stochastic sampling — approximating a distribution by drawing samples from it — as a single lens for how Bayesian inference might run in minds, brains, and machines alike. The second substitutes the awkward distribution with a simpler one that is easier to compute with.</p>
+    <p>Here we have to look at the approximations the mind actually uses, and how they echo the approximations engineered into AI. Two broad strategies recur. The first leans on <em>Monte Carlo</em> or stochastic sampling - approximating a distribution by drawing samples from it - as a single lens for how Bayesian inference might run in minds, brains, and machines alike. The second substitutes the awkward distribution with a simpler one that is easier to compute with.</p>
 
-    <p>This abundance of methods creates a new, higher-order problem: <em>which</em> algorithm should we use, and how many samples should we draw? And that, finally, is the answer to how we get so much from so little — we spend our limited resources well, making intelligent choices about how and when to approximate, leaning on efficient algorithms and efficient representations both.</p>
+    <p>This abundance of methods creates a new, higher-order problem: <em>which</em> algorithm should we use, and how many samples should we draw? And that, finally, is the answer to how we get so much from so little - we spend our limited resources well, making intelligent choices about how and when to approximate, leaning on efficient algorithms and efficient representations both.</p>
   </section>
 
   <div class="endmatter">
