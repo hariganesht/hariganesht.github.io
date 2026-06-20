@@ -39,12 +39,9 @@ ol.body-list, ul.body-list{ margin: 0 0 1.2rem; padding-left: 1.4rem; }
 ol.body-list li, ul.body-list li{ margin: .3rem 0; }
 
 /* ---- site header / footer ------------------------------------------------ */
-.site-header{ border-bottom: 1px solid var(--line); }
-.site-header .bar{
-  display: flex; align-items: baseline; justify-content: space-between;
-  padding: 1.4rem 0; gap: 1rem; flex-wrap: wrap;
-}
-.site-name{ font-size: 1.15rem; font-weight: 600; color: var(--fg); text-decoration: none; }
+.site-header{ border-bottom: 1px solid var(--line); padding: 1.7rem 0 1.2rem; }
+.site-header .site-name{ display: block; margin-bottom: .6rem; }
+.site-name{ font-size: 1.3rem; font-weight: 600; color: var(--fg); text-decoration: none; }
 .site-name:hover{ color: var(--accent); text-decoration: none; }
 .site-nav{ display: flex; gap: 1.3rem; }
 .site-nav a{
@@ -84,6 +81,12 @@ h3{ font-size: .78rem; letter-spacing: .12em; color: var(--accent); margin: 2.4r
 .headshot{
   width: 150px; height: 150px; border-radius: 8px; object-fit: cover;
   float: right; margin: .2rem 0 1rem 1.5rem; border: 1px solid var(--line);
+}
+.headshot-placeholder{
+  display: flex; align-items: center; justify-content: center;
+  background: var(--surface); color: var(--faint);
+  font-family: 'DM Mono', ui-monospace, monospace; font-size: .62rem;
+  letter-spacing: .14em; text-transform: uppercase;
 }
 .home-links{ list-style: none; margin: .4rem 0 0; padding: 0; }
 .home-links li{ margin: .35rem 0; }
