@@ -1,0 +1,183 @@
+/* =========================================================================
+   Hariganesh Tangirala — site styles
+   EB Garamond (text) + DM Mono (labels/code), warm off-white, teal accent.
+   ========================================================================= */
+
+:root{
+  --bg: #fffdf9;
+  --fg: #211f1b;
+  --muted: #6f6a61;
+  --faint: #9a948a;
+  --accent: #0f6e56;
+  --accent-bar: #1d9e75;
+  --mark: #c0532e;
+  --line: rgba(0,0,0,0.10);
+  --line-strong: rgba(0,0,0,0.20);
+  --surface: #f2efe7;
+  --measure: 46rem;
+}
+
+*{ box-sizing: border-box; }
+html{ -webkit-text-size-adjust: 100%; }
+body{
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 20px; line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap{ max-width: var(--measure); margin: 0 auto; padding: 0 1.25rem; }
+
+p{ margin: 0 0 1.15rem; }
+em{ font-style: italic; }
+a{ color: var(--accent); text-underline-offset: 2px; }
+a:hover{ text-decoration: underline; }
+code{
+  font-family: 'DM Mono', ui-monospace, monospace; font-size: .88em;
+  background: var(--surface); padding: .05em .35em; border-radius: 4px;
+}
+ol.body-list, ul.body-list{ margin: 0 0 1.2rem; padding-left: 1.4rem; }
+ol.body-list li, ul.body-list li{ margin: .3rem 0; }
+
+/* ---- site header / footer ------------------------------------------------ */
+.site-header{ border-bottom: 1px solid var(--line); }
+.site-header .bar{
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 1.4rem 0; gap: 1rem; flex-wrap: wrap;
+}
+.site-name{ font-size: 1.15rem; font-weight: 600; color: var(--fg); text-decoration: none; }
+.site-name:hover{ color: var(--accent); text-decoration: none; }
+.site-nav{ display: flex; gap: 1.3rem; }
+.site-nav a{
+  font-family: 'DM Mono', ui-monospace, monospace; font-size: .72rem;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-decoration: none;
+}
+.site-nav a:hover, .site-nav a.active{ color: var(--accent); }
+
+.site-footer{ border-top: 1px solid var(--line); margin-top: 5rem; }
+.site-footer .bar{
+  padding: 1.6rem 0 3rem; font-family: 'DM Mono', ui-monospace, monospace;
+  font-size: .72rem; letter-spacing: .06em; color: var(--faint);
+}
+.site-footer a{ color: var(--muted); text-decoration: none; }
+.site-footer a:hover{ color: var(--accent); }
+
+/* ---- headings ------------------------------------------------------------ */
+h1{ font-size: 2.5rem; line-height: 1.1; font-weight: 600; margin: 0 0 .4rem; letter-spacing: -0.01em; }
+h2, h3{
+  font-family: 'DM Mono', ui-monospace, monospace;
+  text-transform: uppercase; font-weight: 500; color: var(--fg);
+}
+h2{
+  font-size: .92rem; letter-spacing: .12em; margin: 3.2rem 0 1.2rem;
+  padding-top: 1.1rem; border-top: 1px solid var(--line-strong);
+}
+h3{ font-size: .78rem; letter-spacing: .12em; color: var(--accent); margin: 2.4rem 0 .9rem; }
+.desc{ font-style: italic; color: var(--muted); font-size: 1.25rem; margin: 0 0 .9rem; }
+.meta{
+  font-family: 'DM Mono', ui-monospace, monospace; font-size: .72rem;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--faint);
+}
+
+/* ---- home ---------------------------------------------------------------- */
+.home{ padding-top: 3rem; }
+.home .lede{ font-size: 1.15rem; }
+.headshot{
+  width: 150px; height: 150px; border-radius: 8px; object-fit: cover;
+  float: right; margin: .2rem 0 1rem 1.5rem; border: 1px solid var(--line);
+}
+.home-links{ list-style: none; margin: .4rem 0 0; padding: 0; }
+.home-links li{ margin: .35rem 0; }
+.home-links .k{
+  display: inline-block; min-width: 7.5rem;
+  font-family: 'DM Mono', ui-monospace, monospace; font-size: .72rem;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--faint);
+}
+
+/* ---- writing index ------------------------------------------------------- */
+.writing-intro{ padding-top: 2.5rem; }
+.post-list{ list-style: none; margin: 2rem 0 0; padding: 0; }
+.post-list li{ padding: 1.3rem 0; border-top: 1px solid var(--line); }
+.post-list li:last-child{ border-bottom: 1px solid var(--line); }
+.post-list .p-date{
+  font-family: 'DM Mono', ui-monospace, monospace; font-size: .7rem;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--faint);
+  display: block; margin-bottom: .25rem;
+}
+.post-list .p-title{ font-size: 1.4rem; font-weight: 600; }
+.post-list .p-title a{ color: var(--fg); text-decoration: none; }
+.post-list .p-title a:hover{ color: var(--accent); }
+.post-list .p-desc{ color: var(--muted); margin: .2rem 0 0; }
+.post-list .p-tags{
+  font-family: 'DM Mono', ui-monospace, monospace; font-size: .68rem;
+  letter-spacing: .08em; color: var(--faint); margin-top: .4rem;
+}
+
+/* ---- post ---------------------------------------------------------------- */
+.post{ padding-top: 2.5rem; }
+.backlink{
+  font-family: 'DM Mono', ui-monospace, monospace; font-size: .7rem;
+  letter-spacing: .1em; text-transform: uppercase; text-decoration: none;
+  color: var(--muted); display: inline-block; margin-bottom: 2rem;
+}
+.backlink:hover{ color: var(--accent); }
+.post-header{ margin-bottom: 2.2rem; }
+.source-note{ color: var(--muted); font-size: .95rem; margin-top: 1.4rem; }
+
+nav.toc{ margin: 2.2rem 0 2.8rem; padding: .2rem 0 .2rem 1rem; border-left: 2px solid var(--accent-bar); }
+nav.toc .toc-label{
+  font-family: 'DM Mono', ui-monospace, monospace; font-size: .68rem;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--faint); margin-bottom: .5rem;
+}
+nav.toc ol{ list-style: none; margin: 0; padding: 0; }
+nav.toc li{ margin: .2rem 0; font-size: 1rem; }
+nav.toc a{ color: var(--muted); text-decoration: none; }
+nav.toc a:hover{ color: var(--accent); }
+
+.equation{ margin: 1.6rem 0; overflow-x: auto; }
+sup.fnref{ font-size: .7em; line-height: 0; }
+sup.fnref a{ text-decoration: none; padding: 0 .1em; }
+
+figure.fig{ margin: 2.4rem 0; }
+figure.fig figcaption{ font-size: .92rem; color: var(--muted); line-height: 1.5; margin-top: .9rem; max-width: 40rem; }
+figure.fig figcaption .dim{ opacity: .72; }
+
+.endmatter{ margin-top: 4rem; padding-top: 1.4rem; border-top: 1px solid var(--line-strong); }
+.endmatter h2{ border-top: 0; padding-top: 0; margin-top: 2.2rem; }
+.endmatter ol{ padding-left: 1.4rem; }
+.endmatter li{ font-size: .95rem; color: var(--muted); margin: .55rem 0; line-height: 1.5; }
+.endmatter li a.back{ text-decoration: none; }
+.ref-id{ font-family: 'DM Mono', ui-monospace, monospace; font-size: .82rem; color: var(--faint); }
+
+/* ---- number-game figure (scoped under #ng) ------------------------------- */
+#ng{ max-width: 440px; margin: 0 auto; }
+#ng .presets{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:14px; }
+#ng .presets .lbl{ font-size:1rem; color:var(--muted); }
+#ng button.pset{ font-family:'DM Mono', ui-monospace, monospace; font-size:13px; color:var(--fg);
+  background:transparent; border:0.5px solid var(--line-strong); border-radius:7px; padding:5px 10px; cursor:pointer; line-height:1; }
+#ng button.pset:hover{ background:var(--surface); }
+#ng .grid{ display:grid; grid-template-columns:repeat(10,1fr); gap:4px; margin-bottom:22px; }
+#ng button.cell{ font-family:'DM Mono', ui-monospace, monospace; font-size:12px; height:28px; padding:0;
+  border:0.5px solid var(--line); border-radius:6px; background:transparent; color:var(--muted); cursor:pointer; }
+#ng button.cell:hover{ border-color:var(--line-strong); }
+#ng button.cell.on{ background:var(--accent-bar); border-color:var(--accent-bar); color:#04342c; }
+#ng .sect{ font-size:1.02rem; margin:0 0 1px; font-family:'EB Garamond', serif; text-transform:none; letter-spacing:0; color:var(--fg); }
+#ng .sub{ font-size:.85rem; color:var(--muted); margin:0 0 11px; }
+#ng .block{ margin-bottom:22px; }
+#ng .barrow{ display:flex; align-items:center; gap:9px; margin-bottom:6px; }
+#ng .barname{ width:130px; font-size:.92rem; color:var(--muted); text-align:right; flex-shrink:0; }
+#ng .bartrack{ flex:1; height:15px; background:var(--surface); border-radius:6px; overflow:hidden; }
+#ng .barfill{ height:100%; background:var(--accent-bar); }
+#ng .barpct{ width:46px; font-size:12px; text-align:right; flex-shrink:0; color:var(--fg); font-family:'DM Mono', ui-monospace, monospace; }
+#ng .grad{ display:flex; align-items:flex-end; gap:1px; height:112px; padding-top:4px; border-bottom:0.5px solid var(--line-strong); }
+#ng .gbar{ flex:1; min-height:1px; background:var(--accent-bar); border-radius:1px 1px 0 0; }
+#ng .gbar.ex{ background:var(--accent); box-shadow: inset 0 3px 0 var(--mark); }
+#ng .ticks{ display:flex; justify-content:space-between; font-size:11px; color:var(--faint); margin-top:5px; font-family:'DM Mono', ui-monospace, monospace; }
+#ng .hint{ font-size:.9rem; color:var(--faint); padding:6px 0; }
+
+/* ---- responsive ---------------------------------------------------------- */
+@media (max-width: 480px){
+  body{ font-size: 18px; }
+  h1{ font-size: 2rem; }
+  .headshot{ width: 110px; height: 110px; margin-left: 1rem; }
+  .home-links .k{ min-width: 6rem; }
+}
