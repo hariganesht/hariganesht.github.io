@@ -26,7 +26,7 @@ body{
   -webkit-font-smoothing: antialiased;
 }
 .wrap{ max-width: var(--measure); margin: 0 auto; padding: 0 1.25rem; }
-.home{ font-size: 16px; }
+.home{ font-size: 18px; }
 p{ margin: 0 0 1.15rem; }
 em{ font-style: italic; }
 a{ color: var(--accent); text-underline-offset: 2px; }
