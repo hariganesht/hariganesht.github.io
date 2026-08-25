@@ -38,6 +38,12 @@ code{
 ol.body-list, ul.body-list{ margin: 0 0 1.2rem; padding-left: 1.4rem; }
 ol.body-list li, ul.body-list li{ margin: .3rem 0; }
 
+.headshot {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
 /* ---- site header / footer ------------------------------------------------ */
 .site-header{ border-bottom: 1px solid var(--line); padding: 1.7rem 0 1.2rem; }
 .site-header .site-name{ display: block; margin-bottom: .6rem; }
