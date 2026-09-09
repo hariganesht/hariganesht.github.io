@@ -1,6 +1,6 @@
 /* ==========================================================================
    Hariganesh Tangirala
-   A scientific-monograph / old-LaTeX-inspired stylesheet
+   Scientific-monograph / LaTeX-inspired stylesheet
    ========================================================================== */
 
 :root {
@@ -17,7 +17,7 @@
 
 
 /* ==========================================================================
-   RESET / BASE
+   BASE
    ========================================================================== */
 
 * {
@@ -30,6 +30,7 @@ html {
 
 body {
     margin: 0;
+
     background: var(--paper);
     color: var(--ink);
 
@@ -50,7 +51,7 @@ body {
 
 
 /* ==========================================================================
-   GENERAL TYPOGRAPHY
+   TYPOGRAPHY
    ========================================================================== */
 
 p {
@@ -67,6 +68,7 @@ strong {
 
 a {
     color: inherit;
+
     text-decoration-thickness: 0.055em;
     text-decoration-color: rgba(36, 31, 25, 0.55);
     text-underline-offset: 0.13em;
@@ -79,12 +81,15 @@ a:hover {
 code {
     font-family: "DM Mono", ui-monospace, monospace;
     font-size: 0.78em;
+
     background: rgba(36, 31, 25, 0.055);
+
     padding: 0.08em 0.28em;
 }
 
 blockquote {
     margin: 1.7rem 2.3rem;
+
     font-style: italic;
     color: var(--soft-ink);
 }
@@ -92,6 +97,7 @@ blockquote {
 hr {
     border: 0;
     border-top: 1px solid var(--rule);
+
     margin: 2.5rem auto;
 }
 
@@ -108,31 +114,21 @@ hr {
 
 /* ==========================================================================
    HEADER
-
-   Deliberately resembles the title matter at the top of an old scientific
-   plate rather than a modern website navbar.
    ========================================================================== */
 
 .site-header {
     border: 0;
+
     padding: 4.7rem 0 0;
+
     text-align: center;
 }
 
 .site-header .wrap {
     position: relative;
     display: block;
-    padding-bottom: 2.15rem;
-}
 
-.site-header .wrap::after {
-    content: "";
-    display: block;
-
-    width: min(24rem, 62%);
-    margin: 2rem auto 0;
-
-    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1.3rem;
 }
 
 .site-name {
@@ -153,27 +149,22 @@ hr {
     text-decoration: none;
 }
 
-.site-name::before {
-    content: "The Notes of";
-    display: block;
 
-    margin-bottom: 0.42rem;
-
-    font-size: 0.61rem;
-    line-height: 1;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-}
+/* ==========================================================================
+   NAVIGATION
+   ========================================================================== */
 
 .site-nav {
     display: flex;
     justify-content: center;
+
     gap: 2.15rem;
 
     margin-top: 1.05rem;
 
     font-size: 0.72rem;
     line-height: 1;
+
     letter-spacing: 0.17em;
     text-transform: uppercase;
 }
@@ -190,9 +181,11 @@ hr {
 
 .site-nav a.active::after {
     content: "";
+
     display: block;
 
     width: 100%;
+
     margin-top: 0.35rem;
 
     border-bottom: 1px solid var(--ink);
@@ -205,16 +198,17 @@ hr {
 
 .home {
     max-width: var(--text-width);
+
     padding-top: 2.4rem;
     padding-bottom: 4rem;
 
     font-size: 18px;
 }
 
+
 /*
-   Your current HTML puts the photograph first, followed by the biography.
-   Float gives us the illustrated-book feeling without needing to rewrite
-   index.html.
+   Photograph floated into the text to give the page
+   the feeling of an illustrated scientific publication.
 */
 
 .home .headshot {
@@ -230,26 +224,14 @@ hr {
 
 .home::after {
     content: "";
+
     display: table;
     clear: both;
 }
 
 
-/* first paragraph behaves a little like the opening of an essay */
-
-.home > p:first-of-type::first-letter {
-    font-size: 2.6em;
-    line-height: 0.78;
-    float: left;
-
-    margin: 0.10em 0.08em 0 0;
-
-    font-weight: 400;
-}
-
-
 /* ==========================================================================
-   SECTION HEADINGS
+   HEADINGS
    ========================================================================== */
 
 h1,
@@ -278,6 +260,7 @@ h3 {
     margin: 2.2rem 0 0.8rem;
 
     font-size: 1.03rem;
+
     font-variant-caps: small-caps;
     letter-spacing: 0.07em;
 }
@@ -289,6 +272,7 @@ h3 {
 
 .home-links {
     list-style: none;
+
     padding: 0;
     margin: 0 auto;
 
@@ -297,6 +281,7 @@ h3 {
 
 .home-links li {
     display: grid;
+
     grid-template-columns: 5.5rem 1fr;
     gap: 1rem;
 
@@ -305,6 +290,7 @@ h3 {
 
 .home-links .k {
     font-size: 0.76rem;
+
     letter-spacing: 0.09em;
     text-transform: uppercase;
     font-variant-caps: small-caps;
@@ -313,14 +299,12 @@ h3 {
 
 /* ==========================================================================
    WRITING PAGE
-
-   This is intentionally closer to a table of contents / bibliography than
-   a modern blog index.
    ========================================================================== */
 
 .writing,
 .writings {
     max-width: var(--text-width);
+
     padding-top: 2.3rem;
     padding-bottom: 5rem;
 }
@@ -339,11 +323,13 @@ h3 {
 .writing h1::before,
 .writings h1::before {
     content: "Collected";
+
     display: block;
 
     margin-bottom: 0.55rem;
 
     font-size: 0.59rem;
+
     letter-spacing: 0.24em;
     text-transform: uppercase;
 }
@@ -351,6 +337,7 @@ h3 {
 .writing h1::after,
 .writings h1::after {
     content: "";
+
     display: block;
 
     width: 18rem;
@@ -362,11 +349,14 @@ h3 {
 }
 
 
-/* Common article-list patterns */
+/* ==========================================================================
+   WRITING LIST
+   ========================================================================== */
 
 .post-list,
 .writing-list {
     list-style: none;
+
     padding: 0;
     margin: 0;
 }
@@ -374,6 +364,7 @@ h3 {
 .post-list li,
 .writing-list li {
     margin: 0;
+
     padding: 1.15rem 0;
 
     border-bottom: 1px solid var(--rule-light);
@@ -394,18 +385,21 @@ article,
     max-width: var(--text-width);
 
     margin: 0 auto;
+
     padding: 2.8rem 0 6rem;
 }
 
 article > header,
 .post-header {
     text-align: center;
+
     margin-bottom: 3.1rem;
 }
 
 article h1,
 .post-title {
     max-width: 38rem;
+
     margin: 0 auto;
 
     font-size: 1.75rem;
@@ -416,11 +410,13 @@ article h1,
 article > header::before,
 .post-header::before {
     content: "An Essay";
+
     display: block;
 
     margin-bottom: 0.7rem;
 
     font-size: 0.63rem;
+
     letter-spacing: 0.22em;
     text-transform: uppercase;
 }
@@ -428,6 +424,7 @@ article > header::before,
 article > header::after,
 .post-header::after {
     content: "";
+
     display: block;
 
     width: 21rem;
@@ -439,16 +436,21 @@ article > header::after,
 }
 
 
-/* Article paragraphs are justified, like the reference pages */
+/*
+   Desktop article text is justified, as in the reference.
+*/
 
 article p,
 .post p {
     text-align: justify;
+
     hyphens: auto;
 }
 
 
-/* section headings within articles */
+/* ==========================================================================
+   ARTICLE HEADINGS
+   ========================================================================== */
 
 article h2,
 .post h2 {
@@ -458,6 +460,7 @@ article h2,
     text-align: center;
 
     font-size: 1.02rem;
+
     font-variant-caps: small-caps;
     letter-spacing: 0.11em;
 }
@@ -474,6 +477,7 @@ article h3,
 
 figure {
     margin: 2.3rem auto;
+
     text-align: center;
 }
 
@@ -481,6 +485,7 @@ figure img,
 article img,
 .post img {
     display: block;
+
     max-width: 100%;
     height: auto;
 
@@ -493,12 +498,13 @@ article img,
 figcaption {
     margin-top: 0.65rem;
 
+    color: var(--soft-ink);
+
     font-size: 0.83rem;
     line-height: 1.25;
+
     font-style: italic;
     text-align: center;
-
-    color: var(--soft-ink);
 }
 
 
@@ -508,6 +514,7 @@ figcaption {
 
 table {
     width: 100%;
+
     margin: 2rem 0;
 
     border-collapse: collapse;
@@ -517,6 +524,7 @@ table {
 
 th {
     font-weight: 500;
+
     font-variant-caps: small-caps;
     letter-spacing: 0.06em;
 }
@@ -524,7 +532,9 @@ th {
 th,
 td {
     padding: 0.45rem 0.6rem;
+
     border-bottom: 1px solid var(--rule-light);
+
     text-align: left;
 }
 
@@ -540,6 +550,7 @@ article ul,
 .post ol,
 .post ul {
     margin: 0 0 1.2rem;
+
     padding-left: 1.4rem;
 }
 
@@ -552,7 +563,7 @@ article li,
 
 
 /* ==========================================================================
-   MATHJAX / DISPLAY MATH
+   MATHJAX
    ========================================================================== */
 
 mjx-container[display="true"] {
@@ -580,39 +591,35 @@ mjx-container[display="true"] {
     color: var(--soft-ink);
 
     font-size: 0.61rem;
+
     letter-spacing: 0.17em;
     text-transform: uppercase;
 }
 
-.site-footer .bar::before {
-    content: "Finis";
-    display: block;
-
-    margin-bottom: 0.55rem;
-
-    color: var(--ink);
-
-    font-size: 0.64rem;
-    letter-spacing: 0.25em;
-}
-
 
 /* ==========================================================================
-   OPTIONAL: TWO-COLUMN "PLATE" SECTIONS
+   TWO-COLUMN SCIENTIFIC LAYOUT
 
-   In a blog post you can write:
+   Optional. Useful inside blog posts.
+
+   Example:
 
    <div class="plate-columns">
-       <section>...</section>
-       <section>...</section>
-   </div>
+       <section>
+           ...
+       </section>
 
-   This reproduces the mechanics-page layout from your reference.
+       <section>
+           ...
+       </section>
+   </div>
    ========================================================================== */
 
 .plate-columns {
     display: grid;
+
     grid-template-columns: 1fr 1fr;
+
     gap: 0;
 
     max-width: 64rem;
@@ -635,9 +642,9 @@ mjx-container[display="true"] {
 
 
 /* ==========================================================================
-   OPTIONAL: WIDE SCIENTIFIC PLATE
+   WIDE SCIENTIFIC PLATE
 
-   Useful for diagrams, visualisations, etc.
+   Optional. Allows large diagrams to extend beyond the normal text width.
    ========================================================================== */
 
 .scientific-plate {
@@ -645,7 +652,9 @@ mjx-container[display="true"] {
     max-width: none;
 
     position: relative;
+
     left: 50%;
+
     transform: translateX(-50%);
 
     margin-top: 3rem;
@@ -660,6 +669,7 @@ mjx-container[display="true"] {
     text-align: center;
 
     font-size: 0.63rem;
+
     letter-spacing: 0.22em;
     text-transform: uppercase;
 }
@@ -703,12 +713,7 @@ mjx-container[display="true"] {
     }
 
     .site-header .wrap {
-        padding-bottom: 1.4rem;
-    }
-
-    .site-header .wrap::after {
-        width: 11rem;
-        margin-top: 1.5rem;
+        padding-bottom: 1rem;
     }
 
     .site-name {
@@ -727,26 +732,22 @@ mjx-container[display="true"] {
         float: none;
 
         display: block;
+
         width: 9rem;
         max-width: 55%;
 
         margin: 0 auto 1.8rem;
     }
 
-    .home > p:first-of-type::first-letter {
-        float: none;
-        margin: 0;
-        font-size: inherit;
-        line-height: inherit;
-    }
-
     .home-links li {
         display: block;
+
         margin-bottom: 0.75rem;
     }
 
     .home-links .k {
         display: block;
+
         margin-bottom: 0.05rem;
     }
 
@@ -758,6 +759,7 @@ mjx-container[display="true"] {
     article p,
     .post p {
         text-align: left;
+
         hyphens: none;
     }
 
@@ -779,7 +781,9 @@ mjx-container[display="true"] {
 
     .scientific-plate {
         width: 100%;
+
         left: auto;
+
         transform: none;
     }
 }
@@ -787,8 +791,6 @@ mjx-container[display="true"] {
 
 /* ==========================================================================
    PRINT
-
-   Because obviously a website pretending to be a monograph should print well.
    ========================================================================== */
 
 @media print {
@@ -796,6 +798,7 @@ mjx-container[display="true"] {
     body {
         background: #fff;
         color: #000;
+
         font-size: 11pt;
     }
 
