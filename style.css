@@ -1,192 +1,813 @@
-/* =========================================================================
-   Hariganesh Tangirala — site styles
-   EB Garamond (text) + DM Mono (labels/code), warm off-white, teal accent.
-   ========================================================================= */
+/* ==========================================================================
+   Hariganesh Tangirala
+   A scientific-monograph / old-LaTeX-inspired stylesheet
+   ========================================================================== */
 
-:root{
-  --bg: #ffffff;
-  --fg: #211f1b;
-  --muted: #6f6a61;
-  --faint: #9a948a;
-  --accent: #0f6e56;
-  --accent-bar: #1d9e75;
-  --mark: #c0532e;
-  --line: rgba(0,0,0,0.10);
-  --line-strong: rgba(0,0,0,0.20);
-  --surface: #f2efe7;
-  --measure: 46rem;
+:root {
+    --paper: #f3e7d1;
+    --ink: #241f19;
+    --soft-ink: #51483d;
+    --faint-ink: #776c5e;
+    --rule: rgba(36, 31, 25, 0.72);
+    --rule-light: rgba(36, 31, 25, 0.28);
+
+    --page-width: 68rem;
+    --text-width: 45rem;
 }
 
-*{ box-sizing: border-box; }
-html{ -webkit-text-size-adjust: 100%; }
-body{
-  margin: 0; background: var(--bg); color: var(--fg);
-  font-family: 'EB Garamond', Georgia, serif;
-  font-size: 20px; line-height: 1.62;
-  -webkit-font-smoothing: antialiased;
-}
-.wrap{ max-width: var(--measure); margin: 0 auto; padding: 0 1.25rem; }
-.home{ font-size: 18px; }
-p{ margin: 0 0 1.15rem; }
-em{ font-style: italic; }
-a{ color: var(--accent); text-underline-offset: 2px; }
-a:hover{ text-decoration: underline; }
-code{
-  font-family: 'DM Mono', ui-monospace, monospace; font-size: .88em;
-  background: var(--surface); padding: .05em .35em; border-radius: 4px;
-}
-ol.body-list, ul.body-list{ margin: 0 0 1.2rem; padding-left: 1.4rem; }
-ol.body-list li, ul.body-list li{ margin: .3rem 0; }
 
-.headshot {
-  pointer-events: none;
-  user-select: none;
-  -webkit-user-drag: none;
+/* ==========================================================================
+   RESET / BASE
+   ========================================================================== */
+
+* {
+    box-sizing: border-box;
 }
 
-/* ---- site header / footer ------------------------------------------------ */
-.site-header{ border-bottom: 1px solid var(--line); padding: 1.7rem 0 1.2rem; }
-.site-header .site-name{ display: block; margin-bottom: .6rem; }
-.site-name{ font-size: 1.3rem; font-weight: 600; color: var(--fg); text-decoration: none; }
-.site-name:hover{ color: var(--accent); text-decoration: none; }
-.site-nav{ display: flex; gap: 1.3rem; }
-.site-nav a{
-  font-family: 'DM Mono', ui-monospace, monospace; font-size: .72rem;
-  letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-decoration: none;
-}
-.site-nav a:hover, .site-nav a.active{ color: var(--accent); }
-
-.site-footer{ border-top: 1px solid var(--line); margin-top: 5rem; }
-.site-footer .bar{
-  padding: 1.6rem 0 3rem; font-family: 'DM Mono', ui-monospace, monospace;
-  font-size: .72rem; letter-spacing: .06em; color: var(--faint);
-}
-.site-footer a{ color: var(--muted); text-decoration: none; }
-.site-footer a:hover{ color: var(--accent); }
-
-/* ---- headings ------------------------------------------------------------ */
-h1{ font-size: 2.5rem; line-height: 1.1; font-weight: 600; margin: 0 0 .4rem; letter-spacing: -0.01em; }
-h2, h3{
-  font-family: 'DM Mono', ui-monospace, monospace;
-  text-transform: uppercase; font-weight: 500; color: var(--fg);
-}
-h2{
-  font-size: .92rem; letter-spacing: .12em; margin: 3.2rem 0 1.2rem;
-  padding-top: 1.1rem; border-top: 1px solid var(--line-strong);
-}
-h3{ font-size: .78rem; letter-spacing: .12em; color: var(--accent); margin: 2.4rem 0 .9rem; }
-.desc{ font-style: normal; color: var(--muted); font-size: 1rem; margin: 0 0 .9rem; }
-.meta{
-  font-family: 'DM Mono', ui-monospace, monospace; font-size: .72rem;
-  letter-spacing: .12em; text-transform: uppercase; color: var(--faint);
+html {
+    -webkit-text-size-adjust: 100%;
 }
 
-/* ---- home ---------------------------------------------------------------- */
-.home{ padding-top: 3rem; }
-.home .lede{ font-size: 1.15rem; }
-.headshot{
-  width: 150px; height: 150px; border-radius: 8px; object-fit: cover;
-  float: right; margin: .2rem 0 1rem 1.5rem; border: 1px solid var(--line);
-}
-.headshot-placeholder{
-  display: flex; align-items: center; justify-content: center;
-  background: var(--surface); color: var(--faint);
-  font-family: 'DM Mono', ui-monospace, monospace; font-size: .62rem;
-  letter-spacing: .14em; text-transform: uppercase;
-}
-.home-links{ list-style: none; margin: .4rem 0 0; padding: 0; }
-.home-links li{ margin: .35rem 0; }
-.home-links .k{
-  display: inline-block; min-width: 7.5rem;
-  font-family: 'DM Mono', ui-monospace, monospace; font-size: .72rem;
-  letter-spacing: .1em; text-transform: uppercase; color: var(--faint);
+body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+
+    font-family: "EB Garamond", Garamond, "Times New Roman", serif;
+    font-size: 18px;
+    line-height: 1.43;
+
+    font-kerning: normal;
+    font-variant-ligatures: common-ligatures;
+    text-rendering: optimizeLegibility;
+
+    -webkit-font-smoothing: antialiased;
 }
 
-/* ---- writing index ------------------------------------------------------- */
-.writing-intro{ padding-top: 2.5rem; }
-.post-list{ list-style: none; margin: 2rem 0 0; padding: 0; }
-.post-list li{ padding: 1.3rem 0; border-top: 1px solid var(--line); }
-.post-list li:last-child{ border-bottom: 1px solid var(--line); }
-.post-list .p-date{
-  font-family: 'DM Mono', ui-monospace, monospace; font-size: .7rem;
-  letter-spacing: .1em; text-transform: uppercase; color: var(--faint);
-  display: block; margin-bottom: .25rem;
-}
-.post-list .p-title{ font-size: 1.4rem; font-weight: 600; }
-.post-list .p-title a{ color: var(--fg); text-decoration: none; }
-.post-list .p-title a:hover{ color: var(--accent); }
-.post-list .p-desc{ color: var(--muted); margin: .2rem 0 0; }
-.post-list .p-tags{
-  font-family: 'DM Mono', ui-monospace, monospace; font-size: .68rem;
-  letter-spacing: .08em; color: var(--faint); margin-top: .4rem;
+::selection {
+    background: rgba(70, 54, 34, 0.16);
 }
 
-/* ---- post ---------------------------------------------------------------- */
-.post{ padding-top: 2.5rem; }
-.backlink{
-  font-family: 'DM Mono', ui-monospace, monospace; font-size: .7rem;
-  letter-spacing: .1em; text-transform: uppercase; text-decoration: none;
-  color: var(--muted); display: inline-block; margin-bottom: 2rem;
+
+/* ==========================================================================
+   GENERAL TYPOGRAPHY
+   ========================================================================== */
+
+p {
+    margin: 0 0 1em;
 }
-.backlink:hover{ color: var(--accent); }
-.post-header{ margin-bottom: 2.2rem; }
-.source-note{ color: var(--muted); font-size: .95rem; margin-top: 1.4rem; }
 
-nav.toc{ margin: 2.2rem 0 2.8rem; padding: .2rem 0 .2rem 1rem; border-left: 2px solid var(--accent-bar); }
-nav.toc .toc-label{
-  font-family: 'DM Mono', ui-monospace, monospace; font-size: .68rem;
-  letter-spacing: .14em; text-transform: uppercase; color: var(--faint); margin-bottom: .5rem;
+em {
+    font-style: italic;
 }
-nav.toc ol{ list-style: none; margin: 0; padding: 0; }
-nav.toc li{ margin: .2rem 0; font-size: 1rem; }
-nav.toc a{ color: var(--muted); text-decoration: none; }
-nav.toc a:hover{ color: var(--accent); }
 
-.equation{ margin: 1.6rem 0; overflow-x: auto; }
-sup.fnref{ font-size: .7em; line-height: 0; }
-sup.fnref a{ text-decoration: none; padding: 0 .1em; }
+strong {
+    font-weight: 600;
+}
 
-figure.fig{ margin: 2.4rem 0; }
-figure.fig figcaption{ font-size: .92rem; color: var(--muted); line-height: 1.5; margin-top: .9rem; max-width: 40rem; }
-figure.fig figcaption .dim{ opacity: .72; }
+a {
+    color: inherit;
+    text-decoration-thickness: 0.055em;
+    text-decoration-color: rgba(36, 31, 25, 0.55);
+    text-underline-offset: 0.13em;
+}
 
-.endmatter{ margin-top: 4rem; padding-top: 1.4rem; border-top: 1px solid var(--line-strong); }
-.endmatter h2{ border-top: 0; padding-top: 0; margin-top: 2.2rem; }
-.endmatter ol{ padding-left: 1.4rem; }
-.endmatter li{ font-size: .95rem; color: var(--muted); margin: .55rem 0; line-height: 1.5; }
-.endmatter li a.back{ text-decoration: none; }
-.ref-id{ font-family: 'DM Mono', ui-monospace, monospace; font-size: .82rem; color: var(--faint); }
+a:hover {
+    text-decoration-color: var(--ink);
+}
 
-/* ---- number-game figure (scoped under #ng) ------------------------------- */
-#ng{ max-width: 440px; margin: 0 auto; }
-#ng .presets{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:14px; }
-#ng .presets .lbl{ font-size:1rem; color:var(--muted); }
-#ng button.pset{ font-family:'DM Mono', ui-monospace, monospace; font-size:13px; color:var(--fg);
-  background:transparent; border:0.5px solid var(--line-strong); border-radius:7px; padding:5px 10px; cursor:pointer; line-height:1; }
-#ng button.pset:hover{ background:var(--surface); }
-#ng .grid{ display:grid; grid-template-columns:repeat(10,1fr); gap:4px; margin-bottom:22px; }
-#ng button.cell{ font-family:'DM Mono', ui-monospace, monospace; font-size:12px; height:28px; padding:0;
-  border:0.5px solid var(--line); border-radius:6px; background:transparent; color:var(--muted); cursor:pointer; }
-#ng button.cell:hover{ border-color:var(--line-strong); }
-#ng button.cell.on{ background:var(--accent-bar); border-color:var(--accent-bar); color:#04342c; }
-#ng .sect{ font-size:1.02rem; margin:0 0 1px; font-family:'EB Garamond', serif; text-transform:none; letter-spacing:0; color:var(--fg); }
-#ng .sub{ font-size:.85rem; color:var(--muted); margin:0 0 11px; }
-#ng .block{ margin-bottom:22px; }
-#ng .barrow{ display:flex; align-items:center; gap:9px; margin-bottom:6px; }
-#ng .barname{ width:130px; font-size:.92rem; color:var(--muted); text-align:right; flex-shrink:0; }
-#ng .bartrack{ flex:1; height:15px; background:var(--surface); border-radius:6px; overflow:hidden; }
-#ng .barfill{ height:100%; background:var(--accent-bar); }
-#ng .barpct{ width:46px; font-size:12px; text-align:right; flex-shrink:0; color:var(--fg); font-family:'DM Mono', ui-monospace, monospace; }
-#ng .grad{ display:flex; align-items:flex-end; gap:1px; height:112px; padding-top:4px; border-bottom:0.5px solid var(--line-strong); }
-#ng .gbar{ flex:1; min-height:1px; background:var(--accent-bar); border-radius:1px 1px 0 0; }
-#ng .gbar.ex{ background:var(--accent); box-shadow: inset 0 3px 0 var(--mark); }
-#ng .ticks{ display:flex; justify-content:space-between; font-size:11px; color:var(--faint); margin-top:5px; font-family:'DM Mono', ui-monospace, monospace; }
-#ng .hint{ font-size:.9rem; color:var(--faint); padding:6px 0; }
+code {
+    font-family: "DM Mono", ui-monospace, monospace;
+    font-size: 0.78em;
+    background: rgba(36, 31, 25, 0.055);
+    padding: 0.08em 0.28em;
+}
 
-/* ---- responsive ---------------------------------------------------------- */
-@media (max-width: 480px){
-  body{ font-size: 18px; }
-  h1{ font-size: 2rem; }
-  .headshot{ width: 110px; height: 110px; margin-left: 1rem; }
-  .home-links .k{ min-width: 6rem; }
+blockquote {
+    margin: 1.7rem 2.3rem;
+    font-style: italic;
+    color: var(--soft-ink);
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid var(--rule);
+    margin: 2.5rem auto;
+}
+
+
+/* ==========================================================================
+   PAGE WIDTH
+   ========================================================================== */
+
+.wrap {
+    width: min(var(--page-width), calc(100% - 4rem));
+    margin: 0 auto;
+}
+
+
+/* ==========================================================================
+   HEADER
+
+   Deliberately resembles the title matter at the top of an old scientific
+   plate rather than a modern website navbar.
+   ========================================================================== */
+
+.site-header {
+    border: 0;
+    padding: 4.7rem 0 0;
+    text-align: center;
+}
+
+.site-header .wrap {
+    position: relative;
+    display: block;
+    padding-bottom: 2.15rem;
+}
+
+.site-header .wrap::after {
+    content: "";
+    display: block;
+
+    width: min(24rem, 62%);
+    margin: 2rem auto 0;
+
+    border-bottom: 1px solid var(--rule);
+}
+
+.site-name {
+    display: block;
+
+    color: var(--ink);
+    text-decoration: none;
+
+    font-size: 1.42rem;
+    font-weight: 400;
+    line-height: 1.1;
+
+    font-variant-caps: small-caps;
+    letter-spacing: 0.105em;
+}
+
+.site-name:hover {
+    text-decoration: none;
+}
+
+.site-name::before {
+    content: "The Notes of";
+    display: block;
+
+    margin-bottom: 0.42rem;
+
+    font-size: 0.61rem;
+    line-height: 1;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+}
+
+.site-nav {
+    display: flex;
+    justify-content: center;
+    gap: 2.15rem;
+
+    margin-top: 1.05rem;
+
+    font-size: 0.72rem;
+    line-height: 1;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+}
+
+.site-nav a {
+    color: var(--soft-ink);
+    text-decoration: none;
+}
+
+.site-nav a:hover,
+.site-nav a.active {
+    color: var(--ink);
+}
+
+.site-nav a.active::after {
+    content: "";
+    display: block;
+
+    width: 100%;
+    margin-top: 0.35rem;
+
+    border-bottom: 1px solid var(--ink);
+}
+
+
+/* ==========================================================================
+   HOME PAGE
+   ========================================================================== */
+
+.home {
+    max-width: var(--text-width);
+    padding-top: 2.4rem;
+    padding-bottom: 4rem;
+
+    font-size: 18px;
+}
+
+/*
+   Your current HTML puts the photograph first, followed by the biography.
+   Float gives us the illustrated-book feeling without needing to rewrite
+   index.html.
+*/
+
+.home .headshot {
+    float: right;
+
+    width: 12.5rem;
+    max-width: 36%;
+
+    margin: 0.15rem 0 1.4rem 2.2rem;
+
+    filter: sepia(0.10) contrast(0.96);
+}
+
+.home::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+/* first paragraph behaves a little like the opening of an essay */
+
+.home > p:first-of-type::first-letter {
+    font-size: 2.6em;
+    line-height: 0.78;
+    float: left;
+
+    margin: 0.10em 0.08em 0 0;
+
+    font-weight: 400;
+}
+
+
+/* ==========================================================================
+   SECTION HEADINGS
+   ========================================================================== */
+
+h1,
+h2,
+h3,
+h4 {
+    color: var(--ink);
+    font-weight: 400;
+}
+
+h2 {
+    clear: both;
+
+    margin: 3rem 0 1.35rem;
+
+    text-align: center;
+
+    font-size: 1rem;
+    line-height: 1.2;
+
+    font-variant-caps: small-caps;
+    letter-spacing: 0.12em;
+}
+
+h3 {
+    margin: 2.2rem 0 0.8rem;
+
+    font-size: 1.03rem;
+    font-variant-caps: small-caps;
+    letter-spacing: 0.07em;
+}
+
+
+/* ==========================================================================
+   ELSEWHERE
+   ========================================================================== */
+
+.home-links {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+
+    max-width: 31rem;
+}
+
+.home-links li {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    gap: 1rem;
+
+    margin: 0.35rem 0;
+}
+
+.home-links .k {
+    font-size: 0.76rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    font-variant-caps: small-caps;
+}
+
+
+/* ==========================================================================
+   WRITING PAGE
+
+   This is intentionally closer to a table of contents / bibliography than
+   a modern blog index.
+   ========================================================================== */
+
+.writing,
+.writings {
+    max-width: var(--text-width);
+    padding-top: 2.3rem;
+    padding-bottom: 5rem;
+}
+
+.writing h1,
+.writings h1 {
+    margin: 0 0 0.45rem;
+
+    text-align: center;
+
+    font-size: 1.6rem;
+    font-weight: 400;
+    line-height: 1.15;
+}
+
+.writing h1::before,
+.writings h1::before {
+    content: "Collected";
+    display: block;
+
+    margin-bottom: 0.55rem;
+
+    font-size: 0.59rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+}
+
+.writing h1::after,
+.writings h1::after {
+    content: "";
+    display: block;
+
+    width: 18rem;
+    max-width: 60%;
+
+    margin: 1.65rem auto 2.4rem;
+
+    border-bottom: 1px solid var(--rule);
+}
+
+
+/* Common article-list patterns */
+
+.post-list,
+.writing-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.post-list li,
+.writing-list li {
+    margin: 0;
+    padding: 1.15rem 0;
+
+    border-bottom: 1px solid var(--rule-light);
+}
+
+.post-list a,
+.writing-list a {
+    font-size: 1.08rem;
+}
+
+
+/* ==========================================================================
+   ARTICLE / BLOG POST
+   ========================================================================== */
+
+article,
+.post {
+    max-width: var(--text-width);
+
+    margin: 0 auto;
+    padding: 2.8rem 0 6rem;
+}
+
+article > header,
+.post-header {
+    text-align: center;
+    margin-bottom: 3.1rem;
+}
+
+article h1,
+.post-title {
+    max-width: 38rem;
+    margin: 0 auto;
+
+    font-size: 1.75rem;
+    font-weight: 400;
+    line-height: 1.12;
+}
+
+article > header::before,
+.post-header::before {
+    content: "An Essay";
+    display: block;
+
+    margin-bottom: 0.7rem;
+
+    font-size: 0.63rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+}
+
+article > header::after,
+.post-header::after {
+    content: "";
+    display: block;
+
+    width: 21rem;
+    max-width: 62%;
+
+    margin: 2rem auto 0;
+
+    border-bottom: 1px solid var(--rule);
+}
+
+
+/* Article paragraphs are justified, like the reference pages */
+
+article p,
+.post p {
+    text-align: justify;
+    hyphens: auto;
+}
+
+
+/* section headings within articles */
+
+article h2,
+.post h2 {
+    margin-top: 3rem;
+    margin-bottom: 1.15rem;
+
+    text-align: center;
+
+    font-size: 1.02rem;
+    font-variant-caps: small-caps;
+    letter-spacing: 0.11em;
+}
+
+article h3,
+.post h3 {
+    margin-top: 2.2rem;
+}
+
+
+/* ==========================================================================
+   FIGURES
+   ========================================================================== */
+
+figure {
+    margin: 2.3rem auto;
+    text-align: center;
+}
+
+figure img,
+article img,
+.post img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    mix-blend-mode: multiply;
+}
+
+figcaption {
+    margin-top: 0.65rem;
+
+    font-size: 0.83rem;
+    line-height: 1.25;
+    font-style: italic;
+    text-align: center;
+
+    color: var(--soft-ink);
+}
+
+
+/* ==========================================================================
+   TABLES
+   ========================================================================== */
+
+table {
+    width: 100%;
+    margin: 2rem 0;
+
+    border-collapse: collapse;
+
+    font-size: 0.9rem;
+}
+
+th {
+    font-weight: 500;
+    font-variant-caps: small-caps;
+    letter-spacing: 0.06em;
+}
+
+th,
+td {
+    padding: 0.45rem 0.6rem;
+    border-bottom: 1px solid var(--rule-light);
+    text-align: left;
+}
+
+
+/* ==========================================================================
+   LISTS
+   ========================================================================== */
+
+ol.body-list,
+ul.body-list,
+article ol,
+article ul,
+.post ol,
+.post ul {
+    margin: 0 0 1.2rem;
+    padding-left: 1.4rem;
+}
+
+ol.body-list li,
+ul.body-list li,
+article li,
+.post li {
+    margin: 0.25rem 0;
+}
+
+
+/* ==========================================================================
+   MATHJAX / DISPLAY MATH
+   ========================================================================== */
+
+mjx-container[display="true"] {
+    margin: 1.6rem 0 !important;
+}
+
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+.site-footer {
+    clear: both;
+
+    padding: 2rem 0 3.4rem;
+
+    border: 0;
+
+    text-align: center;
+}
+
+.site-footer .bar {
+    display: block;
+
+    color: var(--soft-ink);
+
+    font-size: 0.61rem;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+}
+
+.site-footer .bar::before {
+    content: "Finis";
+    display: block;
+
+    margin-bottom: 0.55rem;
+
+    color: var(--ink);
+
+    font-size: 0.64rem;
+    letter-spacing: 0.25em;
+}
+
+
+/* ==========================================================================
+   OPTIONAL: TWO-COLUMN "PLATE" SECTIONS
+
+   In a blog post you can write:
+
+   <div class="plate-columns">
+       <section>...</section>
+       <section>...</section>
+   </div>
+
+   This reproduces the mechanics-page layout from your reference.
+   ========================================================================== */
+
+.plate-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+
+    max-width: 64rem;
+
+    margin: 3rem auto;
+}
+
+.plate-columns > * {
+    padding: 0 2rem;
+}
+
+.plate-columns > *:first-child {
+    border-right: 1px solid var(--rule);
+}
+
+.plate-columns h2,
+.plate-columns h3 {
+    margin-top: 0;
+}
+
+
+/* ==========================================================================
+   OPTIONAL: WIDE SCIENTIFIC PLATE
+
+   Useful for diagrams, visualisations, etc.
+   ========================================================================== */
+
+.scientific-plate {
+    width: min(72rem, calc(100vw - 4rem));
+    max-width: none;
+
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
+.scientific-plate .plate-label {
+    display: block;
+
+    margin-bottom: 0.55rem;
+
+    text-align: center;
+
+    font-size: 0.63rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+}
+
+.scientific-plate .plate-title {
+    margin-bottom: 0.25rem;
+
+    text-align: center;
+
+    font-size: 1.35rem;
+    line-height: 1.1;
+}
+
+.scientific-plate .plate-subtitle {
+    margin-bottom: 2rem;
+
+    text-align: center;
+
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+
+/* ==========================================================================
+   MOBILE
+   ========================================================================== */
+
+@media (max-width: 700px) {
+
+    body {
+        font-size: 17px;
+        line-height: 1.47;
+    }
+
+    .wrap {
+        width: min(100% - 2.3rem, var(--page-width));
+    }
+
+    .site-header {
+        padding-top: 2.7rem;
+    }
+
+    .site-header .wrap {
+        padding-bottom: 1.4rem;
+    }
+
+    .site-header .wrap::after {
+        width: 11rem;
+        margin-top: 1.5rem;
+    }
+
+    .site-name {
+        font-size: 1.25rem;
+    }
+
+    .site-nav {
+        gap: 1.5rem;
+    }
+
+    .home {
+        padding-top: 1.8rem;
+    }
+
+    .home .headshot {
+        float: none;
+
+        display: block;
+        width: 9rem;
+        max-width: 55%;
+
+        margin: 0 auto 1.8rem;
+    }
+
+    .home > p:first-of-type::first-letter {
+        float: none;
+        margin: 0;
+        font-size: inherit;
+        line-height: inherit;
+    }
+
+    .home-links li {
+        display: block;
+        margin-bottom: 0.75rem;
+    }
+
+    .home-links .k {
+        display: block;
+        margin-bottom: 0.05rem;
+    }
+
+    article,
+    .post {
+        padding-top: 2rem;
+    }
+
+    article p,
+    .post p {
+        text-align: left;
+        hyphens: none;
+    }
+
+    .plate-columns {
+        display: block;
+    }
+
+    .plate-columns > * {
+        padding: 0;
+    }
+
+    .plate-columns > *:first-child {
+        border-right: 0;
+        border-bottom: 1px solid var(--rule);
+
+        padding-bottom: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .scientific-plate {
+        width: 100%;
+        left: auto;
+        transform: none;
+    }
+}
+
+
+/* ==========================================================================
+   PRINT
+
+   Because obviously a website pretending to be a monograph should print well.
+   ========================================================================== */
+
+@media print {
+
+    body {
+        background: #fff;
+        color: #000;
+        font-size: 11pt;
+    }
+
+    .site-nav {
+        display: none;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .site-footer {
+        padding-bottom: 0;
+    }
 }
