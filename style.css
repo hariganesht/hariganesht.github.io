@@ -1,15 +1,16 @@
 /* ==========================================================================
-   Hariganesh Tangirala
-   Scientific-monograph / LaTeX-inspired stylesheet
+   HARIGANESH TANGIRALA
+   Plain academic / Times-style website
    ========================================================================== */
 
 :root {
-    --paper: #f3e7d1;
-    --ink: #241f19;
-    --soft-ink: #51483d;
-    --faint-ink: #776c5e;
-    --rule: rgba(36, 31, 25, 0.72);
-    --rule-light: rgba(36, 31, 25, 0.28);
+    --paper: #ffffff;
+    --ink: #111111;
+    --soft-ink: #444444;
+    --faint-ink: #666666;
+
+    --rule: rgba(0, 0, 0, 0.65);
+    --rule-light: rgba(0, 0, 0, 0.20);
 
     --page-width: 68rem;
     --text-width: 45rem;
@@ -26,15 +27,16 @@
 
 html {
     -webkit-text-size-adjust: 100%;
+    background: #ffffff;
 }
 
 body {
     margin: 0;
 
-    background: var(--paper);
+    background: #ffffff;
     color: var(--ink);
 
-    font-family: "EB Garamond", Garamond, "Times New Roman", serif;
+    font-family: "Times New Roman", Times, serif;
     font-size: 18px;
     line-height: 1.43;
 
@@ -46,7 +48,45 @@ body {
 }
 
 ::selection {
-    background: rgba(70, 54, 34, 0.16);
+    background: rgba(0, 0, 0, 0.12);
+}
+
+
+/* ==========================================================================
+   FORCE SERIF EVERYWHERE
+   ========================================================================== */
+
+body,
+button,
+input,
+textarea,
+select,
+code,
+pre,
+.site-name,
+.site-nav,
+.site-nav a,
+.site-footer,
+.site-footer .bar,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.meta,
+.home-links,
+.home-links .k,
+.post-list,
+.post-list .p-date,
+.post-list .p-tags,
+.writing-list,
+.backlink,
+nav.toc,
+nav.toc .toc-label,
+.ref-id,
+.headshot-placeholder {
+    font-family: "Times New Roman", Times, serif;
 }
 
 
@@ -70,19 +110,18 @@ a {
     color: inherit;
 
     text-decoration-thickness: 0.055em;
-    text-decoration-color: rgba(36, 31, 25, 0.55);
+    text-decoration-color: rgba(0, 0, 0, 0.5);
     text-underline-offset: 0.13em;
 }
 
 a:hover {
-    text-decoration-color: var(--ink);
+    text-decoration-color: #000;
 }
 
 code {
-    font-family: "DM Mono", ui-monospace, monospace;
-    font-size: 0.78em;
+    font-size: 0.88em;
 
-    background: rgba(36, 31, 25, 0.055);
+    background: rgba(0, 0, 0, 0.04);
 
     padding: 0.08em 0.28em;
 }
@@ -90,8 +129,9 @@ code {
 blockquote {
     margin: 1.7rem 2.3rem;
 
-    font-style: italic;
     color: var(--soft-ink);
+
+    font-style: italic;
 }
 
 hr {
@@ -108,6 +148,7 @@ hr {
 
 .wrap {
     width: min(var(--page-width), calc(100% - 4rem));
+
     margin: 0 auto;
 }
 
@@ -126,6 +167,7 @@ hr {
 
 .site-header .wrap {
     position: relative;
+
     display: block;
 
     padding-bottom: 1.3rem;
@@ -135,7 +177,6 @@ hr {
     display: block;
 
     color: var(--ink);
-    text-decoration: none;
 
     font-size: 1.42rem;
     font-weight: 400;
@@ -143,6 +184,8 @@ hr {
 
     font-variant-caps: small-caps;
     letter-spacing: 0.105em;
+
+    text-decoration: none;
 }
 
 .site-name:hover {
@@ -171,6 +214,7 @@ hr {
 
 .site-nav a {
     color: var(--soft-ink);
+
     text-decoration: none;
 }
 
@@ -205,12 +249,6 @@ hr {
     font-size: 18px;
 }
 
-
-/*
-   Photograph floated into the text to give the page
-   the feeling of an illustrated scientific publication.
-*/
-
 .home .headshot {
     float: right;
 
@@ -218,8 +256,6 @@ hr {
     max-width: 36%;
 
     margin: 0.15rem 0 1.4rem 2.2rem;
-
-    filter: sepia(0.10) contrast(0.96);
 }
 
 .home::after {
@@ -237,8 +273,11 @@ hr {
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5,
+h6 {
     color: var(--ink);
+
     font-weight: 400;
 }
 
@@ -271,12 +310,12 @@ h3 {
    ========================================================================== */
 
 .home-links {
-    list-style: none;
-
-    padding: 0;
-    margin: 0 auto;
-
     max-width: 31rem;
+
+    margin: 0 auto;
+    padding: 0;
+
+    list-style: none;
 }
 
 .home-links li {
@@ -311,41 +350,13 @@ h3 {
 
 .writing h1,
 .writings h1 {
-    margin: 0 0 0.45rem;
+    margin: 0 0 2.4rem;
 
     text-align: center;
 
     font-size: 1.6rem;
     font-weight: 400;
     line-height: 1.15;
-}
-
-.writing h1::before,
-.writings h1::before {
-    content: "Collected";
-
-    display: block;
-
-    margin-bottom: 0.55rem;
-
-    font-size: 0.59rem;
-
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-}
-
-.writing h1::after,
-.writings h1::after {
-    content: "";
-
-    display: block;
-
-    width: 18rem;
-    max-width: 60%;
-
-    margin: 1.65rem auto 2.4rem;
-
-    border-bottom: 1px solid var(--rule);
 }
 
 
@@ -355,10 +366,10 @@ h3 {
 
 .post-list,
 .writing-list {
-    list-style: none;
-
-    padding: 0;
     margin: 0;
+    padding: 0;
+
+    list-style: none;
 }
 
 .post-list li,
@@ -377,7 +388,7 @@ h3 {
 
 
 /* ==========================================================================
-   ARTICLE / BLOG POST
+   ARTICLE / BLOG POSTS
    ========================================================================== */
 
 article,
@@ -391,9 +402,9 @@ article,
 
 article > header,
 .post-header {
-    text-align: center;
-
     margin-bottom: 3.1rem;
+
+    text-align: center;
 }
 
 article h1,
@@ -407,38 +418,10 @@ article h1,
     line-height: 1.12;
 }
 
-article > header::before,
-.post-header::before {
-    content: "An Essay";
 
-    display: block;
-
-    margin-bottom: 0.7rem;
-
-    font-size: 0.63rem;
-
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-}
-
-article > header::after,
-.post-header::after {
-    content: "";
-
-    display: block;
-
-    width: 21rem;
-    max-width: 62%;
-
-    margin: 2rem auto 0;
-
-    border-bottom: 1px solid var(--rule);
-}
-
-
-/*
-   Desktop article text is justified, as in the reference.
-*/
+/* ==========================================================================
+   ARTICLE BODY
+   ========================================================================== */
 
 article p,
 .post p {
@@ -446,11 +429,6 @@ article p,
 
     hyphens: auto;
 }
-
-
-/* ==========================================================================
-   ARTICLE HEADINGS
-   ========================================================================== */
 
 article h2,
 .post h2 {
@@ -491,8 +469,6 @@ article img,
 
     margin-left: auto;
     margin-right: auto;
-
-    mix-blend-mode: multiply;
 }
 
 figcaption {
@@ -598,21 +574,7 @@ mjx-container[display="true"] {
 
 
 /* ==========================================================================
-   TWO-COLUMN SCIENTIFIC LAYOUT
-
-   Optional. Useful inside blog posts.
-
-   Example:
-
-   <div class="plate-columns">
-       <section>
-           ...
-       </section>
-
-       <section>
-           ...
-       </section>
-   </div>
+   OPTIONAL TWO-COLUMN ARTICLE LAYOUT
    ========================================================================== */
 
 .plate-columns {
@@ -642,23 +604,21 @@ mjx-container[display="true"] {
 
 
 /* ==========================================================================
-   WIDE SCIENTIFIC PLATE
-
-   Optional. Allows large diagrams to extend beyond the normal text width.
+   OPTIONAL WIDE FIGURES
    ========================================================================== */
 
 .scientific-plate {
-    width: min(72rem, calc(100vw - 4rem));
-    max-width: none;
-
     position: relative;
 
     left: 50%;
 
-    transform: translateX(-50%);
+    width: min(72rem, calc(100vw - 4rem));
+    max-width: none;
 
     margin-top: 3rem;
     margin-bottom: 3rem;
+
+    transform: translateX(-50%);
 }
 
 .scientific-plate .plate-label {
@@ -772,17 +732,18 @@ mjx-container[display="true"] {
     }
 
     .plate-columns > *:first-child {
+        padding-bottom: 2rem;
+
+        margin-bottom: 2rem;
+
         border-right: 0;
         border-bottom: 1px solid var(--rule);
-
-        padding-bottom: 2rem;
-        margin-bottom: 2rem;
     }
 
     .scientific-plate {
-        width: 100%;
-
         left: auto;
+
+        width: 100%;
 
         transform: none;
     }
@@ -796,8 +757,8 @@ mjx-container[display="true"] {
 @media print {
 
     body {
-        background: #fff;
-        color: #000;
+        background: #ffffff;
+        color: #000000;
 
         font-size: 11pt;
     }
