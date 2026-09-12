@@ -1,19 +1,19 @@
 /* ==========================================================================
    HARIGANESH TANGIRALA
-   Plain academic / Times-style website
+   Plain academic website
    ========================================================================== */
 
 :root {
-    --paper: #ffffff;
-    --ink: #111111;
-    --soft-ink: #444444;
-    --faint-ink: #666666;
-
-    --rule: rgba(0, 0, 0, 0.65);
-    --rule-light: rgba(0, 0, 0, 0.20);
+    --bg: #ffffff;
+    --text: #111111;
+    --muted: #555555;
+    --light: #777777;
+    --rule: #d8d8d8;
 
     --page-width: 68rem;
     --text-width: 45rem;
+
+    --serif: Times, "Times New Roman", "Liberation Serif", serif;
 }
 
 
@@ -27,66 +27,47 @@
 
 html {
     -webkit-text-size-adjust: 100%;
-    background: #ffffff;
+    background: var(--bg);
 }
 
 body {
     margin: 0;
 
-    background: #ffffff;
-    color: var(--ink);
+    background: var(--bg);
+    color: var(--text);
 
-    font-family: "Times New Roman", Times, serif;
+    font-family: var(--serif);
     font-size: 18px;
-    line-height: 1.43;
+    line-height: 1.48;
 
     font-kerning: normal;
     font-variant-ligatures: common-ligatures;
-    text-rendering: optimizeLegibility;
 
+    text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
 }
 
-::selection {
-    background: rgba(0, 0, 0, 0.12);
-}
 
+/* Use the same serif typeface everywhere */
 
-/* ==========================================================================
-   FORCE SERIF EVERYWHERE
-   ========================================================================== */
-
-body,
 button,
 input,
 textarea,
 select,
 code,
 pre,
-.site-name,
-.site-nav,
-.site-nav a,
-.site-footer,
-.site-footer .bar,
 h1,
 h2,
 h3,
 h4,
 h5,
-h6,
-.meta,
-.home-links,
-.home-links .k,
-.post-list,
-.post-list .p-date,
-.post-list .p-tags,
-.writing-list,
-.backlink,
-nav.toc,
-nav.toc .toc-label,
-.ref-id,
-.headshot-placeholder {
-    font-family: "Times New Roman", Times, serif;
+h6 {
+    font-family: var(--serif);
+}
+
+
+::selection {
+    background: #dddddd;
 }
 
 
@@ -98,58 +79,70 @@ p {
     margin: 0 0 1em;
 }
 
-em {
-    font-style: italic;
-}
-
 strong {
     font-weight: 600;
+}
+
+em {
+    font-style: italic;
 }
 
 a {
     color: inherit;
 
-    text-decoration-thickness: 0.055em;
-    text-decoration-color: rgba(0, 0, 0, 0.5);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: #888888;
     text-underline-offset: 0.13em;
 }
 
 a:hover {
-    text-decoration-color: #000;
-}
-
-code {
-    font-size: 0.88em;
-
-    background: rgba(0, 0, 0, 0.04);
-
-    padding: 0.08em 0.28em;
+    text-decoration-color: #000000;
 }
 
 blockquote {
-    margin: 1.7rem 2.3rem;
+    margin: 1.5rem 2rem;
 
-    color: var(--soft-ink);
+    color: var(--muted);
 
     font-style: italic;
 }
 
+code {
+    padding: 0.05em 0.2em;
+
+    background: #f5f5f5;
+
+    font-size: 0.9em;
+}
+
+pre {
+    overflow-x: auto;
+
+    padding: 1rem;
+
+    background: #f7f7f7;
+
+    line-height: 1.4;
+}
+
 hr {
+    margin: 2.5rem 0;
+
     border: 0;
     border-top: 1px solid var(--rule);
-
-    margin: 2.5rem auto;
 }
 
 
 /* ==========================================================================
-   PAGE WIDTH
+   GENERAL LAYOUT
    ========================================================================== */
 
 .wrap {
     width: min(var(--page-width), calc(100% - 4rem));
 
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 
@@ -158,32 +151,28 @@ hr {
    ========================================================================== */
 
 .site-header {
-    border: 0;
-
-    padding: 4.7rem 0 0;
+    padding: 4rem 0 0;
 
     text-align: center;
 }
 
 .site-header .wrap {
-    position: relative;
-
     display: block;
 
-    padding-bottom: 1.3rem;
+    padding-bottom: 1.25rem;
 }
 
 .site-name {
     display: block;
 
-    color: var(--ink);
+    color: var(--text);
 
-    font-size: 1.42rem;
+    font-family: var(--serif);
+    font-size: 1.45rem;
     font-weight: 400;
-    line-height: 1.1;
+    line-height: 1.15;
 
-    font-variant-caps: small-caps;
-    letter-spacing: 0.105em;
+    letter-spacing: normal;
 
     text-decoration: none;
 }
@@ -201,38 +190,30 @@ hr {
     display: flex;
     justify-content: center;
 
-    gap: 2.15rem;
+    gap: 1.8rem;
 
-    margin-top: 1.05rem;
+    margin-top: 0.8rem;
 
-    font-size: 0.72rem;
-    line-height: 1;
-
-    letter-spacing: 0.17em;
-    text-transform: uppercase;
+    font-family: var(--serif);
+    font-size: 0.9rem;
 }
 
 .site-nav a {
-    color: var(--soft-ink);
+    color: var(--muted);
 
     text-decoration: none;
 }
 
-.site-nav a:hover,
-.site-nav a.active {
-    color: var(--ink);
+.site-nav a:hover {
+    color: var(--text);
 }
 
-.site-nav a.active::after {
-    content: "";
+.site-nav a.active {
+    color: var(--text);
 
-    display: block;
-
-    width: 100%;
-
-    margin-top: 0.35rem;
-
-    border-bottom: 1px solid var(--ink);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25em;
 }
 
 
@@ -243,10 +224,10 @@ hr {
 .home {
     max-width: var(--text-width);
 
-    padding-top: 2.4rem;
+    padding-top: 2.3rem;
     padding-bottom: 4rem;
 
-    font-size: 18px;
+    font-family: var(--serif);
 }
 
 .home .headshot {
@@ -255,7 +236,9 @@ hr {
     width: 12.5rem;
     max-width: 36%;
 
-    margin: 0.15rem 0 1.4rem 2.2rem;
+    height: auto;
+
+    margin: 0.15rem 0 1.5rem 2.2rem;
 }
 
 .home::after {
@@ -276,32 +259,39 @@ h3,
 h4,
 h5,
 h6 {
-    color: var(--ink);
+    color: var(--text);
 
+    font-family: var(--serif);
     font-weight: 400;
+
+    font-variant: normal;
+    font-variant-caps: normal;
+
+    letter-spacing: normal;
+    text-transform: none;
+}
+
+h1 {
+    font-size: 1.65rem;
+    line-height: 1.2;
 }
 
 h2 {
     clear: both;
 
-    margin: 3rem 0 1.35rem;
+    margin: 2.8rem 0 1.2rem;
 
-    text-align: center;
+    font-size: 1.25rem;
+    line-height: 1.25;
 
-    font-size: 1rem;
-    line-height: 1.2;
-
-    font-variant-caps: small-caps;
-    letter-spacing: 0.12em;
+    text-align: left;
 }
 
 h3 {
-    margin: 2.2rem 0 0.8rem;
+    margin: 2rem 0 0.75rem;
 
-    font-size: 1.03rem;
-
-    font-variant-caps: small-caps;
-    letter-spacing: 0.07em;
+    font-size: 1.08rem;
+    line-height: 1.3;
 }
 
 
@@ -312,10 +302,12 @@ h3 {
 .home-links {
     max-width: 31rem;
 
-    margin: 0 auto;
+    margin: 0;
     padding: 0;
 
     list-style: none;
+
+    font-family: var(--serif);
 }
 
 .home-links li {
@@ -328,11 +320,12 @@ h3 {
 }
 
 .home-links .k {
-    font-size: 0.76rem;
+    font-family: var(--serif);
+    font-size: 0.9rem;
 
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    font-variant-caps: small-caps;
+    font-variant: normal;
+    letter-spacing: normal;
+    text-transform: none;
 }
 
 
@@ -346,22 +339,28 @@ h3 {
 
     padding-top: 2.3rem;
     padding-bottom: 5rem;
+
+    font-family: var(--serif);
 }
 
 .writing h1,
 .writings h1 {
-    margin: 0 0 2.4rem;
+    margin: 0 0 2rem;
 
-    text-align: center;
-
-    font-size: 1.6rem;
+    font-family: var(--serif);
+    font-size: 1.65rem;
     font-weight: 400;
-    line-height: 1.15;
+    line-height: 1.2;
+
+    text-align: left;
+
+    letter-spacing: normal;
+    text-transform: none;
 }
 
 
 /* ==========================================================================
-   WRITING LIST
+   WRITING / POST LIST
    ========================================================================== */
 
 .post-list,
@@ -370,25 +369,41 @@ h3 {
     padding: 0;
 
     list-style: none;
+
+    font-family: var(--serif);
 }
 
 .post-list li,
 .writing-list li {
     margin: 0;
 
-    padding: 1.15rem 0;
+    padding: 1rem 0;
 
-    border-bottom: 1px solid var(--rule-light);
+    border-bottom: 1px solid var(--rule);
+}
+
+.post-list li:first-child,
+.writing-list li:first-child {
+    border-top: 1px solid var(--rule);
 }
 
 .post-list a,
 .writing-list a {
-    font-size: 1.08rem;
+    font-family: var(--serif);
+    font-size: 1.05rem;
+}
+
+.post-list .p-date,
+.post-list .p-tags {
+    color: var(--muted);
+
+    font-family: var(--serif);
+    font-size: 0.88rem;
 }
 
 
 /* ==========================================================================
-   ARTICLE / BLOG POSTS
+   BLOG POSTS / ARTICLES
    ========================================================================== */
 
 article,
@@ -397,25 +412,42 @@ article,
 
     margin: 0 auto;
 
-    padding: 2.8rem 0 6rem;
+    padding: 2.5rem 0 6rem;
+
+    font-family: var(--serif);
 }
 
 article > header,
 .post-header {
-    margin-bottom: 3.1rem;
+    margin-bottom: 2.5rem;
 
-    text-align: center;
+    text-align: left;
 }
 
 article h1,
 .post-title {
-    max-width: 38rem;
+    max-width: none;
 
-    margin: 0 auto;
+    margin: 0;
 
+    font-family: var(--serif);
     font-size: 1.75rem;
     font-weight: 400;
-    line-height: 1.12;
+    line-height: 1.2;
+
+    text-align: left;
+
+    letter-spacing: normal;
+    text-transform: none;
+}
+
+.meta {
+    margin-top: 0.5rem;
+
+    color: var(--muted);
+
+    font-family: var(--serif);
+    font-size: 0.9rem;
 }
 
 
@@ -425,27 +457,62 @@ article h1,
 
 article p,
 .post p {
-    text-align: justify;
+    font-family: var(--serif);
 
-    hyphens: auto;
+    text-align: left;
+    hyphens: none;
 }
 
 article h2,
 .post h2 {
-    margin-top: 3rem;
-    margin-bottom: 1.15rem;
+    margin: 2.8rem 0 1rem;
 
-    text-align: center;
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 400;
 
-    font-size: 1.02rem;
+    text-align: left;
 
-    font-variant-caps: small-caps;
-    letter-spacing: 0.11em;
+    font-variant: normal;
+    letter-spacing: normal;
+    text-transform: none;
 }
 
 article h3,
 .post h3 {
-    margin-top: 2.2rem;
+    margin: 2rem 0 0.75rem;
+
+    font-family: var(--serif);
+    font-size: 1.08rem;
+    font-weight: 400;
+
+    text-align: left;
+}
+
+
+/* ==========================================================================
+   TABLE OF CONTENTS / BACK LINKS / REFERENCES
+   ========================================================================== */
+
+.backlink,
+nav.toc,
+nav.toc .toc-label,
+.ref-id {
+    font-family: var(--serif);
+}
+
+.backlink {
+    color: var(--muted);
+
+    font-size: 0.9rem;
+}
+
+nav.toc {
+    margin: 2rem 0;
+}
+
+nav.toc .toc-label {
+    font-weight: 400;
 }
 
 
@@ -454,7 +521,7 @@ article h3,
    ========================================================================== */
 
 figure {
-    margin: 2.3rem auto;
+    margin: 2.2rem auto;
 
     text-align: center;
 }
@@ -472,14 +539,15 @@ article img,
 }
 
 figcaption {
-    margin-top: 0.65rem;
+    margin-top: 0.6rem;
 
-    color: var(--soft-ink);
+    color: var(--muted);
 
-    font-size: 0.83rem;
-    line-height: 1.25;
-
+    font-family: var(--serif);
+    font-size: 0.88rem;
     font-style: italic;
+    line-height: 1.3;
+
     text-align: center;
 }
 
@@ -495,21 +563,19 @@ table {
 
     border-collapse: collapse;
 
-    font-size: 0.9rem;
+    font-family: var(--serif);
+    font-size: 0.95rem;
 }
 
 th {
-    font-weight: 500;
-
-    font-variant-caps: small-caps;
-    letter-spacing: 0.06em;
+    font-weight: 600;
 }
 
 th,
 td {
     padding: 0.45rem 0.6rem;
 
-    border-bottom: 1px solid var(--rule-light);
+    border-bottom: 1px solid var(--rule);
 
     text-align: left;
 }
@@ -519,21 +585,21 @@ td {
    LISTS
    ========================================================================== */
 
-ol.body-list,
-ul.body-list,
 article ol,
 article ul,
 .post ol,
-.post ul {
+.post ul,
+ol.body-list,
+ul.body-list {
     margin: 0 0 1.2rem;
 
-    padding-left: 1.4rem;
+    padding-left: 1.5rem;
 }
 
-ol.body-list li,
-ul.body-list li,
 article li,
-.post li {
+.post li,
+ol.body-list li,
+ul.body-list li {
     margin: 0.25rem 0;
 }
 
@@ -543,7 +609,7 @@ article li,
    ========================================================================== */
 
 mjx-container[display="true"] {
-    margin: 1.6rem 0 !important;
+    margin: 1.5rem 0 !important;
 }
 
 
@@ -554,9 +620,7 @@ mjx-container[display="true"] {
 .site-footer {
     clear: both;
 
-    padding: 2rem 0 3.4rem;
-
-    border: 0;
+    padding: 2rem 0 3rem;
 
     text-align: center;
 }
@@ -564,25 +628,25 @@ mjx-container[display="true"] {
 .site-footer .bar {
     display: block;
 
-    color: var(--soft-ink);
+    color: var(--muted);
 
-    font-size: 0.61rem;
+    font-family: var(--serif);
+    font-size: 0.85rem;
 
-    letter-spacing: 0.17em;
-    text-transform: uppercase;
+    letter-spacing: normal;
+    text-transform: none;
 }
 
 
 /* ==========================================================================
-   OPTIONAL TWO-COLUMN ARTICLE LAYOUT
+   OPTIONAL TWO-COLUMN CONTENT
    ========================================================================== */
 
 .plate-columns {
     display: grid;
 
     grid-template-columns: 1fr 1fr;
-
-    gap: 0;
+    gap: 3rem;
 
     max-width: 64rem;
 
@@ -590,16 +654,7 @@ mjx-container[display="true"] {
 }
 
 .plate-columns > * {
-    padding: 0 2rem;
-}
-
-.plate-columns > *:first-child {
-    border-right: 1px solid var(--rule);
-}
-
-.plate-columns h2,
-.plate-columns h3 {
-    margin-top: 0;
+    padding: 0;
 }
 
 
@@ -615,23 +670,23 @@ mjx-container[display="true"] {
     width: min(72rem, calc(100vw - 4rem));
     max-width: none;
 
-    margin-top: 3rem;
-    margin-bottom: 3rem;
+    margin: 3rem 0;
 
     transform: translateX(-50%);
 }
 
-.scientific-plate .plate-label {
-    display: block;
+.scientific-plate .plate-label,
+.scientific-plate .plate-title,
+.scientific-plate .plate-subtitle {
+    font-family: var(--serif);
+}
 
-    margin-bottom: 0.55rem;
+.scientific-plate .plate-label {
+    margin-bottom: 0.5rem;
 
     text-align: center;
 
-    font-size: 0.63rem;
-
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
+    font-size: 0.9rem;
 }
 
 .scientific-plate .plate-title {
@@ -639,8 +694,7 @@ mjx-container[display="true"] {
 
     text-align: center;
 
-    font-size: 1.35rem;
-    line-height: 1.1;
+    font-size: 1.25rem;
 }
 
 .scientific-plate .plate-subtitle {
@@ -648,7 +702,6 @@ mjx-container[display="true"] {
 
     text-align: center;
 
-    font-size: 0.9rem;
     font-style: italic;
 }
 
@@ -661,15 +714,15 @@ mjx-container[display="true"] {
 
     body {
         font-size: 17px;
-        line-height: 1.47;
+        line-height: 1.5;
     }
 
     .wrap {
-        width: min(100% - 2.3rem, var(--page-width));
+        width: calc(100% - 2.3rem);
     }
 
     .site-header {
-        padding-top: 2.7rem;
+        padding-top: 2.5rem;
     }
 
     .site-header .wrap {
@@ -677,11 +730,13 @@ mjx-container[display="true"] {
     }
 
     .site-name {
-        font-size: 1.25rem;
+        font-size: 1.3rem;
     }
 
     .site-nav {
-        gap: 1.5rem;
+        gap: 1.4rem;
+
+        font-size: 0.9rem;
     }
 
     .home {
@@ -702,7 +757,7 @@ mjx-container[display="true"] {
     .home-links li {
         display: block;
 
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.7rem;
     }
 
     .home-links .k {
@@ -716,28 +771,12 @@ mjx-container[display="true"] {
         padding-top: 2rem;
     }
 
-    article p,
-    .post p {
-        text-align: left;
-
-        hyphens: none;
-    }
-
     .plate-columns {
         display: block;
     }
 
     .plate-columns > * {
-        padding: 0;
-    }
-
-    .plate-columns > *:first-child {
-        padding-bottom: 2rem;
-
         margin-bottom: 2rem;
-
-        border-right: 0;
-        border-bottom: 1px solid var(--rule);
     }
 
     .scientific-plate {
@@ -768,10 +807,8 @@ mjx-container[display="true"] {
     }
 
     a {
-        text-decoration: none;
-    }
+        color: #000000;
 
-    .site-footer {
-        padding-bottom: 0;
+        text-decoration: none;
     }
 }
