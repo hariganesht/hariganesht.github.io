@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Gradient Descent — Hariganesh Tangirala</title>
+
+  <link rel="stylesheet" href="../../style.css">
+
+  <!-- MathJax -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+
+  <script
+    id="MathJax-script"
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+</head>
+
+
+<body>
+
+  <header class="site-header">
+    <div class="wrap">
+
+      <a class="site-name" href="../../index.html">
+        Hariganesh Tangirala
+      </a>
+
+      <nav class="site-nav">
+        <a href="../../index.html">Home</a>
+        <a class="active" href="../../writing.html">Writing</a>
+        <a href="../../photos.html">Photos</a>
+      </nav>
+
+    </div>
+  </header>
+
+
+  <article class="post">
+
+    <header class="post-header">
+
+      <h1 class="post-title">Gradient Descent</h1>
+
+      <div class="meta">
+        16 June 2026
+      </div>
+
+    </header>
+
+
+    <h3>Gradient Descent</h3>
+
+    <p>
+      Consider first a function of one variable, \(C(w)\). Its derivative
+    </p>
+
+    \[
+      \frac{dC}{dw}
+    \]
+
+    <p>
+      tells us how the cost changes when \(w\) changes. If the derivative is
+      positive, increasing \(w\) increases the cost, so we should move \(w\)
+      in the negative direction. If it is negative, increasing \(w\) decreases
+      the cost, so we should move in the positive direction. We can therefore
+      update
+    </p>
+
+    \[
+      w \leftarrow w-\eta\frac{dC}{dw},
+    \]
+
+    <p>
+      where \(\eta>0\) is the <em>learning rate</em>, controlling the size of
+      the step. A neural network has many parameters rather than one. If
+    </p>
+
+    \[
+      \theta=(\theta_1,\ldots,\theta_d),
+    \]
+
+    <p>
+      then the relevant generalization of the derivative is the
+      <em>gradient</em>
+    </p>
+
+    \[
+      \nabla C(\theta)
+      =
+      \begin{bmatrix}
+        \frac{\partial C}{\partial\theta_1}\\
+        \vdots\\
+        \frac{\partial C}{\partial\theta_d}
+      \end{bmatrix}.
+    \]
+
+    <p>
+      Each component tells us how sensitive the cost is to a small change in
+      one parameter. The sign tells us which direction changes the cost, while
+      the magnitude tells us how strongly that parameter matters locally. The
+      gradient points in the direction of steepest increase in \(C\).
+      Therefore, the negative gradient
+    </p>
+
+    \[
+      -\nabla C(\theta)
+    \]
+
+    <p>
+      points in the direction of steepest decrease. Gradient descent repeatedly
+      updates
+    </p>
+
+    \[
+      \theta
+      \leftarrow
+      \theta-\eta\nabla C(\theta).
+    \]
+
+    <p>
+      The learning rate \(\eta\) determines how far we move on each update. If
+      \(\eta\) is too small, learning can be very slow; if it is too large, we
+      may repeatedly overshoot a minimum rather than approaching it.
+    </p>
+
+
+    <h3>Why Learning is Helpful</h3>
+
+    <p>
+      The gradient has one component for every weight and bias in the network.
+      It therefore provides a direction in parameter space telling us how all
+      of these parameters should change together to reduce the cost. For a
+      particular weight \(w_{ij}\),
+    </p>
+
+    \[
+      \frac{\partial C}{\partial w_{ij}}
+    \]
+
+    <p>
+      measures how a small change in that weight affects the cost. A large
+      magnitude means changing this weight has a relatively large local effect,
+      while a value near zero means changing it has little immediate effect.
+    </p>
+
+    <p>
+      The resulting values of the weights and biases encode whatever patterns
+      the optimization process found useful for reducing the cost on the
+      training data.
+    </p>
+
+
+    <h3>Generalization</h3>
+
+    <p>
+      Minimizing training cost does not by itself mean that the network has
+      learned the general rule we intended. We care about whether the learned
+      function also performs well on examples it did not see during training.
+      We therefore distinguish between <em>training data</em>, used to adjust
+      the parameters, and <em>test data</em>, used to evaluate the resulting
+      network on unseen examples.
+    </p>
+
+    <p>
+      This also means that the representations learned by hidden layers need
+      not correspond to the human-interpretable features we imagined when
+      designing the architecture. Although we might motivate hidden layers as
+      learning
+    </p>
+
+    \[
+      \text{pixels}
+      \rightarrow
+      \text{edges}
+      \rightarrow
+      \text{shapes}
+      \rightarrow
+      \text{digits},
+    \]
+
+    <p>
+      gradient descent is not explicitly instructed to discover edges or
+      shapes. It simply finds parameter changes that reduce the chosen cost on
+      the training data. What internal representations emerge depends on the
+      architecture, data and optimization process.
+    </p>
+
+    <p>
+      Gradient descent tells us what parameter changes we want:
+    </p>
+
+    \[
+      -\nabla C(\theta).
+    \]
+
+    <p>
+      The remaining problem is how to efficiently calculate all of the partial
+      derivatives making up \(\nabla C\) in a large neural network. This is the
+      role of <em>backpropagation</em>.
+    </p>
+
+
+    <p class="backlink">
+      <a href="../../writing.html">← Writing</a>
+    </p>
+
+  </article>
+
+</body>
+
+</html>
