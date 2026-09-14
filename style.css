@@ -902,3 +902,22 @@ mjx-container[display="true"] {
     }
 
 }
+
+/* ==========================================================================
+   BLOG FOOTNOTES
+   ========================================================================== */
+
+.footnote {
+    margin: 1.5rem 0 2rem;
+    padding-left: 1.25rem;
+
+    color: var(--muted);
+
+    font-size: 0.82rem;
+    line-height: 1.4;
+}
+
+.footnote sup {
+    margin-left: -1.25rem;
+    margin-right: 0.25rem;
+}
