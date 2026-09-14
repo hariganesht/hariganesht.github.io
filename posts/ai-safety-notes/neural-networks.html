@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Neural Networks — Hariganesh Tangirala</title>
+
+  <link rel="stylesheet" href="../../style.css">
+
+  <!-- MathJax -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+
+  <script
+    id="MathJax-script"
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+</head>
+
+
+<body>
+
+  <header class="site-header">
+    <div class="wrap">
+
+      <a class="site-name" href="../../index.html">
+        Hariganesh Tangirala
+      </a>
+
+      <nav class="site-nav">
+        <a href="../../index.html">Home</a>
+        <a class="active" href="../../writing.html">Writing</a>
+        <a href="../../photos.html">Photos</a>
+      </nav>
+
+    </div>
+  </header>
+
+
+  <article class="post">
+
+    <header class="post-header">
+
+      <h1 class="post-title">Neural Networks</h1>
+
+      <div class="meta">
+        September 2026
+      </div>
+
+    </header>
+
+
+    <!-- ==========================================================
+         INTRODUCTION
+         ========================================================== -->
+
+    <h2>Introduction</h2>
+
+
+    <h3>Activations</h3>
+
+    <p>
+      Suppose we want to recognize handwritten digits. Writing explicit
+      rules for what makes an image a "3" or a "7" is difficult: different
+      people write the same digit differently, and the useful visual patterns
+      are difficult to specify manually. A neural network instead represents
+      a flexible function whose behaviour can be learned from examples.
+      Given an input image \(x\), we want to learn a function \(f(x)\) that
+      maps the image to a prediction of which digit it represents.
+    </p>
+
+    <p>
+      A grayscale image contains pixels, each with a brightness value between
+      \(0\) and \(1\), so the image can be represented as a vector. The input
+      layer contains one neuron for each pixel. A neuron here can simply be
+      understood as something that holds a number, called its
+      <em>activation</em>. The output layer contains \(10\) neurons,
+      corresponding to the digits \(0,1,\dots,9\). Ideally, the neuron
+      corresponding to the correct digit should have the largest activation.
+      Between the input and output are <em>hidden layers</em>. Thus information
+      passes through the network as
+    </p>
+
+    \[
+      \text{input}
+      \rightarrow
+      \text{hidden layers}
+      \rightarrow
+      \text{output}.
+    \]
+
+
+    <h3>Weights</h3>
+
+    <p>
+      Consider one neuron in the next layer. Its activation should depend on
+      the activations \(a_1,\ldots,a_n\) of neurons in the previous layer.
+      Different inputs can matter by different amounts, so associate a weight
+      \(w_j\) with each incoming activation. We first compute
+      \(\sum_j w_j a_j\).
+    </p>
+
+    <p>
+      The weights determine which patterns of activation the neuron responds
+      to. A large positive \(w_j\) means activation \(a_j\) pushes the neuron
+      toward activation, while a negative \(w_j\) pushes against it.
+    </p>
+
+    <p>
+      For example, if the previous layer represents image pixels, a neuron
+      could have positive weights over pixels in a particular region. Its
+      weighted sum would then become large when that region of the image is
+      bright. In this sense, the pattern of weights determines what feature
+      the neuron is sensitive to.
+    </p>
+
+    <p>
+      However, we may not want the neuron to activate whenever this weighted
+      sum is merely positive. We therefore introduce a <em>bias</em> \(b\):
+    </p>
+
+    \[
+      \sum_j w_j a_j + b.
+    \]
+
+    <p>
+      The bias shifts the threshold at which the neuron becomes meaningfully
+      active. Therefore, weights determine what the neuron responds to, while
+      the bias determines how easily it responds. Finally, we pass this
+      quantity through a nonlinear activation function \(\sigma\):
+    </p>
+
+    \[
+      a'
+      =
+      \sigma\left(
+        \sum_j w_j a_j+b
+      \right).
+    \]
+
+    <p class="footnote">
+      <sup>1</sup>
+      The sigmoid
+      \(\sigma(z)=\frac{1}{1+e^{-z}}\)
+      maps any real-valued input into \((0,1)\).
+    </p>
+
+
+    <h3>Vectorization</h3>
+
+    <p>
+      Doing this separately for every neuron becomes annoying. Collect the
+      activations in one layer into a vector \(\mathbf{a}\), collect all
+      weights connecting this layer to the next into a matrix \(W\), and
+      collect the biases of the next layer into a vector \(\mathbf{b}\).
+      Then the layer transformation can be written as
+    </p>
+
+    \[
+      \mathbf{a}'
+      =
+      \sigma(W\mathbf{a}+\mathbf{b})
+    \]
+
+    <p>
+      where \(\sigma\) is applied component-wise.
+    </p>
+
+    <p>
+      The dimensions also explain what the matrix is doing. If a layer
+      contains \(n\) neurons and the next contains \(m\), then
+    </p>
+
+    \[
+      \mathbf{a}\in\mathbb{R}^{n},
+      \qquad
+      W\in\mathbb{R}^{m\times n},
+      \qquad
+      \mathbf{b}\in\mathbb{R}^{m},
+    \]
+
+    <p>so</p>
+
+    \[
+      W\mathbf{a}+\mathbf{b}
+      \in
+      \mathbb{R}^{m},
+    \]
+
+    <p>
+      giving one value for each neuron in the next layer. A neural network
+      simply repeats transformations of this form:
+    </p>
+
+    \[
+      \mathbf{a}^{(0)}
+      \rightarrow
+      \mathbf{a}^{(1)}
+      \rightarrow
+      \cdots
+      \rightarrow
+      \mathbf{a}^{(L)}.
+    \]
+
+    <p>
+      For layer \(\ell\),
+    </p>
+
+    \[
+      \mathbf{a}^{(\ell)}
+      =
+      \sigma\left(
+        W^{(\ell)}
+        \mathbf{a}^{(\ell-1)}
+        +
+        \mathbf{b}^{(\ell)}
+      \right).
+    \]
+
+    <p>
+      Thus the entire neural network is ultimately just a function
+    </p>
+
+    \[
+      f_\theta(x),
+    \]
+
+    <p>
+      where
+      \(\theta=\{W^{(1)},\mathbf b^{(1)},\ldots,
+      W^{(L)},\mathbf b^{(L)}\}\)
+      contains all of the network's parameters.
+    </p>
+
+    <p>
+      The motivating intuition behind the existence of multiple layers is
+      that difficult problems may be decomposed into progressively more
+      abstract representations. For digit recognition, we might imagine
+      something like
+    </p>
+
+    \[
+      \text{pixels}
+      \rightarrow
+      \text{edges}
+      \rightarrow
+      \text{shapes}
+      \rightarrow
+      \text{digits}.
+    \]
+
+
+    <h3>Learning</h3>
+
+    <p>
+      The architecture tells us how an input becomes an output once the
+      parameters are fixed:
+    </p>
+
+    \[
+      x
+      \xrightarrow{\theta}
+      f_\theta(x).
+    \]
+
+    <p>
+      However, we have not identified the innumerable weights and biases
+      ourselves. Given examples of desired behaviour, we want to find
+      parameters \(\theta^*\) such that \(f_{\theta^*}(x)\) performs the
+      task well.
+    </p>
+
+    <p>
+      Learning a neural network is therefore done by finding useful values
+      for its weights and biases. The remaining question is: how do we know
+      which direction to change thousands of parameters so that the network
+      improves? This motivates defining a numerical measure of how badly the
+      network is performing and then changing the parameters so as to reduce
+      it. This leads to the <em>cost function</em> and
+      <em>gradient descent</em>.
+    </p>
+
+
+    <!-- ==========================================================
+         GRADIENT DESCENT
+         ========================================================== -->
+
+    <h2>Gradient Descent</h2>
+
+
+    <h3>Cost</h3>
+
+    <p>
+      A neural network's behaviour is determined by its parameters
+      \(\theta\), containing all of its weights and biases. Learning
+      therefore requires some way to determine which values of \(\theta\)
+      make the network perform well.
+    </p>
+
+    <p>
+      Suppose an input \(x\) represents a handwritten \(3\). We want the
+      output activation corresponding to \(3\) to be close to \(1\), and
+      the remaining output activations to be close to \(0\). Let
+      \(\mathbf{y}\) denote this desired output and
+      \(\mathbf{a}^{(L)}(x)\) the network's actual output. We can measure
+      how wrong the network is using
+    </p>
+
+    \[
+      C_x(\theta)
+      =
+      \left\|
+        \mathbf{a}^{(L)}(x)-\mathbf{y}
+      \right\|^2.
+    \]
+
+    <p>
+      The cost is small when the network's output is close to the desired
+      output and large when it is far away. However, we do not want
+      parameters that work well for only one image. Given \(N\) training
+      examples, define the overall cost as the average
+    </p>
+
+    \[
+      C(\theta)
+      =
+      \frac{1}{N}
+      \sum_{i=1}^{N}
+      C_{x_i}(\theta).
+    \]
+
+    <p>
+      Training can therefore be viewed as the optimization problem
+    </p>
+
+    \[
+      \theta^*
+      =
+      \arg\min_\theta C(\theta).
+    \]
+
+    <p>
+      The problem of learning has now become the problem of finding a low
+      point of a function. The unusual part is simply that \(C\) may take
+      thousands, millions, or billions of parameters as inputs.
+    </p>
+
+
+    <p class="backlink">
+      <a href="../../writing.html">← Writing</a>
+    </p>
+
+  </article>
+
+</body>
+
+</html>
