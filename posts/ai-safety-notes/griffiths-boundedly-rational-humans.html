@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Griffiths on Boundedly-Rational Humans — Hariganesh Tangirala</title>
+
+  <link rel="stylesheet" href="../../style.css">
+
+  <!-- MathJax -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+
+  <script
+    id="MathJax-script"
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+</head>
+
+
+<body>
+
+  <header class="site-header">
+    <div class="wrap">
+
+      <a class="site-name" href="../../index.html">
+        Hariganesh Tangirala
+      </a>
+
+      <nav class="site-nav">
+        <a href="../../index.html">Home</a>
+        <a class="active" href="../../writing.html">Writing</a>
+        <a href="../../photos.html">Photos</a>
+      </nav>
+
+    </div>
+  </header>
+
+
+  <article class="post">
+
+    <header class="post-header">
+      <h1 class="post-title">Griffiths on Boundedly-Rational Humans</h1>
+      <div class="meta">15 July 2026</div>
+    </header>
+
+
+    <h3>Computational Problems</h3>
+
+    <p>
+      One way to understand human intelligence is to compare humans with
+      other intelligent systems and ask what makes human cognition
+      distinctive. Griffiths suggests shifting this question from identifying
+      the properties humans possess to explaining <em>why</em> those
+      properties exist.
+    </p>
+
+    <p>
+      Human intelligence operates under three fundamental constraints:
+    </p>
+
+    \[
+      \text{limited time},
+      \qquad
+      \text{limited computation},
+      \qquad
+      \text{limited communication}.
+    \]
+
+    <p>
+      These constraints determine the kinds of computational problems humans
+      need to solve. Properties such as learning quickly, decomposing problems
+      into smaller pieces, and accumulating knowledge culturally may therefore
+      not be necessary properties of intelligence itself. Instead, they may
+      be solutions to the particular constraints under which human
+      intelligence operates.
+    </p>
+
+    <p>
+      This also means that artificial systems need not resemble humans simply
+      because both are intelligent. If an AI system does not face the same
+      computational constraints, there is no reason to expect it to develop
+      the same solutions (!).
+    </p>
+
+
+    <h3>Limited Time</h3>
+
+    <p>
+      Humans have only a limited amount of time in which to acquire
+      information. Unlike a machine learning system whose dataset can
+      sometimes be expanded by collecting millions of additional examples, a
+      human learner cannot just request arbitrarily more experience before
+      needing to act. Therefore, learning successfully from limited data
+      requires making assumptions about what conclusions are plausible before
+      seeing all possible evidence. These assumptions are called
+      <em>inductive biases</em>. More generally,
+    </p>
+
+    \[
+      \text{data}
+      +
+      \text{inductive bias}
+      \rightarrow
+      \text{generalization}.
+    \]
+
+    <p>
+      For example, observing only a few instances of a new concept is
+      insufficient to logically determine how the concept should apply to
+      every possible future object. Some generalizations must be considered
+      more than others.
+    </p>
+
+    <p>
+      Therefore, humans may learn from few examples not because they perform
+      inference without prior assumptions, but because they possess useful
+      inductive biases acquired before the particular learning problem
+      begins. Bayesian inference (as in computational cognitive science)
+      provides one way to make such biases explicit:
+    </p>
+
+    \[
+      P(h\mid d)
+      \propto
+      P(d\mid h)P(h).
+    \]
+
+    <p>
+      The prior \(P(h)\) represents which hypotheses the learner considers
+      plausible before observing the current data. Different priors therefore
+      provide a formal way to express different inductive biases.
+    </p>
+
+
+    <h3>Learning to Learn</h3>
+
+    <p>
+      If useful inductive biases exist before a particular learning problem,
+      we can ask where they came from. Experience can therefore impact how
+      efficiently learning occurs on another.
+    </p>
+
+    <p>
+      A related idea in machine learning is <em>meta-learning</em>, or
+      learning to learn. Instead of optimizing a system for one task, the
+      system encounters a distribution of related tasks and learns properties
+      that allow it to learn new tasks quickly.
+    </p>
+
+    <p>
+      This can be understood as two levels of learning:
+    </p>
+
+    \[
+      \text{outer loop: learn a useful inductive bias}
+    \]
+
+    <p>and</p>
+
+    \[
+      \text{inner loop: use that bias to learn a particular task}.
+    \]
+
+    <p>
+      The outer loop has access to experience across many tasks, while each
+      inner-loop task may provide very little data. Similar to evolution,
+      meta-learning can exploit many previous tasks to produce a learner that
+      adapts rapidly to a new one.
+    </p>
+
+
+    <h3>Limited Computation</h3>
+
+    <p>
+      Humans are also limited in how much computation they can perform before
+      making a decision. Even if all relevant information is available,
+      calculating the globally optimal action may require more computation
+      than the brain can feasibly perform.
+    </p>
+
+    <p>
+      This can make strategies that would otherwise appear unnecessary
+      useful. One example is decomposing a difficult problem into
+      <em>subgoals</em>. Rather than planning directly over every possible
+      sequence of actions until reaching the final goal, a person might
+      reason
+    </p>
+
+    \[
+      \text{current state}
+      \rightarrow
+      \text{subgoal}_1
+      \rightarrow
+      \text{subgoal}_2
+      \rightarrow
+      \text{goal}.
+    \]
+
+    <p>
+      Subgoals reduce the computational difficulty of planning by allowing
+      smaller problems to be solved separately and partial solutions to be
+      reused.
+    </p>
+
+    <p>
+      However, this does not imply that every intelligent system must reason
+      using human-like subgoals. With sufficiently large computational
+      resources, an agent might directly search over possible futures without
+      representing the intermediate structure that humans find useful.
+      Apparently fundamental features of human reasoning may therefore partly
+      reflect computational constraints rather than intelligence itself.
+    </p>
+
+
+    <h3>Rational Metareasoning</h3>
+
+    <p>
+      Once computation is limited, computation itself becomes a resource that
+      must be allocated. An agent cannot consider every possibility, so it
+      must decide what is worth thinking about. Suppose additional computation
+      \(c\) could improve a decision but also consumes time or other
+      resources. The relevant question becomes whether the expected
+      improvement from thinking longer is worth its cost. We can think
+      schematically in terms of
+    </p>
+
+    \[
+      \text{value of computation}
+      =
+      \text{expected improvement in decision quality}
+      -
+      \text{cost of computation}.
+    \]
+
+    <p>
+      Reasoning can therefore itself be treated as a decision problem. The
+      agent must decide not only
+    </p>
+
+    \[
+      \text{what should I do?}
+    \]
+
+    <p>but also</p>
+
+    \[
+      \text{what should I think about before deciding what to do?}
+    \]
+
+    <p>
+      The study of how limited computational resources should be allocated is
+      sometimes called <em>rational metareasoning</em>. This provides another
+      way of interpreting bounded human behaviour. A person who fails to
+      compute the theoretically optimal solution need not be irrational if
+      obtaining that solution would require unreasonable computational
+      effort. Rationality can instead be evaluated relative to the resources
+      available to the agent.
+    </p>
+
+
+    <h3>Limited Communication</h3>
+
+    <p>
+      Finally, humans cannot directly copy the contents of one brain into
+      another. Each person acquires information and performs computation
+      privately, and communicating the resulting knowledge to others is
+      itself costly and incomplete.
+    </p>
+
+    <p>
+      This matters because many problems require more time, information, or
+      computation than one person possesses. Humans overcome individual
+      limitations by distributing cognition across people and generations.
+      Language, teaching, writing, division of labour, institutions and other
+      forms of social organization allow information discovered by one
+      individual to influence others.
+    </p>
+
+    <p>
+      The resulting process is <em>cumulative cultural evolution</em>.
+      Knowledge does not disappear when one individual reaches the end of
+      their lifetime:
+    </p>
+
+    \[
+      \text{generation}_1
+      \rightarrow
+      \text{generation}_2
+      \rightarrow
+      \cdots
+      \rightarrow
+      \text{generation}_n.
+    \]
+
+    <p>
+      Each generation can begin with information produced by earlier
+      generations rather than rediscovering everything independently.
+      Communication therefore allows a collection of individually bounded
+      agents to solve problems that exceed the capacities of any one of them.
+      Human intelligence is consequently not only a property of individual
+      brains; some intelligent behaviour emerges from computation distributed
+      across groups and over time.
+    </p>
+
+    <p>
+      In totality, we should be careful when treating properties of human
+      cognition as universal requirements for intelligence. Human cognition
+      occupies a particular region of possible computational systems because
+      humans simultaneously face limited time, computation and communication.
+      An artificial system may face very different constraints. It may learn
+      from vastly more data than a human can encounter, perform much more
+      computation before acting, or copy information between instances far
+      more efficiently than humans can communicate. Such a system might
+      therefore solve the same underlying problems using strategies that
+      appear unintuitive or alien from a human perspective.
+    </p>
+
+    <p>
+      Interestingly, there are also settings where machines <em>do</em> face
+      human-like constraints. An agent interacting with a person may need to
+      learn a new preference from only a few examples, make decisions under
+      strict time or compute limits, or coordinate with other agents through
+      a restricted communication channel. In these cases, understanding the
+      solutions humans have developed to those constraints may provide useful
+      ideas for designing artificial systems.
+    </p>
+
+    <p>
+      It is therefore useful to ask which constraints an artificial system
+      faces, what computational problem those constraints create, what
+      strategies could result as solutions.
+    </p>
+
+
+    <p class="backlink">
+      <a href="../../writing.html">← Writing</a>
+    </p>
+
+  </article>
+
+</body>
+
+</html>
