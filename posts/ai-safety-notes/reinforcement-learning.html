@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Reinforcement Learning — Hariganesh Tangirala</title>
+
+  <link rel="stylesheet" href="../../style.css">
+
+  <!-- MathJax -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+
+  <script
+    id="MathJax-script"
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+</head>
+
+
+<body>
+
+  <header class="site-header">
+    <div class="wrap">
+
+      <a class="site-name" href="../../index.html">
+        Hariganesh Tangirala
+      </a>
+
+      <nav class="site-nav">
+        <a href="../../index.html">Home</a>
+        <a class="active" href="../../writing.html">Writing</a>
+        <a href="../../photos.html">Photos</a>
+      </nav>
+
+    </div>
+  </header>
+
+
+  <article class="post">
+
+    <header class="post-header">
+      <h1 class="post-title">Reinforcement Learning</h1>
+      <div class="meta">30 June 2026</div>
+    </header>
+
+
+    <h3>Bellman Equations</h3>
+
+    <p>
+      Value functions are useful because a long-term prediction can be
+      decomposed recursively. The value of being somewhere is determined by
+      what happens immediately and the value of where we end up afterward:
+    </p>
+
+    \[
+      V^\pi(s)
+      =
+      \mathbb E_{a\sim\pi,\;s'\sim P}
+      \left[
+        r(s,a,s')+\gamma V^\pi(s')
+      \right].
+    \]
+
+    <p>
+      This is the <em>Bellman equation</em>. Rather than separately reasoning
+      about every possible complete future trajectory, it relates the value
+      of the present state to the value of possible next states.
+    </p>
+
+    <p>
+      For an optimal agent, the corresponding relationship is
+    </p>
+
+    \[
+      V^*(s)
+      =
+      \max_a
+      \mathbb E_{s'\sim P}
+      \left[
+        r(s,a,s')+\gamma V^*(s')
+      \right].
+    \]
+
+    <p>
+      The \(\max\) appears because an optimal agent chooses whichever
+      available action produces the greatest expected future return.
+    </p>
+
+
+    <h3>What Can Be Learned?</h3>
+
+    <p>
+      An RL algorithm must somehow discover behaviour that produces high
+      expected return, but there are several different objects it might
+      learn.
+    </p>
+
+    <p>
+      A <em>policy optimization</em> method directly adjusts the parameters
+      of the policy
+    </p>
+
+    \[
+      \pi_\theta(a\mid s)
+    \]
+
+    <p>
+      so that actions producing higher return become more likely.
+      Policy-gradient methods are examples of this approach. Alternatively,
+      the agent can learn a value function such as
+    </p>
+
+    \[
+      Q(s,a)
+    \]
+
+    <p>
+      and derive its behaviour from it by choosing actions with high
+      estimated value. These are <em>Q-learning</em> methods.
+    </p>
+
+    <p>
+      Many algorithms combine both ideas. An <em>actor--critic</em> method
+      learns a policy, the <em>actor</em>, alongside a value function, the
+      <em>critic</em>, which provides information useful for improving that
+      policy.
+    </p>
+
+
+    <h3>Models of the Environment</h3>
+
+    <p>
+      A separate distinction concerns whether the agent learns or uses a
+      model of how the environment works. A model predicts what will happen
+      after an action, for example
+    </p>
+
+    \[
+      P(s_{t+1}\mid s_t,a_t)
+    \]
+
+    <p>
+      and possibly the resulting reward.
+    </p>
+
+    <p>
+      In <em>model-based RL</em>, the agent has or learns such a model and
+      can use it to plan by considering possible future consequences before
+      acting:
+    </p>
+
+    \[
+      \text{possible action}
+      \rightarrow
+      \text{predicted future}
+      \rightarrow
+      \text{evaluate}
+      \rightarrow
+      \text{choose}.
+    \]
+
+    <p>
+      In <em>model-free RL</em>, the agent instead learns a policy or value
+      function without explicitly learning a model that it uses for planning.
+    </p>
+
+    <p>
+      A learned model can make experience more useful because the agent can
+      reason about possible futures without physically experiencing every one
+      of them. However, errors in the model can also produce poor plans, and
+      learning an accurate model may itself be difficult.
+    </p>
+
+
+    <h3>On-Policy and Off-Policy Learning</h3>
+
+    <p>
+      RL algorithms also differ in which experience they can learn from. An
+      <em>on-policy</em> method learns primarily from trajectories generated
+      by the policy currently being optimized. If the policy changes
+      substantially, older experience may no longer provide the right
+      distribution of examples.
+    </p>
+
+    <p>
+      An <em>off-policy</em> method can learn about one policy using
+      experience generated by another policy. This makes it possible to reuse
+      older experience or learn from data produced by other behaviours.
+    </p>
+
+    <p>
+      There is therefore a recurring tradeoff between <em>sample
+      efficiency</em>, how much learning we obtain from each interaction with
+      the environment, and other desirable properties such as simplicity and
+      stability.
+    </p>
+
+
+    <h3>Markov Decision Processes</h3>
+
+    <p>
+      The objects discussed above can be collected into a formal description
+      of the decision problem. Accordingly, a <em>Markov Decision Process</em>
+      (MDP) contains a state space \(S\), action space \(A\), transition model
+      \(P\), reward function \(R\), and initial-state distribution
+      \(\rho_0\):
+    </p>
+
+    \[
+      \langle S,A,P,R,\rho_0\rangle.
+    \]
+
+    <p>
+      The important assumption is not the notation itself but the
+      <em>Markov property</em>: once the current state \(s_t\) is known, the
+      earlier history contains no additional information needed to predict
+      the next state,
+    </p>
+
+    \[
+      P(s_{t+1}\mid s_0,a_0,\ldots,s_t,a_t)
+      =
+      P(s_{t+1}\mid s_t,a_t).
+    \]
+
+    <p>
+      The state must therefore contain everything from the past that remains
+      relevant for predicting what happens next. This explains why defining
+      the state of a problem is substantive rather than choosing notation. If
+      information from the past still matters after \(s_t\) is specified,
+      then what we called the "state" was not actually a complete Markov
+      state.
+    </p>
+
+    <p>
+      For a concrete sequential problem, the modeling task therefore is to
+      ask: what is actually true at time \(t\); what can the agent observe;
+      what can it do; how does its action change the world; and what outcomes
+      are rewarded? The objects
+    </p>
+
+    \[
+      s_t,\qquad
+      o_t,\qquad
+      a_t,\qquad
+      P,\qquad
+      R,\qquad
+      \pi
+    \]
+
+    <p>
+      arise as answers to these questions rather than as pieces of notation
+      to impose on the problem.
+    </p>
+
+
+    <p class="backlink">
+      <a href="../../writing.html">← Writing</a>
+    </p>
+
+  </article>
+
+</body>
+
+</html>
