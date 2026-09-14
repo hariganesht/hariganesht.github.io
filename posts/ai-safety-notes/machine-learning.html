@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Machine Learning — Hariganesh Tangirala</title>
+
+  <link rel="stylesheet" href="../../style.css">
+
+  <!-- MathJax -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+
+  <script
+    id="MathJax-script"
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+</head>
+
+
+<body>
+
+  <header class="site-header">
+    <div class="wrap">
+
+      <a class="site-name" href="../../index.html">
+        Hariganesh Tangirala
+      </a>
+
+      <nav class="site-nav">
+        <a href="../../index.html">Home</a>
+        <a class="active" href="../../writing.html">Writing</a>
+        <a href="../../photos.html">Photos</a>
+      </nav>
+
+    </div>
+  </header>
+
+
+  <article class="post">
+
+    <header class="post-header">
+      <h1 class="post-title">Machine Learning</h1>
+      <div class="meta">24 June 2026</div>
+    </header>
+
+
+    <p>
+      Artificial intelligence aims to build systems capable of performing
+      useful tasks. Rather than manually specifying how the system should
+      solve the task, machine learning approaches a problem by specifying a
+      parameterized model \(f_\theta(x)\) and using data to find parameters
+      \(\theta\) that make it perform well. The process of adjusting these
+      parameters based on data is called <em>training</em> or
+      <em>optimization</em>. Deep learning is machine learning using neural
+      networks with many layers, typically trained using gradient descent
+      and backpropagation.
+    </p>
+
+    <p class="footnote">
+      <sup>1</sup>
+      The three possible settings are: supervised (human/external labels),
+      self-supervised (targets constructed from data), and reinforcement
+      (rewards generated through interaction).
+    </p>
+
+
+    <h3>Supervised Learning</h3>
+
+    <p>
+      Different machine learning settings differ primarily in what
+      information is available for learning. In <em>supervised learning</em>,
+      we have examples paired with desired outputs:
+    </p>
+
+    \[
+      \mathcal D=\{(x_i,y_i)\}_{i=1}^N.
+    \]
+
+    <p>
+      The model learns to predict \(y\) from \(x\). If \(y\) belongs to a
+      discrete set, such as the object contained in an image, this is
+      <em>classification</em>. If \(y\) is continuous, such as a numerical
+      rating, this is <em>regression</em>. The difficulty is that obtaining
+      labels often requires humans to produce them. Large quantities of raw
+      data may be readily available even when corresponding human labels are
+      expensive.
+    </p>
+
+
+    <h3>Self-Supervised Learning</h3>
+
+    <p>
+      Self-supervised learning avoids requiring humans to explicitly label
+      every example by constructing the learning target from the data itself.
+      For text, for example, any sequence \(x_1,x_2,\ldots,x_t\)
+      automatically provides many training examples of the form
+      \((x_1,\ldots,x_t)\rightarrow x_{t+1}\).
+    </p>
+
+    <p>
+      The text therefore supplies both the input and the target without
+      someone manually annotating what each passage means. This makes it
+      possible to learn from enormous quantities of otherwise unlabeled data.
+    </p>
+
+
+    <h3>Reinforcement Learning</h3>
+
+    <p>
+      Supervised and self-supervised learning can be understood as learning
+      from datasets. In <em>reinforcement learning</em>, the model instead
+      interacts with an environment. At time \(t\), an agent takes an action
+      \(a_t\), receives an observation of what happens next, and receives a
+      numerical reward \(r_t\).
+    </p>
+
+    <p>
+      The goal is to learn behaviour that produces high cumulative reward.
+    </p>
+
+    <p>
+      This however creates a difficulty: an action may affect rewards much
+      later. Determining which earlier actions deserve credit or blame for
+      later outcomes is the <em>credit assignment problem</em>.
+    </p>
+
+    <p>
+      There are a few constraints: first, training data are finite. A model
+      therefore encounters situations after training that it has never seen
+      before. If it is able to perform well on new examples of the same kind,
+      it is said to <em>generalize</em>. Second, the real world may differ
+      more substantially from the training setting. A system may need to
+      apply capabilities learned in one setting to a meaningfully different
+      one. This is often described as <em>transfer</em>. We do not, however,
+      have a clear boundary between generalizing within a task and
+      transferring to a new task.
+    </p>
+
+    <p>
+      This means that in order to design a machine learning system, we must
+      (1) choose an optimization algorithm, and further (2) decide what data
+      or environment the model learns from and what objective it is trained
+      to optimize.
+    </p>
+
+
+    <!-- ==========================================================
+         SELF-SUPERVISED LEARNING
+         ========================================================== -->
+
+    <h2>Self-Supervised Learning</h2>
+
+    <p>
+      Suppose we want a model to distinguish images of cats from images of
+      dogs. In supervised learning, we provide examples together with their
+      correct labels:
+    </p>
+
+    \[
+      (x_i,y_i)
+      =
+      (\text{image},\text{cat/dog}).
+    \]
+
+    <p>
+      The model makes a prediction, compares it with the supplied label, and
+      adjusts its parameters to reduce the error. The problem is that
+      obtaining large labelled datasets can be expensive.
+    </p>
+
+    <p class="footnote">
+      <sup>2</sup>
+      Although enormous quantities of images, text and other data already
+      exist, humans would have to manually provide the desired output for
+      each example.
+    </p>
+
+    <p>
+      In self-supervised learning, the supervision is instead obtained from
+      the data itself. We take an unlabelled example \(x\) and construct a
+      prediction problem for which some part of \(x\) provides the target.
+      For example, given an image, we might hide part of it and ask the model
+      to predict the missing portion:
+    </p>
+
+    \[
+      \text{visible part of image}
+      \rightarrow
+      \text{hidden part of image}.
+    \]
+
+    <p>
+      The same idea applies naturally to language. Given a sequence of tokens
+      \(x_1,x_2,\ldots,x_t\), we can use the preceding tokens as the input
+      and the next token as the target:
+      \((x_1,\ldots,x_t)\rightarrow x_{t+1}\).
+    </p>
+
+    <p>
+      The target does not need to be manually labelled because it already
+      occurs in the original text. This is the next-token prediction
+      objective used to pretrain GPT-style language models. Predicting
+      missing image regions or the next token forces the model to learn
+      regularities that help it make those predictions. The resulting
+      internal representations can then be useful for other tasks.
+    </p>
+
+    <p>
+      The advantage is therefore not that learning occurs without an
+      objective or without feedback. Rather, we can manufacture the learning
+      signal automatically from raw data, allowing training to scale to
+      datasets that would be impractical to label manually.
+    </p>
+
+
+    <!-- ==========================================================
+         REINFORCEMENT LEARNING
+         ========================================================== -->
+
+    <h2>Reinforcement Learning</h2>
+
+
+    <h3>Agents and Environments</h3>
+
+    <p>
+      In supervised learning, a model learns from a dataset containing
+      examples of desired behaviour. Many problems instead involve an actor
+      repeatedly interacting with a world, where its actions affect what
+      happens next. Reinforcement learning (RL) studies how an
+      <em>agent</em> can learn behaviour through this interaction.
+    </p>
+
+    <p>
+      At time \(t\), the environment is in some <em>state</em> \(s_t\),
+      describing everything relevant about the world. The agent takes an
+      <em>action</em> \(a_t\), after which the environment changes:
+    </p>
+
+    \[
+      s_{t+1}\sim P(\cdot\mid s_t,a_t).
+    \]
+
+    <p class="footnote">
+      <sup>3</sup>
+      \(P(\cdot\mid s_t,a_t)\) shows the entire distribution of
+      \(P(s_1\mid s_t,a_t), P(s_2\mid s_t,a_t),
+      P(s_3\mid s_t,a_t)\), and so on, for possible future states.
+    </p>
+
+    <p>
+      Here \(P\) is the <em>transition model</em>: it specifies how the
+      current state and action determine a distribution over possible next
+      states. In a deterministic environment this instead reduces to
+    </p>
+
+    \[
+      s_{t+1}=f(s_t,a_t).
+    \]
+
+    <p class="footnote">
+      <sup>4</sup>
+      Unlike a stochastic environment where probability is used to sample
+      future states, here the current state and action completely determine
+      the next state.
+    </p>
+
+    <p>
+      The agent does not always observe the complete state. An
+      <em>observation</em> \(o_t\) contains the information about the state
+      that is actually available to the agent. If the observation contains
+      the complete state, the environment is <em>fully observed</em>;
+      otherwise it is <em>partially observed</em>.
+    </p>
+
+
+    <h3>Policies</h3>
+
+    <p>
+      Knowing what the agent observes does not yet tell us what it will do.
+      We therefore need a rule mapping the information available to the agent
+      to actions. This is called a <em>policy</em>.
+    </p>
+
+    <p>
+      A deterministic policy selects one action for each state:
+    </p>
+
+    \[
+      a_t=\mu(s_t),
+    \]
+
+    <p>
+      while a stochastic policy specifies a probability distribution over
+      possible actions, where the agent does not have to always choose a
+      particular action for an observation. We sample an action \(a_t\) from
+      the probability distribution over all actions given state \(s_t\):
+    </p>
+
+    \[
+      a_t\sim\pi(\cdot\mid s_t).
+    \]
+
+    <p>
+      In practice, if the agent only receives an observation, the policy acts
+      on that observation rather than the inaccessible true state. In that
+      case, for an observation \(o_t\):
+    </p>
+
+    \[
+      a_t\sim\pi(\cdot\mid o_t).
+    \]
+
+    <p>
+      For complicated environments, we cannot define a mapping to an action
+      for every state. We may therefore let the policy be a neural network
+      with parameters \(\theta\):
+    </p>
+
+    \[
+      \pi_\theta(a\mid s).
+    \]
+
+    <p>
+      Changing \(\theta\) changes the probabilities with which the agent
+      chooses actions.
+    </p>
+
+
+    <h3>Trajectories</h3>
+
+    <p>
+      Because actions change the environment, we care about sequences of
+      interaction rather than isolated predictions. A <em>trajectory</em>
+      is a sequence
+    </p>
+
+    \[
+      \tau=(s_0,a_0,s_1,a_1,\ldots).
+    \]
+
+    <p>
+      where the initial state is drawn from some starting distribution
+    </p>
+
+    \[
+      s_0\sim\rho_0,
+    \]
+
+    <p>
+      actions are produced by the policy, and subsequent states are produced
+      by the transition model. For stochastic policies and transitions, the
+      probability of a trajectory is therefore determined jointly by the
+      environment and the agent:
+    </p>
+
+    \[
+      P(\tau\mid\pi)
+      =
+      \rho_0(s_0)
+      \prod_{t=0}^{T-1}
+      \pi(a_t\mid s_t)
+      P(s_{t+1}\mid s_t,a_t).
+    \]
+
+
+    <h3>Reward and Return</h3>
+
+    <p>
+      The environment also produces a numerical <em>reward</em> describing
+      the desirability of what happened:
+    </p>
+
+    \[
+      r_t=R(s_t,a_t,s_{t+1}).
+    \]
+
+    <p>
+      An action that gives a small immediate reward may nevertheless lead to
+      much better outcomes later, so the agent should not generally maximize
+      \(r_t\) independently at every timestep. Instead, we care about the
+      reward accumulated across the trajectory, known as the
+      <em>return</em>.
+    </p>
+
+    <p>
+      For a finite task,
+    </p>
+
+    \[
+      R(\tau)=\sum_{t=0}^{T}r_t.
+    \]
+
+    <p>
+      For an indefinitely continuing task, future rewards are often
+      discounted:
+    </p>
+
+    \[
+      R(\tau)
+      =
+      \sum_{t=0}^{\infty}\gamma^t r_t,
+      \qquad 0<\gamma<1,
+    \]
+
+    <p>
+      where \(\gamma\) is the <em>discount factor</em>. Larger \(\gamma\)
+      makes distant rewards matter more, while smaller \(\gamma\) places
+      greater weight on immediate outcomes.
+    </p>
+
+    <p class="footnote">
+      <sup>5</sup>
+      Discounting also ensures that the infinite sum converges under suitable
+      conditions.
+    </p>
+
+    <p>
+      Since both the policy and environment may be stochastic, the same
+      policy can generate different trajectories and therefore different
+      returns. We consequently evaluate a policy by its
+      <em>expected return</em>
+    </p>
+
+    \[
+      J(\pi)
+      =
+      \mathbb E_{\tau\sim\pi}[R(\tau)].
+    \]
+
+    <p>
+      The central RL problem is then
+    </p>
+
+    \[
+      \pi^*=\arg\max_\pi J(\pi).
+    \]
+
+
+    <h3>Value Functions</h3>
+
+    <p>
+      To choose actions well, it is useful to estimate not merely the reward
+      available now but what a situation is likely to lead to later. The
+      <em>value function</em> \(V^\pi(s)\) is the expected return obtained by
+      starting in state \(s\) and subsequently following policy \(\pi\):
+    </p>
+
+    \[
+      V^\pi(s)
+      =
+      \mathbb E_\pi[R(\tau)\mid s_0=s].
+    \]
+
+    <p>
+      Sometimes we instead want to evaluate a particular action. The
+      <em>action-value function</em> \(Q^\pi(s,a)\) is the expected return
+      from starting in \(s\), first taking action \(a\), and then following
+      \(\pi\):
+    </p>
+
+    \[
+      Q^\pi(s,a)
+      =
+      \mathbb E_\pi[R(\tau)\mid s_0=s,a_0=a].
+    \]
+
+    <p class="footnote">
+      <sup>6</sup>
+      Intuitively, \(V^\pi(s)\) asks "how good is it to be here?", while
+      \(Q^\pi(s,a)\) asks "how good is it to take this action here?".
+    </p>
+
+    <p>
+      If we knew the optimal action-value function \(Q^*\), choosing the
+      optimal action would simply require
+    </p>
+
+    \[
+      a^*(s)=\arg\max_a Q^*(s,a).
+    \]
+
+
+    <p class="backlink">
+      <a href="../../writing.html">← Writing</a>
+    </p>
+
+  </article>
+
+</body>
+
+</html>
