@@ -921,3 +921,175 @@ mjx-container[display="true"] {
     margin-left: -1.25rem;
     margin-right: 0.25rem;
 }
+
+
+/* ==========================================================================
+   MOBILE OVERFLOW FIX
+   ========================================================================== */
+
+/* Never allow the page itself to become wider than the screen */
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+
+/* Let grid/flex children actually shrink */
+* {
+    min-width: 0;
+}
+
+
+/* Long text and links should wrap rather than expand the page */
+p,
+li,
+a,
+span,
+div {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+
+/* Images must always remain inside their container */
+img,
+figure,
+video,
+iframe {
+    max-width: 100%;
+}
+
+
+/* MathJax: scroll the equation itself instead of the whole page */
+mjx-container[display="true"] {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding: 0.15rem 0;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+
+/* ==========================================================================
+   MOBILE
+   ========================================================================== */
+
+@media (max-width: 700px) {
+
+    /*
+       Give content a fixed amount of breathing room on both sides.
+       box-sizing means padding is included within the viewport width.
+    */
+    .wrap {
+        width: 100%;
+        max-width: 100%;
+
+        padding-left: 1.15rem;
+        padding-right: 1.15rem;
+    }
+
+
+    /*
+       Articles don't necessarily inherit .wrap, so explicitly constrain them.
+    */
+    article,
+    .post,
+    .home,
+    .writing,
+    .writings,
+    .photos-page {
+        width: 100%;
+        max-width: 100%;
+
+        padding-left: 1.15rem;
+        padding-right: 1.15rem;
+    }
+
+
+    /* Don't accidentally double-pad elements that are also .wrap */
+    .home.wrap,
+    .writing.wrap,
+    .writings.wrap,
+    .photos-page.wrap {
+        padding-left: 1.15rem;
+        padding-right: 1.15rem;
+    }
+
+
+    /* Slightly smaller body type works better on narrow screens */
+    body {
+        font-size: 16.5px;
+        line-height: 1.5;
+    }
+
+
+    /* Keep titles from becoming awkwardly large */
+    article h1,
+    .post-title {
+        font-size: 1.55rem;
+        line-height: 1.18;
+    }
+
+    h2,
+    article h2,
+    .post h2 {
+        font-size: 1.2rem;
+    }
+
+
+    /*
+       Display equations can be wider than a phone.
+       They scroll independently rather than widening the page.
+    */
+    mjx-container[display="true"] {
+        width: 100% !important;
+        max-width: 100%;
+
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        font-size: 95% !important;
+    }
+
+
+    /* Prevent tables from widening the whole document */
+    table {
+        display: block;
+
+        width: 100%;
+        max-width: 100%;
+
+        overflow-x: auto;
+
+        -webkit-overflow-scrolling: touch;
+    }
+
+
+    /* Footnotes need less indentation on a phone */
+    .footnote {
+        padding-left: 1rem;
+
+        font-size: 0.8rem;
+    }
+
+    .footnote sup {
+        margin-left: -1rem;
+    }
+
+
+    /* Blockquotes shouldn't consume half the available width */
+    blockquote {
+        margin-left: 1rem;
+        margin-right: 0;
+    }
+
+
+    /* Photos remain single-column */
+    .photo-grid {
+        grid-template-columns: 1fr;
+    }
+}
