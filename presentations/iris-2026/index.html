@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>IRIS 2026 | Modeling Boundedly-Rational Agents for Assistive Decision Making</title>
+<style>
+:root{--ink:#0b0b0c;--muted:#6d6d72;--light:#d9d9dc;--paper:#fff;--soft:#f5f5f3;--blue:#2867f0;--coral:#ff5a5f;--blueSoft:#eaf0ff;--coralSoft:#fff0ef}
+*{box-sizing:border-box} html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--paper);color:var(--ink);font-family:Inter,Arial,Helvetica,sans-serif}
+body{cursor:default}.deck{position:relative;width:100vw;height:100vh}.scene{position:absolute;inset:0;padding:clamp(28px,6.5vh,64px) clamp(42px,7vw,110px);opacity:0;pointer-events:none;transition:opacity .55s ease;overflow:hidden}.scene.active{opacity:1;pointer-events:auto}
+.kicker{font-size:1.05vw;letter-spacing:.16em;text-transform:uppercase;font-weight:700}.title{font-size:5.6vw;line-height:.94;letter-spacing:-.055em;font-weight:800}.subtitle{font-size:1.65vw;line-height:1.35;color:#333;max-width:58vw}.huge{font-size:8.6vw;font-weight:750;letter-spacing:-.06em}.center{display:flex;align-items:center;justify-content:center;text-align:center}.bottom{position:absolute;left:7vw;bottom:5vh}.hint{position:absolute;right:2.2vw;bottom:2.3vh;font-size:.78vw;color:#999;letter-spacing:.08em}.progress{position:absolute;left:0;bottom:0;height:3px;background:#111;transition:width .35s ease}.step{opacity:0;transform:translateY(14px);transition:opacity .55s ease,transform .55s cubic-bezier(.2,.8,.2,1)}.step.show{opacity:1;transform:none}
+/* Scene 1 */
+.seq{display:flex;gap:3.3vw;align-items:center;justify-content:center;margin-top:14vh}.num{font-size:8.4vw;font-weight:650;letter-spacing:-.05em}.qmark{font-weight:300}.answer{position:absolute;left:50%;top:67%;transform:translate(-50%,15px);font-size:1.4vw;color:#555;opacity:0;transition:.6s}.answer.show{opacity:1;transform:translate(-50%,0)}
+/* hypothesis space */
+.hypoWrap{display:grid;grid-template-columns:42% 58%;height:70vh;align-items:center}.seqSmall{font-size:4.3vw;font-weight:700;letter-spacing:.04em}.hypoField{position:relative;height:58vh}.hypo{position:absolute;font-size:1.12vw;white-space:nowrap;transform:translate(-50%,-50%) scale(.92);opacity:.18;transition:opacity .8s,transform .8s,font-size .8s}.hypo.focus{opacity:1;transform:translate(-50%,-50%) scale(1.14);font-weight:750}.hypo.medium{opacity:.55;transform:translate(-50%,-50%) scale(1.02)}
+.distLabel{position:absolute;left:48%;bottom:4vh;font-size:1.1vw;color:#555}.mass{position:absolute;width:9px;height:9px;border-radius:50%;background:#111;opacity:.18;transition:all 1.1s cubic-bezier(.2,.8,.2,1)}
+/* probability laboratory */
+.probLab{display:grid;grid-template-columns:39% 61%;height:72vh;align-items:center;gap:3vw}.probIntro .seqSmall{font-size:4.7vw}.probPanel{position:relative;height:61vh}.probTitle{font-size:1vw;letter-spacing:.13em;text-transform:uppercase;font-weight:750;color:#555;margin-bottom:2vh}.ruleRow{display:grid;grid-template-columns:12.5vw 1fr 3.5vw;align-items:center;gap:1vw;margin:1.25vh 0}.ruleName{font-size:1.05vw}.barTrack{height:1.25vh;background:#eee;position:relative;overflow:hidden}.barFill{position:absolute;left:0;top:0;bottom:0;background:var(--blue);width:16.7%;transition:width 1.25s cubic-bezier(.2,.8,.2,1)}.probVal{font-variant-numeric:tabular-nums;font-size:.95vw;color:#666;text-align:right}.predWrap{position:absolute;left:0;right:0;bottom:0;height:23vh;border-top:1px solid #bbb;padding-top:2.2vh;opacity:0;transform:translateY(12px);transition:.65s}.predWrap.show{opacity:1;transform:none}.predChart{height:15vh;display:flex;align-items:flex-end;gap:1.3vw;padding:0 1vw;border-bottom:1px solid #111}.predCol{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}.predBar{width:72%;height:6%;background:#bbb;transition:height 1.3s cubic-bezier(.2,.8,.2,1),background .8s}.predCol.focus .predBar{background:var(--blue)}.predNum{font-size:1vw;margin-top:.7vh}.predPct{font-size:.82vw;color:#777;margin-bottom:.5vh;opacity:0;transition:.5s}.predWrap.show .predPct{opacity:1}.probCaption{font-size:1.05vw;color:var(--blue);margin-top:1.5vh}.posteriorTag{display:inline-block;color:var(--blue);font-size:.9vw;font-weight:700;margin-top:2vh;padding-bottom:.25vh;border-bottom:1px solid #111;opacity:0;transition:.5s}.posteriorTag.show{opacity:1}
+/* cog sci */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:7vw;margin-top:8vh}.bigQ{font-size:2.7vw;font-weight:720;line-height:1.12;letter-spacing:-.035em}.definition{font-size:1.35vw;line-height:1.5;color:#333;margin-top:2vh}.pipeline{display:flex;align-items:center;gap:1.1vw;margin-top:4vh}.node{font-size:1.25vw;font-weight:650}.arrow{width:4vw;height:1px;background:#111;position:relative}.arrow:after{content:"";position:absolute;right:0;top:-4px;border-left:8px solid #111;border-top:4px solid transparent;border-bottom:4px solid transparent}
+/* inference */
+.inferGrid{display:grid;grid-template-columns:36% 16% 48%;align-items:center;height:68vh}.cloud{position:relative;height:50vh}.obs{position:absolute;font-size:1.15vw;border:1px solid #bbb;padding:.55vw .75vw;background:#fff;transition:all 1s cubic-bezier(.2,.8,.2,1)}.inferArrow{font-size:6vw;font-weight:200;text-align:center}.latent{display:flex;flex-direction:column;gap:2.5vh}.latentRow{font-size:2.2vw;font-weight:700;opacity:0;transform:translateX(25px);transition:.7s}.latentRow.show{opacity:1;transform:none}.latentRow small{font-size:1vw;font-weight:500;color:#777;margin-left:1vw}
+/* Bayes */
+.bayesGrid{display:grid;grid-template-columns:1fr 1fr;gap:5vw;margin-top:4vh}.chart{position:relative;height:44vh;border-bottom:1px solid #111}.curve{position:absolute;inset:0}.curve path{fill:none;stroke:var(--blue);stroke-width:4;transition:d 1.1s cubic-bezier(.2,.8,.2,1),stroke .5s;vector-effect:non-scaling-stroke}.curve.light path{stroke:#aaa;stroke-width:3}.evidenceLine{position:absolute;top:0;bottom:0;width:3px;background:var(--coral);left:69%;opacity:0;transform:scaleY(0);transform-origin:bottom;transition:.6s}.evidenceLine.show{opacity:1;transform:scaleY(1)}.evidenceDot{position:absolute;width:14px;height:14px;border-radius:50%;background:var(--coral);left:calc(69% - 5px);top:-7px;opacity:0;transition:.5s}.evidenceDot.show{opacity:1}.chartLabel{position:absolute;left:0;bottom:-3.2vh;font-size:1vw;color:#555}.formula{font-family:Georgia,serif;font-size:2.3vw;margin-top:2vh}.bayesWords{display:flex;justify-content:space-between;font-size:1.15vw;color:#555;margin-top:3vh}.pulse{animation:pulse 1.1s ease}@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.035)}100%{transform:scale(1)}}
+/* project */
+.project{display:grid;grid-template-columns:1fr 1fr;gap:4vw;margin-top:5vh}.actor{height:46vh;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative}.personIcon,.aiIcon{width:7vw;height:7vw;border:2px solid #111;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2vw;font-weight:800;background:#fff;z-index:2}.uncert{width:20vw;height:7vh;margin-top:3vh;position:relative}.uncert svg{width:100%;height:100%}.flow{position:absolute;left:48%;right:48%;top:44%;height:2px;background:#111;opacity:0}.flow.show{left:44%;right:44%;opacity:1;transition:all .8s}.flow:after{content:"";position:absolute;right:-1px;top:-5px;border-left:10px solid #111;border-top:5px solid transparent;border-bottom:5px solid transparent}.flow.reverse:after{right:auto;left:-1px;border-left:0;border-right:10px solid #111}.flow.reverse{top:58%}.flowLabel{position:absolute;left:50%;transform:translateX(-50%);font-size:1.05vw;font-weight:650;opacity:0;transition:.5s}.flowLabel.show{opacity:1}.fl1{top:37%}.fl2{top:62%}.particles{position:absolute;inset:0;pointer-events:none}.particle{position:absolute;width:7px;height:7px;border-radius:50%;background:#111;opacity:0}.particle.goRight{animation:rightflow 1.7s infinite}.particle.goLeft{animation:leftflow 1.7s infinite}@keyframes rightflow{0%{left:42%;opacity:0}20%{opacity:.8}80%{opacity:.8}100%{left:58%;opacity:0}}@keyframes leftflow{0%{left:58%;opacity:0}20%{opacity:.8}80%{opacity:.8}100%{left:42%;opacity:0}}
+/* ending */
+.program{display:flex;align-items:center;justify-content:space-between;margin-top:13vh}.phase{width:20%;font-size:1.55vw;font-weight:700;line-height:1.15}.phase .n{font-size:.9vw;color:#777;margin-bottom:1vh}.longArrow{flex:1;height:1px;background:#aaa;margin:0 1vw;position:relative}.longArrow:after{content:"";position:absolute;right:0;top:-4px;border-left:7px solid #777;border-top:4px solid transparent;border-bottom:4px solid transparent}.closing{font-size:3.8vw;line-height:1.05;font-weight:760;letter-spacing:-.045em;margin-top:10vh;max-width:80vw}
+
+/* title */
+.titleScene{display:flex;flex-direction:column;justify-content:center;height:100%;padding-bottom:3vh}.talkTitle{font-size:5.35vw;line-height:.98;letter-spacing:-.055em;font-weight:800;max-width:84vw}.talkMeta{margin-top:6vh;font-size:1.35vw;line-height:1.75;color:#444}.talkMeta b{color:var(--ink)}
+/* ambiguous perception */
+.ambigWrap{display:grid;grid-template-columns:58% 42%;height:72vh;align-items:center}.cubeStage{position:relative;height:58vh}.cubeStage svg{width:100%;height:100%;overflow:visible}.cubeLine{stroke:#111;stroke-width:5;fill:none;stroke-linecap:round;stroke-linejoin:round}.faceA,.faceB{fill:var(--blue);opacity:0;transition:opacity .8s ease}.faceB{fill:var(--coral)}.faceA.on,.faceB.on{opacity:.16}.depthEdgeA,.depthEdgeB{stroke-width:9;opacity:0;transition:opacity .8s}.depthEdgeA{stroke:var(--blue)}.depthEdgeB{stroke:var(--coral)}.depthEdgeA.on,.depthEdgeB.on{opacity:1}.interpPanel{padding-left:2vw}.interpTitle{font-size:1vw;letter-spacing:.13em;text-transform:uppercase;font-weight:750;color:#555}.interpQ{font-size:3.4vw;line-height:1.02;font-weight:760;letter-spacing:-.04em;margin-top:2vh}.twoBeliefs{margin-top:6vh}.beliefRow{display:grid;grid-template-columns:9vw 1fr 4vw;gap:1vw;align-items:center;margin:2vh 0}.beliefName{font-size:1.05vw}.beliefTrack{height:1.5vh;background:#eee;overflow:hidden}.beliefFill{height:100%;width:50%;transition:width 1s cubic-bezier(.2,.8,.2,1);background:var(--blue)}.beliefRow:nth-child(2) .beliefFill{background:var(--coral)}.beliefPct{font-size:.95vw;color:#666;text-align:right}.sameInput{font-size:1.25vw;line-height:1.45;margin-top:5vh;color:#333;opacity:0;transform:translateY(10px);transition:.6s}.sameInput.show{opacity:1;transform:none}.sameInput b{color:var(--ink)}
+
+
+/* v6 visual math */
+.cogVisual{height:72vh;display:flex;flex-direction:column;justify-content:center}.cogQuestion{font-size:5vw;line-height:1.02;font-weight:800;letter-spacing:-.05em}.cogQuestion span{color:var(--blue)}.cogMap{display:flex;align-items:center;justify-content:center;gap:1.6vw;margin-top:7vh}.mathNode{width:16vw;height:13vh;border-top:2px solid #111;display:flex;flex-direction:column;justify-content:center}.mathNode b{font-size:.9vw;text-transform:uppercase;letter-spacing:.12em;color:#666}.mathNode strong{font-family:Georgia,serif;font-size:2.5vw;margin-top:1vh}.mathNode.accent{border-color:var(--blue)}.mathNode.accent strong{color:var(--blue)}.mathArrow{font-size:3vw}.reverseArrow{color:var(--blue)}.modelLoop{margin-top:5vh;text-align:center;font-size:1.3vw;font-weight:700}.modelLoop i{font-style:normal;color:#999;margin:0 1.3vw}
+.inferVisual{height:73vh;display:flex;flex-direction:column;justify-content:center}.inferEq{display:flex;align-items:baseline;justify-content:center;gap:1.2vw}.raw,.latentSym{font-family:Georgia,serif;font-size:7vw}.latentSym{color:var(--blue)}.given{font-size:1vw;text-transform:uppercase;letter-spacing:.12em;color:#777}.bigCond{font-size:5vw;color:#aaa}.miniWorld{display:grid;grid-template-columns:repeat(4,1fr);gap:2vw;margin-top:8vh}.miniWorld div{border-top:1px solid #aaa;padding-top:1.5vh;font-size:1.2vw}.miniWorld b{margin:0 .7vw;color:#999}.miniWorld strong{font-size:1.5vw}.miniWorld .prefLine{border-top:3px solid var(--blue)}.miniWorld .prefLine strong{color:var(--blue)}.inferPosterior{text-align:center;margin-top:7vh;font-family:Georgia,serif;font-size:2.5vw;color:#333}
+.bayesTop{text-align:center;font-family:Georgia,serif;font-size:3vw;margin-top:4vh}.bayesTop b{font-family:Inter,sans-serif;font-weight:400;color:#aaa;margin:0 1.2vw}.blueTxt{color:var(--blue)}.coralTxt{color:var(--coral)}.tripleDist{height:44vh;display:grid;grid-template-columns:1fr 5vw 1fr 5vw 1fr;align-items:end;gap:1vw;margin-top:3vh}.distBox{text-align:center;font-family:Georgia,serif;font-size:1.4vw}.distBox svg{width:100%;height:31vh;border-bottom:1px solid #aaa}.distBox path{fill:none;stroke-width:4;vector-effect:non-scaling-stroke}.priorStatic{stroke:#777}.likeStatic{stroke:var(--coral)}.postStatic{stroke:var(--blue)}.op{text-align:center;font-size:3vw;color:#aaa;padding-bottom:13vh}.bayesMath{text-align:center;font-family:Georgia,serif;font-size:2.1vw;margin-top:2vh}.frac{display:inline-flex;flex-direction:column;vertical-align:middle;line-height:1.05}.frac span:first-child{border-bottom:1px solid #111;padding:0 .5vw .3vh}.frac span:last-child{padding-top:.3vh}
+.projectTitle{font-size:4.5vw;line-height:1;font-weight:800;letter-spacing:-.045em;margin-top:2vh}.selfModel{display:grid;grid-template-columns:13vw 3vw 24vw 3vw 11vw 3vw 14vw;align-items:center;justify-content:center;gap:.7vw;margin-top:9vh}.truth,.beliefBlob,.query,.selfModel .obs{min-height:18vh;border-top:2px solid #111;padding-top:2vh}.selfModel span{font-size:.85vw;text-transform:uppercase;letter-spacing:.1em;color:#666}.selfModel strong{display:block;font-family:Georgia,serif;font-size:2.3vw;margin-top:1.5vh}.beliefBlob{border-color:var(--blue)}.beliefBlob strong{color:var(--blue)}.beliefBlob svg{width:100%;height:7vh;margin-top:1vh}.beliefBlob path{fill:none;stroke:var(--blue);stroke-width:3}.query{border-color:var(--coral)}.query strong{color:var(--coral)}.selfArrow{text-align:center;font-size:2.5vw;color:#999}.updateEq{text-align:center;font-family:Georgia,serif;font-size:2.2vw;margin-top:5vh}.projectQuestions{display:flex;justify-content:center;gap:4vw;margin-top:4vh;font-size:1.05vw;color:#555}.projectQuestions span{border-bottom:1px solid #bbb;padding-bottom:.5vh}
+.voiTitle{font-size:4.2vw;line-height:1.03;font-weight:800;letter-spacing:-.04em;margin-top:2vh;max-width:85vw}.queryLandscape{height:43vh;display:flex;align-items:flex-end;justify-content:center;gap:7vw;margin-top:4vh;border-bottom:1px solid #aaa}.qChoice{height:100%;width:10vw;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}.qChoice>b{font-family:Georgia,serif;font-size:2vw;margin-bottom:1vh}.twoBars{height:34vh;width:8vw;display:flex;align-items:flex-end;justify-content:center;gap:1vw}.twoBars i{display:block;width:2.2vw;transition:height 1s}.aBar{background:var(--coral)}.hBar{background:var(--blue)}.legend{display:flex;justify-content:center;gap:4vw;margin-top:2vh;font-size:1vw;color:#555}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:.5vw}.coralDot{background:var(--coral)}.blueDot{background:var(--blue)}.objectives{text-align:center;font-family:Georgia,serif;font-size:1.9vw;margin-top:3vh}
+.expFlow{display:grid;grid-template-columns:1fr 4vw 1fr 4vw 1fr 4vw 1fr;align-items:center;margin-top:12vh}.exp{min-height:26vh;border-top:3px solid #111;padding-top:2vh}.exp:nth-of-type(3){border-color:var(--blue)}.exp b{font-size:.9vw;color:#888}.exp strong{display:block;font-size:1.8vw;margin-top:2vh}.exp span{display:block;font-size:1.05vw;line-height:1.45;color:#555;margin-top:2vh}.expArrow{text-align:center;font-size:2.4vw;color:#aaa}.scene[data-scene="9"] .closing{font-size:3.5vw;margin-top:8vh}
+
+.compactSeq{font-size:8vw;font-weight:760;letter-spacing:.08em;text-align:center;margin-top:5vh}.compactSeq span{color:var(--blue)}
+.hypothesisViz{position:absolute;left:7vw;right:7vw;top:29vh;height:39vh}.probSvg{width:100%;height:31vh}.axis{stroke:#aaa;stroke-width:1}.area{transition:opacity .8s}.grayArea{fill:#ddd;opacity:.65}.blueArea{fill:var(--blue);opacity:.22}.svgLabel{font-size:20px;fill:#777}.blueText{fill:var(--blue);color:var(--blue)}.probEquation{text-align:center;font-family:Georgia,serif;font-size:1.8vw;margin-top:-1vh}.predictionViz{position:absolute;left:30vw;right:30vw;bottom:4vh}.predictionLabel{text-align:center;font-size:.85vw;letter-spacing:.13em;text-transform:uppercase;color:#777}.predictionBars{height:12vh;display:flex;align-items:flex-end;gap:1vw;border-bottom:1px solid #aaa}.predictionBars i{flex:1;background:#ccc}.predictionBars .winner{background:var(--blue)}.predictionNums{display:flex;gap:1vw}.predictionNums span{flex:1;text-align:center;font-size:.9vw;margin-top:.5vh}
+.cogComposite{display:grid;grid-template-columns:36% 30% 34%;align-items:center;height:68vh;margin-top:2vh}.cubeMini{height:52vh;position:relative}.cubeMini svg{width:100%;height:44vh}.cubeCaption{text-align:center;font-size:1.15vw;color:#555}.inferenceCore{text-align:center}.generative{font-family:Georgia,serif;font-size:4.5vw}.generative span{color:#aaa}.posteriorCore{font-family:Georgia,serif;font-size:3vw;color:var(--blue);margin-top:4vh}.modelCycle{font-size:.9vw;color:#777;margin-top:4vh}.inferenceExamples{display:flex;flex-direction:column;gap:2vh}.inferenceExamples div{border-top:1px solid #bbb;padding-top:1vh}.inferenceExamples small{display:block;color:#888;font-size:.9vw}.inferenceExamples strong{font-size:1.7vw}.accentExample{border-top:3px solid var(--blue)!important}.accentExample strong{color:var(--blue)}.cogReveal{text-align:center;font-size:2.4vw;font-weight:750;position:absolute;bottom:4vh;left:0;right:0}
+.bayesHero{height:72vh;display:flex;flex-direction:column;justify-content:center}.bayesFormula{text-align:center;font-family:Georgia,serif;font-size:3vw}.bayesMotion{width:88%;height:43vh;margin:2vh auto 0}.bayesMotion path{fill:none;stroke-width:5}.priorHero{stroke:#777}.likeHero{stroke:var(--coral)}.postHero{stroke:var(--blue)}.curveText{font-size:24px;font-family:Inter,sans-serif}.grayText{fill:#777}.coralText{fill:var(--coral);color:var(--coral)}.bayesBottom{text-align:center;font-size:1.5vw}.bayesBottom b{color:#aaa;margin:0 1vw}
+.projectHeroTitle{font-size:4.6vw;font-weight:800;letter-spacing:-.045em;margin-top:2vh}.projectCanvas{height:38vh;display:grid;grid-template-columns:42% 12% 12% 34%;align-items:center;margin-top:3vh}.humanModel{text-align:center}.uStar{font-family:Georgia,serif;font-size:2.5vw}.beliefSvg{width:100%;height:18vh}.beliefSvg path{fill:none;stroke:var(--blue);stroke-width:5;transition:d 1s}.beliefName{font-family:Georgia,serif;font-size:1.6vw;color:var(--blue)}.queryPulse,.evidencePulse{font-family:Georgia,serif;font-size:2.4vw;text-align:center}.queryPulse{color:var(--coral)}.evidencePulse{color:#444}.updateMini{font-family:Georgia,serif;font-size:1.6vw;text-align:center}.voiCompact{display:grid;grid-template-columns:1fr 5vw 1fr;align-items:center;width:70%;margin:0 auto}.voiSide{text-align:center}.voiSide>span{display:block;font-size:1vw;margin-bottom:1vh}.voiSide>b{font-family:Georgia,serif;font-size:1.8vw}.miniQuery{height:10vh;display:flex;align-items:flex-end;justify-content:center;gap:.6vw}.miniQuery i{display:block;width:2vw}.coralSide .miniQuery i{background:var(--coral)}.blueSide .miniQuery i{background:var(--blue)}.notEqual{text-align:center;font-size:3vw;color:#aaa}
+.programVisual{display:grid;grid-template-columns:minmax(0,1fr) 2.2vw minmax(0,1fr) 2.2vw minmax(0,1fr) 2.2vw minmax(0,1fr);align-items:center;gap:.45vw;margin-top:9vh;width:100%}.programOrb{min-width:0;min-height:25vh;border-top:3px solid #111;padding-top:2vh;padding-right:.5vw}.programOrb b{font-size:1vw;color:#888}.programOrb strong{display:block;font-size:clamp(18px,1.55vw,28px);margin-top:2vh;line-height:1.08}.programOrb small{display:block;font-size:clamp(12px,.9vw,17px);color:#666;line-height:1.35;margin-top:1.7vh}.blueOrb{border-color:var(--blue)}.blueOrb strong{color:var(--blue)}.programArrow{text-align:center;font-size:2.3vw;color:#aaa}.scene[data-scene="5"] .closing{text-align:center;font-size:clamp(30px,3vw,52px);font-weight:800;margin-top:8vh}
+</style>
+</head>
+<body>
+<div class="deck">
+<section class="scene active" data-scene="0">
+ <div class="titleScene">
+  <div class="talkTitle">Modeling Boundedly-Rational Agents<br>for Assistive Decision Making</div>
+  <div class="talkMeta"><b>Hariganesh Tangirala</b><br>Aug–Nov 2026<br>Advisor: Prof. Tan Zhi Xuan · School of Computing</div>
+ </div>
+ <div class="hint">→ / space / click</div>
+</section>
+<section class="scene" data-scene="1">
+ <div class="kicker">One tiny inference problem</div>
+ <div class="compactSeq">2&nbsp;&nbsp;&nbsp;4&nbsp;&nbsp;&nbsp;6&nbsp;&nbsp;&nbsp;<span>?</span></div>
+ <div class="hypothesisViz step">
+   <svg viewBox="0 0 1000 360" class="probSvg">
+     <line x1="40" y1="310" x2="960" y2="310" class="axis"/>
+     <path id="priorArea" class="area grayArea" d="M40 310 C130 305 160 250 230 245 C300 240 325 275 390 270 C455 265 490 195 555 185 C625 174 650 250 710 250 C780 250 805 220 860 230 C910 238 930 285 960 310 Z"/>
+     <path id="postArea" class="area blueArea" d="M40 310 C180 310 250 305 330 292 C420 276 475 230 535 172 C590 120 620 56 655 44 C692 55 720 125 755 180 C795 245 850 290 960 310 Z"/>
+     <text x="175" y="337" class="svgLabel">repeat</text><text x="375" y="337" class="svgLabel">+1,+2,...</text><text x="625" y="337" class="svgLabel blueText">+2 / even</text><text x="850" y="337" class="svgLabel">other</text>
+   </svg>
+   <div class="probEquation">P(h | 2,4,6) &nbsp;∝&nbsp; P(2,4,6 | h) P(h)</div>
+ </div>
+ <div class="predictionViz step">
+   <div class="predictionLabel">posterior predictive</div>
+   <div class="predictionBars"><i style="height:10%"></i><i style="height:8%"></i><i style="height:12%"></i><i class="winner" style="height:88%"></i><i style="height:25%"></i><i style="height:18%"></i></div>
+   <div class="predictionNums"><span>2</span><span>4</span><span>6</span><span class="blueText">8</span><span>10</span><span>other</span></div>
+ </div>
+</section>
+<section class="scene" data-scene="2">
+ <div class="kicker">Cognitive science asks what hidden computation produces behaviour</div>
+ <div class="cogComposite">
+   <div class="cubeMini">
+    <svg viewBox="0 0 700 520">
+      <polygon class="faceA" points="155,115 420,115 420,380 155,380"/>
+      <polygon class="faceB" points="280,45 545,45 545,310 280,310"/>
+      <path class="cubeLine" d="M155 115 L420 115 L420 380 L155 380 Z M280 45 L545 45 L545 310 L280 310 Z M155 115 L280 45 M420 115 L545 45 M420 380 L545 310 M155 380 L280 310"/>
+    </svg>
+    <div class="cubeCaption">same x<br><b>two possible z</b></div>
+   </div>
+   <div class="inferenceCore">
+      <div class="generative">z <span>→</span> x</div>
+      <div class="posteriorCore">P(z | x)</div>
+      <div class="modelCycle">theory → model → prediction → experiment</div>
+   </div>
+   <div class="inferenceExamples">
+      <div><small>pixels</small><strong>objects</strong></div>
+      <div><small>actions</small><strong>goals</strong></div>
+      <div><small>examples</small><strong>rules</strong></div>
+      <div class="accentExample"><small>my reactions</small><strong>preferences?</strong></div>
+   </div>
+ </div>
+ <div class="step cogReveal">Inference is everywhere.</div>
+</section>
+<section class="scene" data-scene="3">
+ <div class="kicker">A common computational language</div>
+ <div class="bayesHero">
+   <div class="bayesFormula">P(h | d) = <span class="frac"><span>P(d | h)P(h)</span><span>P(d)</span></span></div>
+   <svg viewBox="0 0 1200 390" class="bayesMotion">
+      <line x1="45" y1="330" x2="1150" y2="330" class="axis"/>
+      <path class="priorHero" d="M45 330 C150 325 220 295 300 235 C385 170 470 140 550 180 C625 217 650 285 760 318 C890 340 1010 330 1150 330"/>
+      <path class="likeHero step" d="M45 330 C560 330 680 328 760 295 C825 268 850 125 895 70 C938 122 960 270 1015 305 C1050 326 1100 330 1150 330"/>
+      <path class="postHero step" d="M45 330 C650 330 735 326 800 285 C850 250 870 110 910 52 C950 108 965 260 1015 300 C1050 326 1100 330 1150 330"/>
+      <text x="300" y="105" class="curveText grayText">prior</text><text x="790" y="42" class="curveText coralText step">likelihood</text><text x="1000" y="92" class="curveText blueText step">posterior</text>
+   </svg>
+   <div class="bayesBottom step"><span>belief</span><b>+</b><span class="coralText">evidence</span><b>→</b><span class="blueText">revised belief</span></div>
+ </div>
+</section>
+<section class="scene" data-scene="4">
+ <div class="kicker">My project</div>
+ <div class="projectHeroTitle">What if the hidden state is <span class="blueText">what I want?</span></div>
+ <div class="projectCanvas">
+   <div class="humanModel">
+     <div class="uStar">U*</div>
+     <svg viewBox="0 0 430 180" class="beliefSvg"><line x1="10" y1="150" x2="420" y2="150" class="axis"/><path id="humanBelief" d="M10 150 C50 148 75 90 115 82 C160 73 190 140 235 115 C285 86 320 136 420 150"/></svg>
+     <div class="beliefName">b<sub>H,t</sub>(U)</div>
+   </div>
+   <div class="queryPulse">q<sub>t</sub></div>
+   <div class="evidencePulse">o<sub>H,t</sub></div>
+   <div class="updateMini step">b<sub>H,t+1</sub>(U) ∝ P(o<sub>H,t</sub> | U,q<sub>t</sub>) b<sub>H,t</sub>(U)</div>
+ </div>
+ <div class="voiCompact step">
+   <div class="voiSide coralSide"><span>AI learns about H</span><div class="miniQuery"><i style="height:88%"></i><i style="height:54%"></i><i style="height:25%"></i></div><b>VOI<sub>A</sub></b></div>
+   <div class="notEqual">≠</div>
+   <div class="voiSide blueSide"><span>H learns about H</span><div class="miniQuery"><i style="height:31%"></i><i style="height:51%"></i><i style="height:92%"></i></div><b>VOI<sub>H</sub></b></div>
+ </div>
+</section>
+<section class="scene" data-scene="5">
+ <div class="kicker">Research program</div>
+ <div class="programVisual">
+   <div class="programOrb"><b>1</b><strong>Observe people</strong><small>What do they learn when they evaluate options?</small></div>
+   <div class="programArrow">→</div>
+   <div class="programOrb blueOrb"><b>2</b><strong>Model H</strong><small>fit evaluation, uncertainty, updating, generalization</small></div>
+   <div class="programArrow">→</div>
+   <div class="programOrb"><b>3</b><strong>Simulate assistance</strong><small>random · A-info · outcome · H-info</small></div>
+   <div class="programArrow">→</div>
+   <div class="programOrb"><b>4</b><strong>Return to people</strong><small>does model-aware assistance actually help?</small></div>
+ </div>
+ <div class="closing step">Can an AI help you understand yourself?</div>
+</section>
+<div class="progress" id="progress"></div>
+</div>
+<script>
+const scenes=[...document.querySelectorAll('.scene')]; let s=0, step=0;
+const maxSteps=[0,2,1,3,2,1];
+function showScene(){scenes.forEach((x,i)=>x.classList.toggle('active',i===s));step=0;resetScene();updateProgress()}
+function resetScene(){const sc=scenes[s];sc.querySelectorAll('.step').forEach(e=>e.classList.remove('show'));if(s===2){sc.querySelector('.faceA')?.classList.remove('on');sc.querySelector('.faceB')?.classList.remove('on')}if(s===4){const c=sc.querySelector('#humanBelief');if(c)c.setAttribute('d','M10 150 C50 148 75 90 115 82 C160 73 190 140 235 115 C285 86 320 136 420 150')}}
+function advance(){if(step<maxSteps[s]){step++;build()}else if(s<scenes.length-1){s++;showScene()}}
+function back(){if(step>0){step--;resetScene();for(let i=1;i<=step;i++){step=i;build()}}else if(s>0){s--;showScene();step=maxSteps[s];for(let i=1;i<=step;i++){step=i;build()}}}
+function build(){const sc=scenes[s];if(s===1){if(step>=1)sc.querySelector('.hypothesisViz')?.classList.add('show');if(step>=2)sc.querySelector('.predictionViz')?.classList.add('show')}if(s===2&&step>=1){sc.querySelector('.faceA')?.classList.add('on');setTimeout(()=>{sc.querySelector('.faceA')?.classList.remove('on');sc.querySelector('.faceB')?.classList.add('on')},700);sc.querySelector('.cogReveal')?.classList.add('show')}if(s===3){const st=sc.querySelectorAll('.step');for(let i=0;i<Math.min(step,st.length);i++)st[i].classList.add('show')}if(s===4){if(step>=1){sc.querySelector('.updateMini')?.classList.add('show');const c=sc.querySelector('#humanBelief');if(c)c.setAttribute('d','M10 150 C190 150 240 145 285 95 C315 60 335 25 355 30 C380 36 392 110 420 150')}if(step>=2)sc.querySelector('.voiCompact')?.classList.add('show')}if(s===5&&step>=1)sc.querySelector('.closing')?.classList.add('show');updateProgress()}
+function updateProgress(){document.getElementById('progress').style.width=((s+step/(maxSteps[s]+1))/(scenes.length-1)*100)+'%'}
+document.addEventListener('keydown',e=>{if(['ArrowRight',' ','PageDown'].includes(e.key)){e.preventDefault();advance()}else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();back()}else if(e.key.toLowerCase()==='f'){document.documentElement.requestFullscreen?.()}else if(e.key.toLowerCase()==='r'){s=0;showScene()}});document.addEventListener('click',advance);window.addEventListener('resize',()=>{});showScene();
+</script>
+</body></html>
