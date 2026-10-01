@@ -2,7 +2,7 @@
    HARIGANESH TANGIRALA
    Plain academic website
    ========================================================================== */
-
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,500;0,600;1,400&display=swap');
 :root {
     --bg: #ffffff;
     --text: #111111;
@@ -13,7 +13,7 @@
     --page-width: 68rem;
     --text-width: 45rem;
 
-    --serif: Arial, Helvetica, sans-serif;
+    --serif: "Source Sans 3", sans-serif;
 }
 
 
