@@ -1141,7 +1141,7 @@ figure.fig figcaption .dim{ opacity: .72; }
    SIMPLE THEME — matches the homepage (plain Times, narrow column, blue links)
    ========================================================================== */
 :root {
-    --serif: "Times New Roman", Times, serif;
+    --serif: "Palatino Linotype", Palatino, "TeX Gyre Pagella", "Book Antiqua", serif;
     --page-width: 640px;
     --text-width: 640px;
     --text: #222222;
