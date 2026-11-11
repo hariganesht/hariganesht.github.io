@@ -2,7 +2,6 @@
    HARIGANESH TANGIRALA
    Plain academic website
    ========================================================================== */
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,500;0,600;1,400&display=swap');
 :root {
     --bg: #ffffff;
     --text: #111111;
@@ -1137,3 +1136,38 @@ figure.fig figcaption .dim{ opacity: .72; }
 #ng .gbar.ex{ background:var(--accent); box-shadow: inset 0 3px 0 var(--mark); }
 #ng .ticks{ display:flex; justify-content:space-between; font-size:11px; color:var(--faint); margin-top:5px; font-family:'DM Mono', ui-monospace, monospace; }
 #ng .hint{ font-size:.9rem; color:var(--faint); padding:6px 0; }
+
+/* ==========================================================================
+   SIMPLE THEME — matches the homepage (plain Times, narrow column, blue links)
+   ========================================================================== */
+:root {
+    --serif: "Times New Roman", Times, serif;
+    --page-width: 640px;
+    --text-width: 640px;
+    --text: #222222;
+    --link: #1a4f8b;
+}
+body { font-size: 17px; line-height: 1.35; color: var(--text); }
+.wrap { width: min(var(--page-width), calc(100% - 40px)); }
+a, a:hover { color: var(--link); text-decoration: underline; text-decoration-color: currentColor; }
+
+.site-header { padding: 48px 0 0; text-align: left; }
+.site-header .wrap { padding-bottom: 0; }
+.site-name, .site-name:hover { color: var(--text); font-size: 30px; font-weight: 500; text-decoration: none; }
+.site-nav { justify-content: flex-start; gap: 1rem; margin-top: 0.4rem; font-size: 1rem; }
+.site-nav a, .site-nav a.active { color: var(--link); text-decoration: underline; }
+.site-nav a.active { color: var(--text); text-decoration: none; }
+
+.writing, .writings, .photos-page, article, .post { padding-top: 1.5rem; }
+.post-list li, .writing-list li { padding: 0.7rem 0; border: 0; }
+.post-list li:first-child, .writing-list li:first-child { border: 0; }
+.post-list .p-desc { margin: 0.1rem 0 0; }
+.site-footer { text-align: left; }
+.site-footer .wrap { padding-left: 0; }
+
+@media (max-width: 700px) {
+    body { font-size: 17px; line-height: 1.35; }
+    .wrap { width: 100%; }
+    .site-header { padding-top: 32px; }
+    .site-name { font-size: 26px; }
+}
