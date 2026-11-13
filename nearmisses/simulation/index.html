@@ -101,8 +101,8 @@ td:first-child,th:first-child{text-align:left}
       <select id="envMode"><option value="mix">Mix all three</option><option value="calm">Calm</option><option value="gusty">Gusty</option><option value="chance">Chance (action ignored)</option></select></div>
     <div class="f"><label for="windCalm">Calm wind SD <output id="windCalmOut"></output></label><input type="range" id="windCalm" min="0" max="1" step="0.1"></div>
     <div class="f"><label for="windGusty">Gusty wind SD <output id="windGustyOut"></output></label><input type="range" id="windGusty" min="0.4" max="2" step="0.1"></div>
-    <div class="f"><label for="win">A hit pays <output id="winOut"></output></label><input type="range" id="win" min="10" max="50" step="5"></div>
-    <div class="f"><label for="cost1">First retry costs (then +₹2 each) <output id="cost1Out"></output></label><input type="range" id="cost1" min="0" max="30" step="1"></div>
+    <div class="f"><label for="win">A hit pays <output id="winOut"></output></label><input type="range" id="win" min="10" max="200" step="10"></div>
+    <div class="f"><label for="cost1">First retry costs (2nd costs double, 3rd triple…) <output id="cost1Out"></output></label><input type="range" id="cost1" min="0" max="60" step="5"></div>
     <div class="f"><label for="maxTries">Retries allowed per sling <output id="maxTriesOut"></output></label><input type="range" id="maxTries" min="1" max="8" step="1"></div>
     <div class="f"><label for="diff">Difficulty (unknown curve, sensitivity) <output id="diffOut"></output></label><input type="range" id="diff" min="0" max="1" step="0.1"></div>
     <div class="f"><label for="pChance">Chance hit rate <output id="pChanceOut"></output></label><input type="range" id="pChance" min="0.1" max="0.9" step="0.01"></div>
@@ -124,7 +124,7 @@ td:first-child,th:first-child{text-align:left}
 (()=>{
 const $=id=>document.getElementById(id);
 const cv=$('cv'),ctx=cv.getContext('2d');
-const VMIN=-14,VMAX=8,START=-12,BANK0=200;
+const VMIN=-20,VMAX=13,START=-18,BANK0=200;
 let W=0,H=0,U=1,X0=0,TY=0;
 const X=u=>X0+u*U;
 const rand=Math.random,pick=a=>a[Math.floor(rand()*a.length)],sgn=()=>rand()<.5?-1:1,clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -133,7 +133,7 @@ function randn(){let u=0,v=0;while(!u)u=rand();while(!v)v=rand();return Math.sqr
 const GRID_MISS=[0.25,1,2,3.5,5.5],GRID_HIT=[0.3,0.8];
 function schedOffset(){return rand()<10/90?pick(GRID_HIT)*sgn():(1+pick(GRID_MISS))*sgn()}
 function describe(o){return Math.abs(o)<=1?'on target':(Math.abs(o)-1).toFixed(1)+(o<0?' short':' long')}
-const S={game:'fling',envMode:'mix',windCalm:0.3,windGusty:1.0,win:20,cost1:8,diff:0.6,maxTries:4,pChance:0.3,forced:0.25,sched:true,labels:false,showPull:true,showTraj:true,fx:true};
+const S={game:'fling',envMode:'mix',windCalm:0.3,windGusty:1.0,win:100,cost1:20,diff:0.6,maxTries:4,pChance:0.3,forced:0.25,sched:true,labels:false,showPull:true,showTraj:true,fx:true};
 const SESSION={rounds:3,perRun:8};
 const ENV={
  calm:{fling:['Calm air','Light wind. Where a shot lands mostly reflects your pull.'],stop:['Calm track','Light wind. Where it stops mostly reflects your braking.']},
@@ -154,15 +154,15 @@ addEventListener('resize',resize);resize();
 const TH=[.45,2.0];
 const games={
  fling:{name:'Fling',maxPull:4,gam:1.5,R:20,
-  hint(s,L){return L.tut?TUT.fling[L.tut-1][s?1:0]:L.env==='chance'?'Pull and let go. This sling fires at random.':s?(S.showPull?'The dashed ring is your last pull. Adjust and let go.':'Adjust your pull and let go.'):'New sling. Pull the dot back and let go.'},
-  reset(){this.drag=false;this.pv=null;if(E.phase==='aim1'){const L=E.lvl;this.gam=L.tut?1.5:1+rand()*2.2*L.diff;this.R=12/Math.pow(.7,this.gam)}},
+  hint(s,L){return L.tut?TUT.fling[0][s?1:0]():L.env==='chance'?'Pull and let go. This sling fires at random.':s?(S.showPull?'The dashed ring is your last pull. Adjust and let go.':'Adjust your pull and let go.'):'New sling. Pull the dot back and let go.'},
+  reset(){this.drag=false;this.pv=null;if(E.phase==='aim1'){const L=E.lvl;this.gam=L.tut?1.5:1+rand()*2.2*L.diff;this.R=-START/Math.pow(.7,this.gam)}},
   /* a pull is read as a real launch: direction opposite to the pull, power from its length */
   read(pv){const l=Math.hypot(pv.x,pv.y),p=clamp(l/(this.maxPull*U),0,1),ux=-pv.x/l,uy=pv.y/l;
     if(uy<.04)return {p,s:0,al:0,dud:true};const al=Math.atan2(uy,ux);return {p,s:Math.sin(2*al),al}},
   reach(a){return Math.pow(a.p,this.gam)*this.R*a.s},
   landing(a,th){return START+th*this.reach(a)},
   schedule(a,want){const r=this.reach(a);if(a.dud||a.s<.25||a.p<.2)return null;return clamp((want-START)/r,TH[0],TH[1])},
-  randTheta(L){return L.tut?[1,1.25,.8][L.tut-1]:.7+rand()*.8},
+  randTheta(L){return L.tut?1.15:.7+rand()*.8},
   down(p){if(!aiming())return;if(Math.hypot(p.x-X(START),p.y-TY)<48){this.drag=true;this.move(p)}},
   move(p){if(!this.drag)return;let dx=p.x-X(START),dy=p.y-TY;const l=Math.hypot(dx,dy),mx=this.maxPull*U;if(l>mx){dx*=mx/l;dy*=mx/l}this.pv={x:dx,y:dy}},
   up(){if(!this.drag)return;this.drag=false;const pv=this.pv;this.pv=null;if(!pv||Math.hypot(pv.x,pv.y)<.15*U)return;
@@ -173,12 +173,12 @@ const games={
     if(prev&&prev.pv&&S.showPull){ctx.save();ctx.setLineDash([3,3]);ctx.strokeStyle=C.fg;ctx.lineWidth=1;ctx.beginPath();ctx.arc(o.x+prev.pv.x,o.y+prev.pv.y,8,0,7);ctx.stroke();ctx.restore()}
     ctx.strokeStyle=C.fg;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(o.x,o.y);ctx.lineTo(o.x+p.x,o.y+p.y);ctx.stroke();objPx(o.x+p.x,o.y+p.y,sq)}
  },
- stop:{name:'Stop',K:3,v:4,
-  hint(s,L){return L.tut?TUT.stop[L.tut-1][s?1:0]:L.env==='chance'?'Press anywhere (or Space) to release it. It brakes by itself.':s?(S.showPull?'The dashed tick is where you braked last time. Press to brake.':'Press to brake.'):'New slider. Press anywhere (or Space) to brake.'},
-  reset(){const L=E.lvl,ch=L.env==='chance';this.x=START;this.pressed=false;if(E.phase==='aim1')this.v=L.tut?4:3+(4+rand()*4)*L.diff;
-    this.selfAt=ch?-11+rand()*3:null;this.go=!ch;this.t0=performance.now()+700},
+ stop:{name:'Stop',K:4.5,v:6,
+  hint(s,L){return L.tut?TUT.stop[0][s?1:0]():L.env==='chance'?'Press anywhere (or Space) to release it. It brakes by itself.':s?(S.showPull?'The dashed tick is where you braked last time. Press to brake.':'Press to brake.'):'New slider. Press anywhere (or Space) to brake.'},
+  reset(){const L=E.lvl,ch=L.env==='chance';this.x=START;this.pressed=false;if(E.phase==='aim1')this.v=L.tut?6:4.5+(6+rand()*6)*L.diff;
+    this.selfAt=ch?START+1.5+rand()*4.5:null;this.go=!ch;this.t0=performance.now()+700},
   landing(a,th){return a+th*this.K},schedule(a,want){const th=(want-a)/this.K;return th<.1?null:clamp(th,.1,2.7)},
-  randTheta(L){return L.tut?[1,1.6,.6][L.tut-1]:.5+rand()*1.2},
+  randTheta(L){return L.tut?1.3:.5+rand()*1.2},
   tick(now){if(!aiming()||this.pressed||!this.go)return;this.x=now<this.t0?START:START+this.v*(now-this.t0)/1000;
     if(this.selfAt!=null&&this.x>=this.selfAt){this.x=this.selfAt;this.press()}
     else if(this.x>=VMAX-.5){this.x=VMAX-.5;flash('Too late. It braked at the end of the line.');this.press()}},
@@ -189,12 +189,8 @@ const games={
  }
 };
 const TUT={
- fling:[['Pull the dot back and down, then let go. It launches the opposite way: a longer pull throws further, a lower pull throws higher.','Missed? The dashed ring shows your last pull. Pull a little more or less and let go.'],
-        ['A new sling. Every sling is different, so the same pull will not land in the same place.','Use where the last shot landed to adjust.'],
-        ['One more. Your first shot with a new sling is always a guess.','Adjust and try again.']],
- stop:[['The dot slides right. Press anywhere (or Space) to brake. It skids a little further before stopping.','Missed? The dashed tick is where you braked last time. Brake earlier or later.'],
-       ['A new slider. Every slider has its own speed and skid.','Use where it stopped to adjust.'],
-       ['One more. Your first go with a new slider is always a guess.','Adjust and try again.']]};
+ fling:[[()=>'Warm-up, no wind. Pull the dot back and down, then let go.',()=>S.showPull?'The dashed ring is your last pull. Pull a little more or less.':'Pull a little more or less.']],
+ stop:[[()=>'Warm-up, no wind. Press anywhere (or Space) to brake. It skids a little further.',()=>S.showPull?'The dashed tick is where you braked last. Brake earlier or later.':'Brake earlier or later.']]};
 const game=()=>games[S.game];
 
 /* ---------- engine ---------- */
@@ -206,7 +202,7 @@ function money(d){E.bank+=d;const a=$('amt');a.firstChild.nodeValue='₹'+E.bank
   const f=document.createElement('span');f.className='float '+(d>0?'g':'l');f.textContent=(d>0?'+₹':'−₹')+Math.abs(d);a.appendChild(f);setTimeout(()=>f.remove(),1100)}
 function setBank(v){E.bank=v;$('amt').firstChild.nodeValue='₹'+v}
 
-function buildSession(){const q=[{card:'tutorial'},{env:'calm',tut:1},{env:'calm',tut:2},{env:'calm',tut:3},{card:'go'}];
+function buildSession(){const q=[{env:'calm',tut:1},{card:'go'}];
   for(let r=0;r<SESSION.rounds;r++)for(const env of shuffle(['calm','gusty','chance'])){
     const n=SESSION.perRun,offs=shuffle(GRID_MISS.concat([pick(GRID_MISS),pick(GRID_MISS)])).slice(0,n-1).map((d,i)=>(1+d)*(i%2?1:-1)*sgn()).concat([pick(GRID_HIT)*sgn()]);
     const fo=shuffle(Array.from({length:n},(_,i)=>i<2));shuffle(offs.map((off,i)=>({env,off,forced:fo[i]}))).forEach(x=>q.push(x))}
@@ -217,7 +213,7 @@ function advance(){E.shot=null;
   else startLevel(freeSpec())}
 function startLevel(sp){E.n++;const g=game(),tut=sp.tut||0;
   E.lvl={n:E.n,game:S.game,mode:E.mode,env:sp.env,tut,forced:!!sp.forced&&!tut,off:sp.off,sched:tut?false:(E.mode==='session'?true:S.sched),
-    wind:tut?0:sp.env==='gusty'?S.windGusty:S.windCalm,pChance:S.pChance,win:tut?0:S.win,cost1:tut?0:S.cost1,diff:S.diff,maxTries:tut?6:S.maxTries,shots:[],spent:0,won:false,bankStart:E.bank};
+    wind:tut?0:sp.env==='gusty'?S.windGusty:S.windCalm,pChance:S.pChance,win:tut?0:S.win,cost1:tut?0:S.cost1,diff:S.diff,maxTries:tut?4:S.maxTries,shots:[],spent:0,won:false,bankStart:E.bank};
   E.phase='aim1';E.shot=null;E.prev=null;$('card').hidden=true;$('bank').hidden=!!tut;makeStreaks();g.reset();
   if(!tut&&sp.env!==E.lastEnv){const t=ENV[sp.env][S.game];$('banner').innerHTML=`<b>${t[0]}</b><span>${t[1]}</span>`;$('banner').hidden=false;E.bannerT=performance.now()+4200;E.lastEnv=sp.env}
   renderAll()}
@@ -231,7 +227,7 @@ function fire(a,meta){const L=E.lvl,g=game(),eps=randn()*L.wind,ch=L.env==='chan
   const sh={a,nom,eps,obs:nom+eps,t0:performance.now(),s:0};
   if(S.game==='fling'){if(ch||a.dud||!(a.al>0))sh.a={...a,al:Math.PI/4};sh.apex=g.apex(sh)}
   sh.dur=g.dur(sh);L.shots.push(sh);E.prev=meta;E.shot=sh;E.phase=L.shots.length===1?'fly1':'fly2';renderAll()}
-function nextCost(){const L=E.lvl,r=L.shots.length;if((L.forced&&r===1)||!L.cost1)return 0;return L.cost1+2*(r-1)}
+function nextCost(){const L=E.lvl,r=L.shots.length;if((L.forced&&r===1)||!L.cost1)return 0;return L.cost1*r}
 function landed(){const L=E.lvl,n=L.shots.length,x=last(),hit=Math.abs(x.obs)<=1;E.shot=null;
   if(hit){L.won=true;if(L.win)money(L.win);E.streak++;boom(x.obs)}
   else{const c=clamp(1-(Math.abs(x.obs)-1)/2.5,0,1);if(c>0)shake(2+7*c,260)}
@@ -253,11 +249,11 @@ function boom(u){if(!S.fx)return;shake(11,420);E.pulse=performance.now();if(redu
 function showCard(kind){E.phase='card';$('dec').innerHTML='';$('prompt').textContent='';$('banner').hidden=true;$('bank').hidden=true;const c=$('cardIn'),g=S.game,name=games[g].name;let h='';
   if(kind==='start'){E.mode='start';
     h=`<h1>${name}</h1><p>${g==='fling'?'Fling a dot onto the target.':'Brake a sliding dot so it stops on the target.'} You start with <span class="money">₹${BANK0}</span>. Every hit pays <span class="money">₹${S.win}</span>. Missing is free, but trying again costs money.</p>
-    <div class="btns"><button class="btn solid" id="cGo" type="button">Play</button><button class="btn" id="cFree" type="button">Free play (skip the tutorial)</button></div>`}
+    <div class="btns"><button class="btn solid" id="cGo" type="button">Play</button><button class="btn" id="cFree" type="button">Free play (skip the warm-up)</button></div>`}
   else if(kind==='tutorial')h=`<h1>First, a quick warm-up</h1><p>Three practice ${g==='fling'?'slings':'sliders'} with no wind and no money at stake. Keep trying until you land each one.</p><div class="btns"><button class="btn solid" id="cNext" type="button">Begin</button></div>`;
   else if(kind==='go'){setBank(BANK0);E.streak=0;E.lastEnv=null;const c1=S.cost1;
     h=`<h1>Now for real</h1><p>You have <span class="money">₹${BANK0}</span>.</p><p>Your first shot with each new ${g==='fling'?'sling':'slider'} is free. A hit pays <span class="money">₹${S.win}</span>.</p>
-    <p>If you miss, you can pay to try again with the same one, or move on to a new one. Tries get dearer: ₹${c1}, then ₹${c1+2}, ₹${c1+4}, ₹${c1+6}.</p>
+    <p>If you miss, you can pay to try again with the same one, or move on to a new one. Each extra try costs more: ₹${c1}, then ₹${c1*2}, ₹${c1*3}, ₹${c1*4}.</p>
     <p class="sub">The air changes as you go: calm, gusty, or a loose ${g==='fling'?'sling':'brake'} that is pure chance. You will be told each time.</p><div class="btns"><button class="btn solid" id="cNext" type="button">Start</button></div>`}
   else{const rows=['calm','gusty','chance'].map(e=>{const r=E.log.filter(l=>l.mode==='session'&&l.env===e&&l.game===g),f=r.filter(l=>!l.forced&&!l.hit1),near=f.filter(l=>Math.abs(l.obs1)<=2.5),far=f.filter(l=>Math.abs(l.obs1)>2.5),
       pc=a=>a.length?Math.round(100*a.filter(l=>l.choice==='retry').length/a.length)+'%':'–';return `<tr><td>${ENV[e][g][0]}</td><td>${r.length}</td><td>${pc(near)}</td><td>${pc(far)}</td><td>${r.length?(r.reduce((s,l)=>s+l.tries,0)/r.length).toFixed(1):'–'}</td></tr>`}).join('');
@@ -288,7 +284,7 @@ function draw(now){
   ctx.strokeStyle=C.fg;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(X(VMIN),TY+.5);ctx.lineTo(X(VMAX),TY+.5);ctx.stroke();
   const pl=now-E.pulse,won=pl<900;ctx.fillStyle=won?C.gain:C.fg;ctx.fillRect(X(-1),TY-3,2*U,6);
   if(won&&!reduce()){ctx.strokeStyle=C.gain;ctx.globalAlpha=1-pl/900;ctx.lineWidth=2;ctx.beginPath();ctx.arc(X(0),TY,U+pl*.12,0,7);ctx.stroke();ctx.globalAlpha=1;ctx.lineWidth=1}
-  const step=U<22?4:2;
+  const step=U<16?4:2;
   for(let o=VMIN;o<=VMAX;o++){ctx.strokeStyle=C.faint;ctx.beginPath();ctx.moveTo(X(o)+.5,TY+8);ctx.lineTo(X(o)+.5,TY+(o%step===0?16:12));ctx.stroke();
     if(o%step===0)text(X(o),TY+30,String(o),C.soft)}
   if(!aiming()){ctx.strokeStyle=C.soft;ctx.beginPath();ctx.moveTo(X(START)+.5,TY-8);ctx.lineTo(X(START)+.5,TY+8);ctx.stroke()}
