@@ -7,23 +7,33 @@
 <title>Near-miss simulation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: the whole screen is one ground line with a target; game switcher and conditions sit top right, status top left, cards centred. */
-:root{--bg:#ffffff;--fg:#000000;--soft:rgba(0,0,0,.45);--faint:rgba(0,0,0,.14);
+/* Layout: the whole screen is one ground line with a target; money top centre, game switcher and conditions top right, cards centred. */
+:root{--bg:#ffffff;--fg:#000000;--soft:rgba(0,0,0,.45);--faint:rgba(0,0,0,.14);--gain:#1c8a4b;--loss:#c0392f;
   --f:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#000000;--fg:#ffffff;--soft:rgba(255,255,255,.5);--faint:rgba(255,255,255,.18);color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#000000;--fg:#ffffff;--soft:rgba(255,255,255,.5);--faint:rgba(255,255,255,.18);color-scheme:dark}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#000000;--fg:#ffffff;--soft:rgba(255,255,255,.5);--faint:rgba(255,255,255,.18);--gain:#4fce85;--loss:#ff6f61;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#000000;--fg:#ffffff;--soft:rgba(255,255,255,.5);--faint:rgba(255,255,255,.18);--gain:#4fce85;--loss:#ff6f61;color-scheme:dark}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--fg);font:13px/1.45 var(--f);overflow:hidden;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 #cv{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
-.tl{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));left:max(16px,env(safe-area-inset-left,0px));z-index:2;pointer-events:none;max-width:55vw}
-@media (max-width:640px){.tl{top:calc(48px + env(safe-area-inset-top,0px));max-width:none;right:max(16px,env(safe-area-inset-right,0px))}}
+.tl{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));left:max(16px,env(safe-area-inset-left,0px));z-index:2;pointer-events:none;max-width:30vw}
 .tl .name{font-weight:600}
 .tl .meta{color:var(--soft)}
+.bank{position:fixed;top:calc(40px + env(safe-area-inset-top,0px));left:0;right:0;z-index:2;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:2px}
+.bank .amt{font-size:38px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums;transition:color .5s,transform .25s;position:relative}
+.bank .amt.up{color:var(--gain);transform:scale(1.14)}
+.bank .amt.down{color:var(--loss);transform:scale(.94)}
+.bank .streak{color:var(--gain);font-weight:600;min-height:1.4em}
+.float{position:absolute;left:100%;top:0;margin-left:10px;font-size:20px;font-weight:700;white-space:nowrap;animation:rise 1.1s ease-out forwards}
+.float.g{color:var(--gain)}.float.l{color:var(--loss)}
+@keyframes rise{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-34px)}}
+.banner{position:fixed;top:calc(112px + env(safe-area-inset-top,0px));left:0;right:0;z-index:2;text-align:center;pointer-events:none;padding:0 16px}
+.banner b{display:inline-block;border:1px solid var(--fg);background:var(--bg);padding:4px 12px;font-weight:600}
+.banner span{display:block;color:var(--soft);margin-top:4px}
 .tr{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));z-index:6;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
 .row{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:2px}
 .link{background:none;border:0;color:var(--fg);font:inherit;padding:4px 7px;cursor:pointer;opacity:.45}
@@ -51,26 +61,30 @@ td:first-child,th:first-child{text-align:left}
 .dec{position:fixed;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:12px;padding:0 16px;text-align:center;z-index:3;pointer-events:none}
 .dec>*{pointer-events:auto}
 .res{font-weight:600;font-size:16px}
+.res.win{color:var(--gain);font-size:20px}
 .sub{color:var(--soft)}
 .dec .sub{margin-top:-8px}
-.dec input[type=range]{width:min(320px,80vw)}
 .btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-.btn{font:inherit;background:var(--bg);color:var(--fg);border:1px solid var(--fg);padding:9px 16px;cursor:pointer;position:relative;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:none}
+.btn{font:inherit;font-weight:500;background:var(--bg);color:var(--fg);border:1px solid var(--fg);padding:10px 18px;cursor:pointer;user-select:none;-webkit-user-select:none}
 .btn.solid{background:var(--fg);color:var(--bg)}
-.btn .fill{position:absolute;inset:0 auto 0 0;width:0;background:var(--bg);opacity:.35}
-.btn span{position:relative}
+.btn.quit{color:var(--loss);border-color:var(--loss)}
+.btn[disabled]{opacity:.35;cursor:not-allowed}
 .btn:focus-visible,.link:focus-visible,.small:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
 .card{position:fixed;inset:0;z-index:5;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:70px 16px 24px;overflow:auto}
-.card .in{max-width:520px;display:grid;gap:14px;justify-items:start}
+.card .in{max-width:540px;display:grid;gap:14px;justify-items:start}
 .card h1{font:600 20px var(--f);margin:0;text-wrap:balance}
 .card p{margin:0}
+.card .money{color:var(--gain);font-weight:600}
 .card table{font-size:12px}
+@media (max-width:640px){.tl{top:calc(40px + env(safe-area-inset-top,0px))}.bank{top:calc(84px + env(safe-area-inset-top,0px))}.bank .amt{font-size:30px}.banner{top:calc(146px + env(safe-area-inset-top,0px))}}
 </style>
 </head>
 <body>
 
 <canvas id="cv" aria-label="Game"></canvas>
 <div class="tl"><div class="name" id="hudName"></div><div class="meta" id="hudMeta"></div></div>
+<div class="bank" id="bank" hidden><div class="amt" id="amt">₹200</div><div class="streak" id="streak"></div></div>
+<div class="banner" id="banner" hidden></div>
 <div class="tr">
   <div class="row" role="tablist" aria-label="Game">
     <button class="link" role="tab" data-game="fling" id="g-fling">Fling</button>
@@ -79,23 +93,21 @@ td:first-child,th:first-child{text-align:left}
   </div>
   <div class="panel" id="panel" hidden>
     <h2>Conditions</h2>
-    <div class="sub" style="font-size:12px;margin-top:-6px">For free play. Apply from the next level. A session uses its own fixed schedule.</div>
+    <div class="sub" style="font-size:12px;margin-top:-6px">Apply from the next sling. Environment and scheduling apply to free play only.</div>
+    <label class="ck"><input type="checkbox" id="showPull"> Show the last pull (dashed ring)</label>
+    <label class="ck"><input type="checkbox" id="showTraj"> Show the flight path of shots</label>
+    <label class="ck"><input type="checkbox" id="fx"> Screen shake and effects</label>
     <div class="f"><label for="envMode">Environment</label>
       <select id="envMode"><option value="mix">Mix all three</option><option value="calm">Calm</option><option value="gusty">Gusty</option><option value="chance">Chance (action ignored)</option></select></div>
-    <div class="f"><label for="shooter">Who shoots</label>
-      <select id="shooter"><option value="you">You</option><option value="computer">Computer (you decide whether to back it)</option><option value="interleave">Mix both</option></select></div>
-    <div class="f"><label for="reveal">Wind-free marker</label>
-      <select id="reveal"><option value="off">Never</option><option value="half">Random half</option><option value="always">Always</option></select></div>
     <div class="f"><label for="windCalm">Calm wind SD <output id="windCalmOut"></output></label><input type="range" id="windCalm" min="0" max="1" step="0.1"></div>
     <div class="f"><label for="windGusty">Gusty wind SD <output id="windGustyOut"></output></label><input type="range" id="windGusty" min="0.4" max="2" step="0.1"></div>
-    <div class="f"><label for="cost">Cost of another try</label>
-      <select id="cost"><option value="points">Points, rising (3, 4, 5…)</option><option value="hold">Hold, rising (2, 4, 6 s…)</option><option value="none">Free</option></select></div>
+    <div class="f"><label for="win">A hit pays <output id="winOut"></output></label><input type="range" id="win" min="10" max="50" step="5"></div>
+    <div class="f"><label for="cost1">First retry costs (then +₹2 each) <output id="cost1Out"></output></label><input type="range" id="cost1" min="0" max="30" step="1"></div>
+    <div class="f"><label for="maxTries">Retries allowed per sling <output id="maxTriesOut"></output></label><input type="range" id="maxTries" min="1" max="8" step="1"></div>
     <div class="f"><label for="diff">Difficulty (unknown curve, sensitivity) <output id="diffOut"></output></label><input type="range" id="diff" min="0" max="1" step="0.1"></div>
-    <div class="f"><label for="maxTries">Retries allowed per level <output id="maxTriesOut"></output></label><input type="range" id="maxTries" min="1" max="8" step="1"></div>
-    <div class="f"><label for="pChance">Chance-level hit rate <output id="pChanceOut"></output></label><input type="range" id="pChance" min="0.1" max="0.9" step="0.01"></div>
+    <div class="f"><label for="pChance">Chance hit rate <output id="pChanceOut"></output></label><input type="range" id="pChance" min="0.1" max="0.9" step="0.01"></div>
     <div class="f"><label for="forced">Free forced retries <output id="forcedOut"></output></label><input type="range" id="forced" min="0" max="0.5" step="0.05"></div>
-    <label class="ck"><input type="checkbox" id="sched"> Schedule first-shot distance</label>
-    <label class="ck"><input type="checkbox" id="probe"> Ask for a chance rating on 1 in 5 levels</label>
+    <label class="ck"><input type="checkbox" id="sched"> Schedule first-shot distance (within what the pull could do)</label>
     <label class="ck"><input type="checkbox" id="labels"> Show condition labels (experimenter view)</label>
     <hr>
     <div class="logbar"><h2 id="logTitle">Log</h2><span><button class="small" id="copyCsv" type="button">Copy CSV</button> <button class="small" id="clearLog" type="button">Clear</button></span></div>
@@ -112,7 +124,7 @@ td:first-child,th:first-child{text-align:left}
 (()=>{
 const $=id=>document.getElementById(id);
 const cv=$('cv'),ctx=cv.getContext('2d');
-const VMIN=-14,VMAX=8,START=-12;
+const VMIN=-14,VMAX=8,START=-12,BANK0=200;
 let W=0,H=0,U=1,X0=0,TY=0;
 const X=u=>X0+u*U;
 const rand=Math.random,pick=a=>a[Math.floor(rand()*a.length)],sgn=()=>rand()<.5?-1:1,clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -121,209 +133,220 @@ function randn(){let u=0,v=0;while(!u)u=rand();while(!v)v=rand();return Math.sqr
 const GRID_MISS=[0.25,1,2,3.5,5.5],GRID_HIT=[0.3,0.8];
 function schedOffset(){return rand()<10/90?pick(GRID_HIT)*sgn():(1+pick(GRID_MISS))*sgn()}
 function describe(o){return Math.abs(o)<=1?'on target':(Math.abs(o)-1).toFixed(1)+(o<0?' short':' long')}
-const S={game:'fling',envMode:'mix',shooter:'you',reveal:'off',windCalm:0.3,windGusty:1.0,cost:'points',diff:0.6,maxTries:4,pChance:0.3,forced:0.25,sched:true,probe:false,labels:true};
-const SESSION={cost:'points',diff:0.6,maxTries:4,pChance:0.3,windCalm:0.3,windGusty:1.0,rounds:3,perBlock:8};
+const S={game:'fling',envMode:'mix',windCalm:0.3,windGusty:1.0,win:20,cost1:8,diff:0.6,maxTries:4,pChance:0.3,forced:0.25,sched:true,labels:false,showPull:true,showTraj:true,fx:true};
+const SESSION={rounds:3,perRun:8};
 const ENV={
- calm:{fling:['Calm air','Light wind. Where a shot lands mostly reflects the pull.'],stop:['Calm track','Light wind. Where it stops mostly reflects the braking.']},
+ calm:{fling:['Calm air','Light wind. Where a shot lands mostly reflects your pull.'],stop:['Calm track','Light wind. Where it stops mostly reflects your braking.']},
  gusty:{fling:['Gusty air','Strong wind. It can carry a shot well off course, either way.'],stop:['Gusty track','Strong wind. It can push the slide well off, either way.']},
- chance:{fling:['Loose sling','This sling fires at a random strength, whatever the pull. Marked by a square.'],stop:['Faulty brake','This one brakes by itself, wherever it likes. You only release it. Marked by a square.']}};
+ chance:{fling:['Loose sling','It fires at a random strength, whatever your pull. Marked by a square.'],stop:['Faulty brake','It brakes by itself, wherever it likes. You only release it. Marked by a square.']}};
+const reduce=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}};
 
 let C={};
-function readTokens(){const cs=getComputedStyle(document.documentElement);['bg','fg','soft','faint'].forEach(k=>C[k]=cs.getPropertyValue('--'+k).trim())}
+function readTokens(){const cs=getComputedStyle(document.documentElement);['bg','fg','soft','faint','gain','loss'].forEach(k=>C[k]=cs.getPropertyValue('--'+k).trim())}
 readTokens();try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',readTokens)}catch(e){}
 new MutationObserver(readTokens).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 function resize(){const d=devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=Math.round(W*d);cv.height=Math.round(H*d);ctx.setTransform(d,0,0,d,0,0);
-  const m=Math.max(22,W*.05);U=(W-2*m)/(VMAX-VMIN);X0=m-VMIN*U;TY=Math.round(H*.56);
+  const m=Math.max(22,W*.05);U=(W-2*m)/(VMAX-VMIN);X0=m-VMIN*U;TY=Math.round(H*.6);
   $('prompt').style.top=(TY+50)+'px';$('dec').style.top=(TY+50)+'px'}
 addEventListener('resize',resize);resize();
 
 /* ---------- games: positions are in target half-widths, 0 = target centre ---------- */
+const TH=[.45,2.0];
 const games={
- fling:{name:'Fling',maxPull:4,R:16,gam:1,
-  hint(s,L){return L.env==='chance'?(L.auto?'The computer fires the loose sling.':'Pull and let go. This sling fires at random.'):L.auto?'The computer takes this shot.':s?'The dashed ring is your last pull. Adjust and let go.':'Drag the dot back and let go. Each sling has its own strength and curve.'},
-  reset(){this.drag=false;this.pv=null;this.pull=0;if(E.phase==='aim1'){this.gam=1+rand()*2.2*E.lvl.diff;this.R=16+14*E.lvl.diff}},
-  randTheta(){return 12/(.5*this.R)*(.65+rand()*.8)},landing(a,th){return START+th*Math.pow(a,this.gam)*this.R},solve(a,off){return (off-START)/(Math.pow(a,this.gam)*this.R)},
-  correct(a1,nom1){return clamp(a1*Math.pow((0-START)/(nom1-START),1/(1+1.1*E.lvl.diff)),.02,1)},
+ fling:{name:'Fling',maxPull:4,gam:1.5,R:20,
+  hint(s,L){return L.tut?TUT.fling[L.tut-1][s?1:0]:L.env==='chance'?'Pull and let go. This sling fires at random.':s?(S.showPull?'The dashed ring is your last pull. Adjust and let go.':'Adjust your pull and let go.'):'New sling. Pull the dot back and let go.'},
+  reset(){this.drag=false;this.pv=null;if(E.phase==='aim1'){const L=E.lvl;this.gam=L.tut?1.5:1+rand()*2.2*L.diff;this.R=12/Math.pow(.7,this.gam)}},
+  /* a pull is read as a real launch: direction opposite to the pull, power from its length */
+  read(pv){const l=Math.hypot(pv.x,pv.y),p=clamp(l/(this.maxPull*U),0,1),ux=-pv.x/l,uy=pv.y/l;
+    if(uy<.04)return {p,s:0,al:0,dud:true};const al=Math.atan2(uy,ux);return {p,s:Math.sin(2*al),al}},
+  reach(a){return Math.pow(a.p,this.gam)*this.R*a.s},
+  landing(a,th){return START+th*this.reach(a)},
+  schedule(a,want){const r=this.reach(a);if(a.dud||a.s<.25||a.p<.2)return null;return clamp((want-START)/r,TH[0],TH[1])},
+  randTheta(L){return L.tut?[1,1.25,.8][L.tut-1]:.7+rand()*.8},
   down(p){if(!aiming())return;if(Math.hypot(p.x-X(START),p.y-TY)<48){this.drag=true;this.move(p)}},
-  move(p){if(!this.drag)return;let dx=p.x-X(START),dy=p.y-TY;const l=Math.hypot(dx,dy),mx=this.maxPull*U;if(l>mx){dx*=mx/l;dy*=mx/l}this.pv={x:dx,y:dy};this.pull=Math.min(l,mx)/U},
-  up(){if(!this.drag)return;this.drag=false;const pv=this.pv,pull=this.pull;this.pv=null;this.pull=0;if(pull<.15)return;fire(pull/this.maxPull,{pv})},
-  autoFire(second){const a=second&&E.lvl.env!=='chance'?this.correct(last().a,last().nom):.4+rand()*.5,l=a*this.maxPull*U;fire(a,{pv:{x:-l*.8,y:l*.6}})},
+  move(p){if(!this.drag)return;let dx=p.x-X(START),dy=p.y-TY;const l=Math.hypot(dx,dy),mx=this.maxPull*U;if(l>mx){dx*=mx/l;dy*=mx/l}this.pv={x:dx,y:dy}},
+  up(){if(!this.drag)return;this.drag=false;const pv=this.pv;this.pv=null;if(!pv||Math.hypot(pv.x,pv.y)<.15*U)return;
+    const a=this.read(pv);if(a.dud){flash('Pull back and down, like a slingshot, so it launches up and forward.');return}fire(a,{pv})},
   dur:()=>1.3,path(sh,s){return START+s*(sh.nom-START)+sh.eps*s*s},
-  apex(sh){return clamp(.3*(sh.nom-START)*U,50,TY-120)},height(sh,s){return 4*this.apex(sh)*s*(1-s)},
-  drawAim(t,prev){const o={x:X(START),y:TY},p=this.pv||{x:0,y:0};
-    if(prev&&prev.pv){ctx.save();ctx.setLineDash([3,3]);ctx.strokeStyle=C.fg;ctx.lineWidth=1;ctx.beginPath();ctx.arc(o.x+prev.pv.x,o.y+prev.pv.y,8,0,7);ctx.stroke();ctx.restore()}
-    ctx.strokeStyle=C.fg;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(o.x,o.y);ctx.lineTo(o.x+p.x,o.y+p.y);ctx.stroke();objPx(o.x+p.x,o.y+p.y,t)}
+  apex(sh){return clamp(Math.abs(sh.nom-START)*U*Math.abs(Math.tan(sh.a.al))/4,14,TY-150)},height(sh,s){return 4*sh.apex*s*(1-s)},
+  drawAim(sq,prev){const o={x:X(START),y:TY},p=this.pv||{x:0,y:0};
+    if(prev&&prev.pv&&S.showPull){ctx.save();ctx.setLineDash([3,3]);ctx.strokeStyle=C.fg;ctx.lineWidth=1;ctx.beginPath();ctx.arc(o.x+prev.pv.x,o.y+prev.pv.y,8,0,7);ctx.stroke();ctx.restore()}
+    ctx.strokeStyle=C.fg;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(o.x,o.y);ctx.lineTo(o.x+p.x,o.y+p.y);ctx.stroke();objPx(o.x+p.x,o.y+p.y,sq)}
  },
  stop:{name:'Stop',K:3,v:4,
-  hint(s,L){return L.env==='chance'?(L.auto?'The computer releases it. It brakes by itself.':'Press anywhere (or Space) to release it. It brakes by itself.'):L.auto?'The computer brakes this one.':s?'The dashed tick is where you braked last time. Press to brake.':'The dot slides right. Press anywhere (or Space) to brake. Speed and skid differ on every level.'},
-  reset(){const L=E.lvl,ch=L.env==='chance';this.x=START;this.pressed=false;if(E.phase==='aim1')this.v=3+(4+rand()*4)*L.diff;
-    this.selfAt=ch?-11+rand()*3:null;this.go=!ch||L.auto;this.t0=performance.now()+700;
-    this.autoAt=!ch&&L.auto?(E.phase==='aim2'?clamp(last().a-last().nom+randn()*.12*this.v,START+.3,VMAX-1):-10+rand()*4):null},
-  randTheta(){return .5+rand()*1.2},landing(a,th){return a+th*this.K},solve(a,off){return (off-a)/this.K},
+  hint(s,L){return L.tut?TUT.stop[L.tut-1][s?1:0]:L.env==='chance'?'Press anywhere (or Space) to release it. It brakes by itself.':s?(S.showPull?'The dashed tick is where you braked last time. Press to brake.':'Press to brake.'):'New slider. Press anywhere (or Space) to brake.'},
+  reset(){const L=E.lvl,ch=L.env==='chance';this.x=START;this.pressed=false;if(E.phase==='aim1')this.v=L.tut?4:3+(4+rand()*4)*L.diff;
+    this.selfAt=ch?-11+rand()*3:null;this.go=!ch;this.t0=performance.now()+700},
+  landing(a,th){return a+th*this.K},schedule(a,want){const th=(want-a)/this.K;return th<.1?null:clamp(th,.1,2.7)},
+  randTheta(L){return L.tut?[1,1.6,.6][L.tut-1]:.5+rand()*1.2},
   tick(now){if(!aiming()||this.pressed||!this.go)return;this.x=now<this.t0?START:START+this.v*(now-this.t0)/1000;
-    const at=this.selfAt!=null?this.selfAt:this.autoAt;
-    if(at!=null&&this.x>=at){this.x=at;this.press()}
+    if(this.selfAt!=null&&this.x>=this.selfAt){this.x=this.selfAt;this.press()}
     else if(this.x>=VMAX-.5){this.x=VMAX-.5;flash('Too late. It braked at the end of the line.');this.press()}},
   press(){if(!aiming()||this.pressed||performance.now()<this.t0)return;this.pressed=true;fire(this.x,{press:this.x})},
   down(){if(!aiming())return;if(!this.go){this.go=true;this.t0=performance.now()}else if(this.selfAt==null)this.press()},move(){},up(){},
   dur(sh){return clamp(2*Math.abs(sh.nom+sh.eps-sh.a)/this.v,.4,2.2)},path(sh,s){const e=1-(1-s)**2;return sh.a+e*(sh.nom-sh.a)+sh.eps*e*e},
-  drawAim(t,prev){if(prev&&prev.press!=null&&E.lvl.env!=='chance'){dash(X(prev.press),TY-16,TY+16);text(X(prev.press),TY-24,'last',C.soft)}obj(this.x,t)}
+  drawAim(sq,prev){if(prev&&prev.press!=null&&S.showPull&&E.lvl.env!=='chance'){dash(X(prev.press),TY-16,TY+16);text(X(prev.press),TY-24,'last',C.soft)}obj(this.x,sq)}
  }
 };
+const TUT={
+ fling:[['Pull the dot back and down, then let go. It launches the opposite way: a longer pull throws further, a lower pull throws higher.','Missed? The dashed ring shows your last pull. Pull a little more or less and let go.'],
+        ['A new sling. Every sling is different, so the same pull will not land in the same place.','Use where the last shot landed to adjust.'],
+        ['One more. Your first shot with a new sling is always a guess.','Adjust and try again.']],
+ stop:[['The dot slides right. Press anywhere (or Space) to brake. It skids a little further before stopping.','Missed? The dashed tick is where you braked last time. Brake earlier or later.'],
+       ['A new slider. Every slider has its own speed and skid.','Use where it stopped to adjust.'],
+       ['One more. Your first go with a new slider is always a guess.','Adjust and try again.']]};
 const game=()=>games[S.game];
 
 /* ---------- engine ---------- */
-const E={mode:'start',phase:'card',n:0,score:0,log:[],lvl:null,shot:null,prev:null,eff:null,moveT:0,flashT:0,flashMsg:'',autoT:0,decT:0,after:null,queue:[],block:0,blocks:0,inBlock:0,streaks:[]};
+const E={mode:'start',phase:'card',n:0,bank:BANK0,streak:0,log:[],lvl:null,shot:null,prev:null,moveT:0,flashT:0,flashMsg:'',decT:0,queue:[],total:0,streaks:[],shake:0,shakeAmp:0,parts:[],pulse:0,lastEnv:null,bannerT:0};
 const aiming=()=>E.phase==='aim1'||E.phase==='aim2';
 const last=()=>E.lvl.shots[E.lvl.shots.length-1];
-function flash(m){E.flashMsg=m;E.flashT=performance.now()+2600;renderPrompt()}
+function flash(m){E.flashMsg=m;E.flashT=performance.now()+3200;renderPrompt()}
+function money(d){E.bank+=d;const a=$('amt');a.firstChild.nodeValue='₹'+E.bank;a.classList.remove('up','down');void a.offsetWidth;a.classList.add(d>0?'up':'down');setTimeout(()=>a.classList.remove('up','down'),600);
+  const f=document.createElement('span');f.className='float '+(d>0?'g':'l');f.textContent=(d>0?'+₹':'−₹')+Math.abs(d);a.appendChild(f);setTimeout(()=>f.remove(),1100)}
+function setBank(v){E.bank=v;$('amt').firstChild.nodeValue='₹'+v}
 
-function buildSession(){const q=[{card:'practice'}];for(let i=0;i<3;i++)q.push({env:'calm',practice:true});let b=0;
-  for(let r=0;r<SESSION.rounds;r++)for(const env of shuffle(['calm','gusty','chance'])){b++;q.push({card:'block',env,b});
-    const n=SESSION.perBlock,offs=shuffle(GRID_MISS.concat([pick(GRID_MISS),pick(GRID_MISS)])).slice(0,n-1).map((d,i)=>(1+d)*(i%2?1:-1)*sgn()).concat([pick(GRID_HIT)*sgn()]);
-    const flag=k=>shuffle(Array.from({length:n},(_,i)=>i<k));const rev=flag(env==='gusty'?n/2:0),au=flag(2),fo=flag(2),pr=flag(2);
-    shuffle(offs.map((off,i)=>({env,off,reveal:rev[i],auto:au[i],forced:fo[i],probe:pr[i],b,of:n}))).forEach((x,i)=>{x.i=i+1;q.push(x)})}
-  E.blocks=b;q.push({card:'end'});return q}
-function freeSpec(){const env=S.envMode==='mix'?pick(['calm','gusty','chance']):S.envMode;
-  return {env,reveal:S.reveal==='always'||(S.reveal==='half'&&rand()<.5),auto:S.shooter==='computer'||(S.shooter==='interleave'&&rand()<.5),forced:rand()<S.forced,probe:S.probe&&rand()<.2}}
-function advance(){E.eff=null;E.shot=null;
-  if(E.mode==='session'){const x=E.queue.shift();if(!x||x.card){showCard(x?x.card:'end',x);return}startLevel(x,SESSION)}
-  else startLevel(freeSpec(),S)}
-function startLevel(sp,P){E.n++;const g=game();
-  E.lvl={n:E.n,game:S.game,mode:E.mode,env:sp.env,auto:!!sp.auto,shooter:sp.auto?'computer':'you',forced:!!sp.forced,reveal:!!sp.reveal,probe:!!sp.probe,practice:!!sp.practice,
-    block:sp.b||'',i:sp.i||'',of:sp.of||'',off:sp.off,sched:E.mode==='session'?true:S.sched,wind:sp.env==='gusty'?P.windGusty:P.windCalm,pChance:P.pChance,cost:P.cost,diff:P.diff,maxTries:P.maxTries,shots:[],spent:0,won:false};
-  E.phase='aim1';E.shot=null;E.prev=null;E.autoT=0;$('card').hidden=true;makeStreaks();g.reset();renderAll()}
+function buildSession(){const q=[{card:'tutorial'},{env:'calm',tut:1},{env:'calm',tut:2},{env:'calm',tut:3},{card:'go'}];
+  for(let r=0;r<SESSION.rounds;r++)for(const env of shuffle(['calm','gusty','chance'])){
+    const n=SESSION.perRun,offs=shuffle(GRID_MISS.concat([pick(GRID_MISS),pick(GRID_MISS)])).slice(0,n-1).map((d,i)=>(1+d)*(i%2?1:-1)*sgn()).concat([pick(GRID_HIT)*sgn()]);
+    const fo=shuffle(Array.from({length:n},(_,i)=>i<2));shuffle(offs.map((off,i)=>({env,off,forced:fo[i]}))).forEach(x=>q.push(x))}
+  E.total=SESSION.rounds*3*SESSION.perRun;q.push({card:'end'});return q}
+function freeSpec(){return {env:S.envMode==='mix'?pick(['calm','gusty','chance']):S.envMode,forced:rand()<S.forced}}
+function advance(){E.shot=null;
+  if(E.mode==='session'){const x=E.queue.shift();if(!x||x.card){showCard(x?x.card:'end');return}startLevel(x)}
+  else startLevel(freeSpec())}
+function startLevel(sp){E.n++;const g=game(),tut=sp.tut||0;
+  E.lvl={n:E.n,game:S.game,mode:E.mode,env:sp.env,tut,forced:!!sp.forced&&!tut,off:sp.off,sched:tut?false:(E.mode==='session'?true:S.sched),
+    wind:tut?0:sp.env==='gusty'?S.windGusty:S.windCalm,pChance:S.pChance,win:tut?0:S.win,cost1:tut?0:S.cost1,diff:S.diff,maxTries:tut?6:S.maxTries,shots:[],spent:0,won:false,bankStart:E.bank};
+  E.phase='aim1';E.shot=null;E.prev=null;$('card').hidden=true;$('bank').hidden=!!tut;makeStreaks();g.reset();
+  if(!tut&&sp.env!==E.lastEnv){const t=ENV[sp.env][S.game];$('banner').innerHTML=`<b>${t[0]}</b><span>${t[1]}</span>`;$('banner').hidden=false;E.bannerT=performance.now()+4200;E.lastEnv=sp.env}
+  renderAll()}
 function fire(a,meta){const L=E.lvl,g=game(),eps=randn()*L.wind,ch=L.env==='chance';let nom;
-  if(!L.shots.length){let th;
-    if(L.sched){nom=(L.off!=null?L.off:schedOffset())-eps;th=g.solve(a,nom);if(!(th>0&&isFinite(th))){if(ch)th=1;else{th=g.randTheta();nom=g.landing(a,th);L.note='unscheduled'}}}
-    else{th=g.randTheta();nom=g.landing(a,th)}
+  if(!L.shots.length){const want=(L.off!=null?L.off:schedOffset())-eps;let th=L.sched&&!ch?g.schedule(a,want):null;
+    if(ch&&L.sched){nom=want;th=1}
+    else{if(th==null){th=g.randTheta(L);if(L.sched)L.note='not schedulable'}nom=g.landing(a,th);if(L.sched&&Math.abs(nom-want)>.01&&!L.note)L.note='clamped'}
     Object.assign(L,{theta:th,nom1:nom,eps1:eps,obs1:nom+eps,hit1:Math.abs(nom+eps)<=1});
   }else if(!ch)nom=g.landing(a,L.theta);
   else{const obs=rand()<L.pChance?(rand()*1.8-.9):sgn()*(1.25+rand()*5.25);nom=obs-eps}
-  L.shots.push({a,nom,eps,obs:nom+eps});E.prev=meta;
-  E.shot={a,nom,eps,t0:performance.now(),s:0};E.shot.dur=g.dur(E.shot);E.phase=L.shots.length===1?'fly1':'fly2';renderAll()}
-function nextCost(){const L=E.lvl,r=L.shots.length;if(L.forced&&r===1)return {free:true};
-  return L.cost==='points'?{pts:2+r}:L.cost==='hold'?{hold:Math.min(8,2*r)}:{free:true}}
-function landed(){const L=E.lvl,n=L.shots.length,hit=Math.abs(last().obs)<=1;E.shot=null;
-  if(hit){E.score+=10;L.won=true}
-  if(n===1){E.phase='decide';E.decT=performance.now()}
-  else if(hit||n-1>=L.maxTries){E.phase='done';record()}
+  const sh={a,nom,eps,obs:nom+eps,t0:performance.now(),s:0};
+  if(S.game==='fling'){if(ch||a.dud||!(a.al>0))sh.a={...a,al:Math.PI/4};sh.apex=g.apex(sh)}
+  sh.dur=g.dur(sh);L.shots.push(sh);E.prev=meta;E.shot=sh;E.phase=L.shots.length===1?'fly1':'fly2';renderAll()}
+function nextCost(){const L=E.lvl,r=L.shots.length;if((L.forced&&r===1)||!L.cost1)return 0;return L.cost1+2*(r-1)}
+function landed(){const L=E.lvl,n=L.shots.length,x=last(),hit=Math.abs(x.obs)<=1;E.shot=null;
+  if(hit){L.won=true;if(L.win)money(L.win);E.streak++;boom(x.obs)}
+  else{const c=clamp(1-(Math.abs(x.obs)-1)/2.5,0,1);if(c>0)shake(2+7*c,260)}
+  if(n===1&&!L.tut){E.phase='decide';E.decT=performance.now()}
+  else if(hit||n-1>=L.maxTries){if(!hit)E.streak=0;E.phase='done';record();E.moveT=performance.now()+(L.tut?2200:1500)}
   else E.phase='decide';
   renderAll()}
 function decided(c){const L=E.lvl;if(L.rt==null){L.rt=Math.round(performance.now()-E.decT);L.choice=c}}
-function askProbe(next){const L=E.lvl;if(L.probe&&L.rating==null){E.after=next;E.phase='probe';renderAll();return true}return false}
-function retry(){const L=E.lvl,c=nextCost();decided(L.forced?'forced':'retry');if(askProbe(retry))return;
-  if(c.pts){E.score-=c.pts;L.spent+=c.pts}
-  if(c.hold){E.eff={need:c.hold,held:0,holding:false,last:0};E.phase='effort';renderAll();return}
-  toAim2()}
-function toAim2(){if(E.eff){E.lvl.spent+=E.eff.need;E.eff=null}E.phase='aim2';E.autoT=0;game().reset();renderAll()}
-function moveOn(){decided('move on');if(askProbe(moveOn))return;E.eff=null;record();E.phase='moving';E.moveT=performance.now()+2000;renderAll()}
-function record(){const L=E.lvl;E.log.push({...L,tries:L.shots.length,obsAll:L.shots.map(x=>x.obs.toFixed(2)).join(';')});renderLog()}
+function retry(){const L=E.lvl,c=nextCost();if(c>E.bank)return;decided(L.forced?'forced':'retry');if(c){money(-c);L.spent+=c}E.phase='aim2';game().reset();renderAll()}
+function moveOn(){const L=E.lvl;decided('move on');if(!L.won)E.streak=0;record();E.phase='moving';E.moveT=performance.now()+700;renderAll()}
+function record(){const L=E.lvl;if(L.tut)return;E.log.push({...L,tries:L.shots.length,bankEnd:E.bank,obsAll:L.shots.map(x=>x.obs.toFixed(2)).join(';')});renderLog()}
+
+/* ---------- effects ---------- */
+function shake(amp,ms){if(!S.fx||reduce())return;E.shakeAmp=amp;E.shake=performance.now()+ms}
+function boom(u){if(!S.fx)return;shake(11,420);E.pulse=performance.now();if(reduce())return;
+  for(let i=0;i<34;i++){const an=-Math.PI*rand(),v=2+rand()*6;E.parts.push({x:X(u),y:TY,vx:Math.cos(an)*v,vy:Math.sin(an)*v,t:performance.now(),sq:rand()<.5})}}
 
 /* ---------- cards ---------- */
-function showCard(kind,x){E.phase='card';$('dec').innerHTML='';$('prompt').textContent='';const c=$('cardIn'),g=S.game,name=games[g].name;let h='';
+function showCard(kind){E.phase='card';$('dec').innerHTML='';$('prompt').textContent='';$('banner').hidden=true;$('bank').hidden=true;const c=$('cardIn'),g=S.game,name=games[g].name;let h='';
   if(kind==='start'){E.mode='start';
-    h=`<h1>${name}</h1><p>${g==='fling'?'Fling a dot at the target. Each level gives you a new sling you have never used.':'Brake a sliding dot so it stops on the target. Each level gives you a new slider you have never used.'}</p>
-    <p>If you miss, you can pay points to try again or move on. A try on target earns 10. Each extra try costs more: 3, then 4, 5 and 6.</p>
-    <p class="sub">Sometimes the computer takes the shot and you decide whether to back it. Some levels are calm, some gusty, and some pure chance; you are always told which.</p>
-    <div class="btns"><button class="btn solid" id="cGo" type="button"><span>Start session (${SESSION.rounds*3*SESSION.perBlock} levels)</span></button><button class="btn" id="cFree" type="button"><span>Free play</span></button></div>`}
-  else if(kind==='practice')h=`<h1>Practice</h1><p>Three calm levels to get the feel. They are not counted.</p><div class="btns"><button class="btn solid" id="cNext" type="button"><span>Begin</span></button></div>`;
-  else if(kind==='block'){E.block=x.b;const t=ENV[x.env][g];h=`<p class="sub">Block ${x.b} of ${E.blocks}</p><h1>${t[0]}</h1><p>${t[1]}</p><div class="btns"><button class="btn solid" id="cNext" type="button"><span>Start block</span></button></div>`}
-  else{const rows=['calm','gusty','chance'].map(e=>{const r=E.log.filter(l=>l.mode==='session'&&!l.practice&&l.env===e&&l.game===g),f=r.filter(l=>!l.forced&&!l.hit1),near=f.filter(l=>Math.abs(l.obs1)<=2.5),far=f.filter(l=>Math.abs(l.obs1)>2.5),
+    h=`<h1>${name}</h1><p>${g==='fling'?'Fling a dot onto the target.':'Brake a sliding dot so it stops on the target.'} You start with <span class="money">₹${BANK0}</span>. Every hit pays <span class="money">₹${S.win}</span>. Missing is free, but trying again costs money.</p>
+    <div class="btns"><button class="btn solid" id="cGo" type="button">Play</button><button class="btn" id="cFree" type="button">Free play (skip the tutorial)</button></div>`}
+  else if(kind==='tutorial')h=`<h1>First, a quick warm-up</h1><p>Three practice ${g==='fling'?'slings':'sliders'} with no wind and no money at stake. Keep trying until you land each one.</p><div class="btns"><button class="btn solid" id="cNext" type="button">Begin</button></div>`;
+  else if(kind==='go'){setBank(BANK0);E.streak=0;E.lastEnv=null;const c1=S.cost1;
+    h=`<h1>Now for real</h1><p>You have <span class="money">₹${BANK0}</span>.</p><p>Your first shot with each new ${g==='fling'?'sling':'slider'} is free. A hit pays <span class="money">₹${S.win}</span>.</p>
+    <p>If you miss, you can pay to try again with the same one, or move on to a new one. Tries get dearer: ₹${c1}, then ₹${c1+2}, ₹${c1+4}, ₹${c1+6}.</p>
+    <p class="sub">The air changes as you go: calm, gusty, or a loose ${g==='fling'?'sling':'brake'} that is pure chance. You will be told each time.</p><div class="btns"><button class="btn solid" id="cNext" type="button">Start</button></div>`}
+  else{const rows=['calm','gusty','chance'].map(e=>{const r=E.log.filter(l=>l.mode==='session'&&l.env===e&&l.game===g),f=r.filter(l=>!l.forced&&!l.hit1),near=f.filter(l=>Math.abs(l.obs1)<=2.5),far=f.filter(l=>Math.abs(l.obs1)>2.5),
       pc=a=>a.length?Math.round(100*a.filter(l=>l.choice==='retry').length/a.length)+'%':'–';return `<tr><td>${ENV[e][g][0]}</td><td>${r.length}</td><td>${pc(near)}</td><td>${pc(far)}</td><td>${r.length?(r.reduce((s,l)=>s+l.tries,0)/r.length).toFixed(1):'–'}</td></tr>`}).join('');
-    h=`<h1>Session complete</h1><p>Score ${E.score}.</p><table><thead><tr><th>environment</th><th>levels</th><th>retried after near miss</th><th>after far miss</th><th>shots per level</th></tr></thead><tbody>${rows}</tbody></table>
-    <p class="sub">Near means within 1.5 of the target edge. The full trial log is under Conditions.</p><div class="btns"><button class="btn solid" id="cFree" type="button"><span>Free play</span></button><button class="btn" id="cHome" type="button"><span>Start screen</span></button></div>`;E.mode='free'}
+    h=`<h1>Finished</h1><p>You end with <span class="money">₹${E.bank}</span> (started with ₹${BANK0}).</p><table><thead><tr><th>environment</th><th>slings</th><th>retried after near miss</th><th>after far miss</th><th>shots each</th></tr></thead><tbody>${rows}</tbody></table>
+    <p class="sub">Near means within 1.5 of the target edge. The full log is under Conditions.</p><div class="btns"><button class="btn solid" id="cFree" type="button">Free play</button><button class="btn" id="cHome" type="button">Start screen</button></div>`;E.mode='free'}
   c.innerHTML=h;$('card').hidden=false;renderHud();
-  if($('cGo'))$('cGo').onclick=()=>{E.mode='session';E.score=0;E.n=0;E.queue=buildSession();advance()};
-  if($('cFree'))$('cFree').onclick=()=>{E.mode='free';advance()};
+  if($('cGo'))$('cGo').onclick=()=>{E.mode='session';E.n=0;E.queue=buildSession();advance()};
+  if($('cFree'))$('cFree').onclick=()=>{E.mode='free';if(kind==='start'){setBank(BANK0);E.streak=0;E.lastEnv=null}advance()};
   if($('cNext'))$('cNext').onclick=advance;
   if($('cHome'))$('cHome').onclick=()=>showCard('start')}
 
 /* ---------- drawing ---------- */
 function text(x,y,t,col,w){ctx.font=`${w||400} 12px "IBM Plex Mono",ui-monospace,monospace`;ctx.textAlign='center';ctx.fillStyle=col||C.fg;ctx.fillText(t,clamp(x,46,W-46),y)}
 function dash(x,y1,y2){ctx.save();ctx.setLineDash([3,3]);ctx.strokeStyle=C.fg;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,y1);ctx.lineTo(x,y2);ctx.stroke();ctx.restore()}
-function objPx(x,y,sq,alpha){x=clamp(x,8,W-8);ctx.globalAlpha=alpha==null?1:alpha;ctx.fillStyle=C.fg;
+function objPx(x,y,sq,alpha,col){x=clamp(x,8,W-8);ctx.globalAlpha=alpha==null?1:alpha;ctx.fillStyle=col||C.fg;
   if(sq)ctx.fillRect(x-6,y-6,12,12);else{ctx.beginPath();ctx.arc(x,y,6.5,0,7);ctx.fill()}ctx.globalAlpha=1}
-const obj=(u,sq,alpha)=>objPx(X(u),TY,sq,alpha);
-function arc(nom,eps,dashed){const g=games.fling,sh={nom,eps};ctx.save();if(dashed)ctx.setLineDash([3,4]);ctx.strokeStyle=dashed?C.fg:C.soft;ctx.lineWidth=1;ctx.beginPath();
-  for(let i=0;i<=40;i++){const s=i/40,x=X(START+s*(nom-START)+eps*s*s),y=TY-4*g.apex(sh)*s*(1-s);i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke();ctx.restore()}
-function windFree(u){const x=X(u);ctx.strokeStyle=C.fg;ctx.lineWidth=1;ctx.beginPath();ctx.arc(x,TY,7,0,7);ctx.stroke();text(x,TY-34,'without wind',C.soft)}
-function shotMarks(x,tag,reveal,sq){if(S.game==='fling'){arc(x.nom,x.eps,false);if(reveal)arc(x.nom,0,true)}
-  obj(x.obs,sq);text(X(x.obs),TY-18,tag+': '+describe(x.obs));if(reveal)windFree(x.nom)}
-function makeStreaks(){const w=E.lvl.wind,n=Math.round(3+w*16);E.streaks=Array.from({length:n},()=>({x:rand(),y:rand(),d:sgn(),v:.3+rand()*.7,l:.5+rand()}))}
-function drawWind(now){const w=E.lvl.wind;ctx.strokeStyle=C.faint;ctx.lineWidth=1;const top=Math.max(70,TY-260),hgt=TY-50-top;
+const obj=(u,sq,alpha,col)=>objPx(X(u),TY,sq,alpha,col);
+function arc(sh,alpha){ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle=C.soft;ctx.lineWidth=1;ctx.beginPath();
+  for(let i=0;i<=40;i++){const s=i/40,x=X(START+s*(sh.nom-START)+sh.eps*s*s),y=TY-4*sh.apex*s*(1-s);i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke();ctx.restore()}
+function makeStreaks(){const w=E.lvl.wind,n=w?Math.round(3+w*16):0;E.streaks=Array.from({length:n},()=>({x:rand(),y:rand(),d:sgn(),v:.3+rand()*.7,l:.5+rand()}))}
+function drawWind(now){const w=E.lvl.wind;ctx.strokeStyle=C.faint;ctx.lineWidth=1;const top=Math.max(150,TY-250),hgt=Math.max(40,TY-50-top);
   for(const s of E.streaks){const x=((s.x+s.d*s.v*w*now/9000)%1+1)%1*W,y=top+s.y*hgt,len=(8+w*26)*s.l;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+len*s.d,y);ctx.stroke()}}
 function draw(now){
-  ctx.fillStyle=C.bg;ctx.fillRect(0,0,W,H);if(!E.lvl||E.phase==='card')return;
+  ctx.setTransform(devicePixelRatio||1,0,0,devicePixelRatio||1,0,0);ctx.fillStyle=C.bg;ctx.fillRect(0,0,W,H);if(!E.lvl||E.phase==='card')return;
   const L=E.lvl,ph=E.phase,g=game(),sq=L.env==='chance';
+  if(now<E.shake){const k=(E.shake-now)/400;ctx.translate((rand()-.5)*2*E.shakeAmp*Math.min(1,k+.3),(rand()-.5)*2*E.shakeAmp*Math.min(1,k+.3))}
   drawWind(now);
   ctx.strokeStyle=C.fg;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(X(VMIN),TY+.5);ctx.lineTo(X(VMAX),TY+.5);ctx.stroke();
-  ctx.fillStyle=C.fg;ctx.fillRect(X(-1),TY-3,2*U,6);
+  const pl=now-E.pulse,won=pl<900;ctx.fillStyle=won?C.gain:C.fg;ctx.fillRect(X(-1),TY-3,2*U,6);
+  if(won&&!reduce()){ctx.strokeStyle=C.gain;ctx.globalAlpha=1-pl/900;ctx.lineWidth=2;ctx.beginPath();ctx.arc(X(0),TY,U+pl*.12,0,7);ctx.stroke();ctx.globalAlpha=1;ctx.lineWidth=1}
   const step=U<22?4:2;
   for(let o=VMIN;o<=VMAX;o++){ctx.strokeStyle=C.faint;ctx.beginPath();ctx.moveTo(X(o)+.5,TY+8);ctx.lineTo(X(o)+.5,TY+(o%step===0?16:12));ctx.stroke();
     if(o%step===0)text(X(o),TY+30,String(o),C.soft)}
   if(!aiming()){ctx.strokeStyle=C.soft;ctx.beginPath();ctx.moveTo(X(START)+.5,TY-8);ctx.lineTo(X(START)+.5,TY+8);ctx.stroke()}
   const sh=L.shots,flying=!!E.shot,past=flying?sh.slice(0,-1):ph==='aim2'?sh:sh.slice(0,-1);
   past.forEach((x,i)=>obj(x.obs,sq,.12+.18*(i+1)/Math.max(1,past.length)));
-  if(sh.length&&!flying&&ph!=='aim2')shotMarks(last(),'shot '+sh.length,L.reveal,sq);
+  if(S.game==='fling'&&S.showTraj&&sh.length){if(ph==='aim2')arc(last(),.5);else if(!flying)arc(last(),1)}
+  if(sh.length&&!flying&&ph!=='aim2'){const x=last(),hit=Math.abs(x.obs)<=1;obj(x.obs,sq,1,hit?C.gain:null);text(X(x.obs),TY-18,describe(x.obs),hit?C.gain:C.fg,hit?600:400)}
   if(aiming())g.drawAim(sq,ph==='aim2'?E.prev:null);
   if(E.shot){const s=E.shot.s;objPx(X(g.path(E.shot,s)),TY-(g.height?g.height(E.shot,s):0),sq)}
+  E.parts=E.parts.filter(p=>now-p.t<900);ctx.fillStyle=C.gain;
+  for(const p of E.parts){const t=(now-p.t)/16,x=p.x+p.vx*t,y=p.y+p.vy*t+.12*t*t;ctx.globalAlpha=1-(now-p.t)/900;if(p.sq)ctx.fillRect(x-2,y-2,4,4);else{ctx.beginPath();ctx.arc(x,y,2.5,0,7);ctx.fill()}}ctx.globalAlpha=1
 }
 
 /* ---------- UI ---------- */
-function renderHud(){const L=E.lvl,g=game();if(E.phase==='card'||!L){$('hudName').textContent=g.name;$('hudMeta').textContent=E.mode==='session'?`score ${E.score}`:'';return}
-  const where=E.mode==='session'?(L.practice?'practice':`block ${L.block} of ${E.blocks} · level ${L.i} of ${L.of}`):`level ${L.n}`;
-  $('hudName').textContent=`${g.name} · ${where} · score ${E.score}`;
-  const bits=[ENV[L.env][S.game][0].toLowerCase()];if(L.auto)bits.push('computer shoots');bits.push(`shot ${Math.max(1,L.shots.length+(aiming()?1:0))} of ${L.maxTries+1}`);
-  if(E.mode==='free'&&S.labels){bits.push('wind sd '+L.wind.toFixed(1));if(L.forced)bits.push('free retry');if(L.reveal)bits.push('wind-free marker');if(!L.sched)bits.push('unscheduled')}
+function renderHud(){const L=E.lvl,g=game();$('streak').textContent=E.streak>1?`streak ×${E.streak}`:'';
+  if(E.phase==='card'||!L){$('hudName').textContent=g.name;$('hudMeta').textContent='';return}
+  $('hudName').textContent=g.name+(L.tut?' · warm-up':'');
+  const bits=[L.tut?'no wind':ENV[L.env][S.game][0].toLowerCase()];
+  if(S.labels&&!L.tut){bits.push('wind sd '+L.wind.toFixed(1));if(L.forced)bits.push('free retry');if(!L.sched)bits.push('unscheduled');if(E.mode==='session')bits.push(`${E.total-E.queue.length+1} of ${E.total}`)}
   $('hudMeta').textContent=bits.join(' · ')}
 function renderPrompt(){const now=performance.now(),L=E.lvl;$('prompt').textContent=!L||E.phase==='card'?'':E.flashT>now?E.flashMsg:(E.phase==='aim1'?game().hint(false,L):E.phase==='aim2'?game().hint(true,L):'')}
-function renderDec(){const L=E.lvl,d=$('dec'),ph=E.phase;
-  if(ph==='decide'){const x=last(),n=L.shots.length,c=nextCost(),hit=Math.abs(x.obs)<=1,verb=L.auto?'Back another shot':(n===1&&hit?'Shoot again':'Try again');
-    const lab=c.free?(L.forced&&n===1?'Free retry':verb):c.pts?`${verb} (−${c.pts} points)`:`${verb} (hold ${c.hold} s)`;
-    d.innerHTML=`<div class="res">${describe(x.obs)}${hit?' · +10':''}</div><div class="sub">${L.reveal?'Without wind: '+describe(x.nom)+'.':'Landing on target earns +10.'}</div><div class="btns"><button class="btn solid" id="bRetry" type="button"><span>${lab}</span></button>`+
-      (L.forced&&n===1?'':`<button class="btn" id="bMove" type="button"><span>${n===1?'Move on':'Give up'}</span></button>`)+`</div>`;
+function renderDec(){const L=E.lvl,d=$('dec'),ph=E.phase,thing=S.game==='fling'?'sling':'slider';
+  if(ph==='decide'){const x=last(),n=L.shots.length,c=nextCost(),hit=Math.abs(x.obs)<=1,left=L.maxTries-(n-1),poor=c>E.bank;
+    const lab=L.tut?'Try again':L.forced&&n===1?'Free retry':(hit?'Shoot again':'Try again')+(c?` (−₹${c})`:'');
+    d.innerHTML=`<div class="res${hit?' win':''}">${hit?'On target'+(L.win?' · +₹'+L.win:''):describe(x.obs)}</div><div class="sub">${L.tut?'':poor?'Not enough money for another try.':`A hit pays ₹${L.win}. ${left} ${left===1?'try':'tries'} left with this ${thing}.`}</div><div class="btns"><button class="btn solid" id="bRetry" type="button"${poor?' disabled':''}>${lab}</button>`+
+      (L.tut||(L.forced&&n===1)?'':`<button class="btn${hit?'':' quit'}" id="bMove" type="button">${hit?'Next '+thing:n===1?'Move on':'Give up'}</button>`)+`</div>`;
     $('bRetry').onclick=retry;if($('bMove'))$('bMove').onclick=moveOn}
-  else if(ph==='probe'){d.innerHTML=`<div class="res">How likely is another shot to land on target?</div><input type="range" id="rate" min="0" max="100" step="1" value="50" aria-label="Chance in percent"><div class="sub" id="rateOut" style="margin:0">50%</div><div class="btns"><button class="btn solid" id="bRate" type="button"><span>Continue</span></button></div>`;
-    $('rate').oninput=()=>$('rateOut').textContent=$('rate').value+'%';$('bRate').onclick=()=>{L.rating=+$('rate').value;const f=E.after;E.after=null;f()}}
-  else if(ph==='effort'){d.innerHTML=`<div class="res">Hold for ${E.eff.need} s</div><div class="sub">Hold the button or Space. Letting go restarts the timer.</div><div class="btns"><button class="btn solid" id="bHold" type="button"><span class="fill" id="fill"></span><span>Hold</span></button><button class="btn" id="bMove" type="button"><span>Give up instead</span></button></div>`;
-    const b=$('bHold'),on=e=>{e.preventDefault();if(E.eff){E.eff.holding=true;E.eff.last=performance.now()}},off=()=>{if(E.eff){E.eff.holding=false;E.eff.held=0}};
-    b.addEventListener('pointerdown',on);['pointerup','pointerleave','pointercancel'].forEach(t=>b.addEventListener(t,off));$('bMove').onclick=moveOn}
-  else if(ph==='done'){const x=last();d.innerHTML=`<div class="res">${Math.abs(x.obs)<=1?'On target · +10':describe(x.obs)+' · out of tries'}</div><div class="btns"><button class="btn solid" id="bNext" type="button"><span>Next level</span></button></div>`;$('bNext').onclick=advance}
-  else if(ph==='moving')d.innerHTML=`<div class="sub" style="margin:0">Next level…</div>`;
+  else if(ph==='done'){const x=last(),hit=Math.abs(x.obs)<=1;d.innerHTML=`<div class="res${hit?' win':''}">${hit?'On target'+(L.win?' · +₹'+L.win:''):describe(x.obs)+' · out of tries'}</div>`}
   else d.innerHTML=''}
 function renderAll(){renderHud();renderPrompt();renderDec()}
 const f2=v=>v==null?'':v.toFixed(2);
 function renderLog(){$('logTitle').textContent=`Log (${E.log.length})`;
   document.querySelector('#log tbody').innerHTML=E.log.slice(-12).reverse().map(r=>`<tr><td>${r.n}</td><td>${r.env}</td><td>${f2(r.obs1)}</td><td>${r.choice||''}</td><td>${r.rt==null?'':(r.rt/1000).toFixed(1)}</td><td>${r.tries}</td><td>${r.won?'yes':'no'}</td></tr>`).join('')}
-function csv(){const cols=['n','game','mode','practice','block','i','env','shooter','forced','reveal','sched','wind','cost','diff','maxTries','pChance','obs1','nom1','eps1','hit1','choice','rt','rating','tries','spent','won','obsAll','note'];
+function csv(){const cols=['n','game','mode','env','forced','sched','wind','win','cost1','diff','maxTries','pChance','obs1','nom1','eps1','hit1','choice','rt','tries','spent','won','bankStart','bankEnd','obsAll','note'];
   return cols.join(',')+'\n'+E.log.map(r=>cols.map(c=>r[c]==null?'':typeof r[c]==='number'?Math.round(r[c]*1000)/1000:r[c]).join(',')).join('\n')}
 
 /* ---------- input ---------- */
-const pt=e=>({x:e.clientX,y:e.clientY}),mine=()=>E.lvl&&!E.lvl.auto&&E.phase!=='card';
-cv.addEventListener('pointerdown',e=>{e.preventDefault();try{cv.setPointerCapture(e.pointerId)}catch(_){}if(mine())game().down(pt(e))});
-cv.addEventListener('pointermove',e=>{if(mine())game().move(pt(e))});
-cv.addEventListener('pointerup',e=>{if(mine())game().up(pt(e))});
-cv.addEventListener('pointercancel',()=>{const g=game();if(g.drag){g.drag=false;g.pv=null;g.pull=0}});
+const pt=e=>({x:e.clientX,y:e.clientY}),live=()=>E.lvl&&E.phase!=='card';
+cv.addEventListener('pointerdown',e=>{e.preventDefault();try{cv.setPointerCapture(e.pointerId)}catch(_){}if(live())game().down(pt(e))});
+cv.addEventListener('pointermove',e=>{if(live())game().move(pt(e))});
+cv.addEventListener('pointerup',e=>{if(live())game().up(pt(e))});
+cv.addEventListener('pointercancel',()=>{const g=game();if(g.drag){g.drag=false;g.pv=null}});
 const typing=e=>/INPUT|SELECT|TEXTAREA/.test(e.target.tagName);
-addEventListener('keydown',e=>{if(e.code!=='Space'||typing(e))return;e.preventDefault();if(e.repeat)return;
-  if(E.phase==='effort'&&E.eff){E.eff.holding=true;E.eff.last=performance.now()}else if(aiming()&&mine()&&S.game==='stop')games.stop.down()});
-addEventListener('keyup',e=>{if(e.code!=='Space'||typing(e))return;if(E.phase==='effort'&&E.eff){E.eff.holding=false;E.eff.held=0}});
+addEventListener('keydown',e=>{if(e.code!=='Space'||typing(e))return;e.preventDefault();if(e.repeat)return;if(live()&&aiming()&&S.game==='stop')games.stop.down()});
 
 function frame(now){const g=game(),L=E.lvl;
   if(L&&E.phase!=='card'){if(g.tick)g.tick(now);
-    if(aiming()&&L.auto&&g.autoFire){if(!E.autoT)E.autoT=now+900;else if(now>=E.autoT){E.autoT=0;g.autoFire(E.phase==='aim2')}}
     if(E.shot){E.shot.s=Math.min(1,(now-E.shot.t0)/(E.shot.dur*1000));if(E.shot.s>=1)landed()}
-    if(E.phase==='effort'&&E.eff){if(E.eff.holding){E.eff.held+=(now-E.eff.last)/1000;E.eff.last=now}const f=$('fill');if(f)f.style.width=Math.min(100,100*E.eff.held/E.eff.need)+'%';if(E.eff.held>=E.eff.need)toAim2()}
-    if(E.phase==='moving'&&now>=E.moveT)advance();
-    if(E.flashT&&now>E.flashT){E.flashT=0;renderPrompt()}}
+    if((E.phase==='moving'||E.phase==='done')&&now>=E.moveT)advance();
+    if(E.flashT&&now>E.flashT){E.flashT=0;renderPrompt()}
+    if(E.bannerT&&now>E.bannerT){E.bannerT=0;$('banner').hidden=true}}
   draw(now);requestAnimationFrame(frame)}
 
 /* ---------- controls ---------- */
 function bindRange(id,fmt){const el=$(id),out=$(id+'Out');el.value=S[id];const sh=()=>out.textContent=fmt(+el.value);sh();el.addEventListener('input',()=>{S[id]=+el.value;sh()})}
-bindRange('windCalm',v=>v.toFixed(1));bindRange('windGusty',v=>v.toFixed(1));bindRange('pChance',v=>v.toFixed(2));bindRange('forced',v=>Math.round(v*100)+'%');bindRange('diff',v=>v.toFixed(1));bindRange('maxTries',v=>String(v));
-['envMode','reveal','shooter','cost'].forEach(k=>{$(k).value=S[k];$(k).addEventListener('change',()=>S[k]=$(k).value)});
-['sched','probe','labels'].forEach(k=>{$(k).checked=S[k];$(k).addEventListener('change',()=>{S[k]=$(k).checked;renderHud()})});
+bindRange('windCalm',v=>v.toFixed(1));bindRange('windGusty',v=>v.toFixed(1));bindRange('pChance',v=>v.toFixed(2));bindRange('forced',v=>Math.round(v*100)+'%');bindRange('diff',v=>v.toFixed(1));bindRange('maxTries',v=>String(v));bindRange('win',v=>'₹'+v);bindRange('cost1',v=>'₹'+v);
+$('envMode').value=S.envMode;$('envMode').addEventListener('change',()=>S.envMode=$('envMode').value);
+['sched','labels','showPull','showTraj','fx'].forEach(k=>{$(k).checked=S[k];$(k).addEventListener('change',()=>{S[k]=$(k).checked;renderHud();renderPrompt()})});
 $('toggle').onclick=()=>{const p=$('panel'),open=p.hidden;p.hidden=!open;$('toggle').setAttribute('aria-expanded',String(open))};
 $('clearLog').onclick=()=>{E.log=[];renderLog();$('csv').hidden=true};
 $('restart').onclick=()=>{$('panel').hidden=true;$('toggle').setAttribute('aria-expanded','false');showCard('start')};
@@ -331,7 +354,7 @@ $('copyCsv').onclick=()=>{const t=csv(),ta=$('csv');ta.value=t;const fall=()=>{t
   try{navigator.clipboard.writeText(t).then(()=>{$('copyCsv').textContent='Copied';setTimeout(()=>$('copyCsv').textContent='Copy CSV',1500)},fall)}catch(e){fall()}};
 function setGame(k,push){S.game=k;document.querySelectorAll('[data-game]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.game===k)));
   if(push){try{history.replaceState(null,'','#'+k)}catch(e){location.hash=k}}
-  if(E.mode==='free')advance();else showCard('start')}
+  E.lastEnv=null;if(E.mode==='free')advance();else showCard('start')}
 document.querySelectorAll('[data-game]').forEach(b=>b.addEventListener('click',()=>setGame(b.dataset.game,true)));
 addEventListener('hashchange',()=>{const k=location.hash.slice(1);if(games[k]&&k!==S.game)setGame(k,false)});
 setGame(games[location.hash.slice(1)]?location.hash.slice(1):'fling',false);
