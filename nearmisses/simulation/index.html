@@ -93,7 +93,7 @@ td:first-child,th:first-child{text-align:left}
   </div>
   <div class="panel" id="panel" hidden>
     <h2>Conditions</h2>
-    <div class="sub" style="font-size:12px;margin-top:-6px">Apply from the next sling. Environment and scheduling apply to free play only.</div>
+    <div class="sub" style="font-size:12px;margin-top:-6px">Apply from the next round. Environment, prices, marker and scheduling apply to free play only.</div>
     <label class="ck"><input type="checkbox" id="showPull"> Show the last pull (dashed ring)</label>
     <label class="ck"><input type="checkbox" id="showTraj"> Show the flight path of shots</label>
     <label class="ck"><input type="checkbox" id="fx"> Screen shake and effects</label>
@@ -102,7 +102,10 @@ td:first-child,th:first-child{text-align:left}
     <div class="f"><label for="windCalm">Calm wind SD <output id="windCalmOut"></output></label><input type="range" id="windCalm" min="0" max="1" step="0.1"></div>
     <div class="f"><label for="windGusty">Gusty wind SD <output id="windGustyOut"></output></label><input type="range" id="windGusty" min="0.4" max="2" step="0.1"></div>
     <div class="f"><label for="win">A hit pays <output id="winOut"></output></label><input type="range" id="win" min="10" max="200" step="10"></div>
-    <div class="f"><label for="cost1">First retry costs (2nd costs double, 3rd triple…) <output id="cost1Out"></output></label><input type="range" id="cost1" min="0" max="60" step="5"></div>
+    <label class="ck"><input type="checkbox" id="randPrice"> Random first-retry price (₹20, ₹40 or ₹60)</label>
+    <div class="f"><label for="reveal">Wind-free marker</label>
+      <select id="reveal"><option value="off">Never</option><option value="half">Random half</option><option value="always">Always</option></select></div>
+    <div class="f"><label for="cost1">Fixed first-retry price (each further try +₹20) <output id="cost1Out"></output></label><input type="range" id="cost1" min="0" max="60" step="5"></div>
     <div class="f"><label for="maxTries">Retries allowed per sling <output id="maxTriesOut"></output></label><input type="range" id="maxTries" min="1" max="8" step="1"></div>
     <div class="f"><label for="diff">Difficulty (unknown curve, sensitivity) <output id="diffOut"></output></label><input type="range" id="diff" min="0" max="1" step="0.1"></div>
     <div class="f"><label for="pChance">Chance hit rate <output id="pChanceOut"></output></label><input type="range" id="pChance" min="0.1" max="0.9" step="0.01"></div>
@@ -124,17 +127,18 @@ td:first-child,th:first-child{text-align:left}
 (()=>{
 const $=id=>document.getElementById(id);
 const cv=$('cv'),ctx=cv.getContext('2d');
-const VMIN=-20,VMAX=13,START=-18,BANK0=200;
+const VMIN=-20,VMAX=13,START=-18,BANK0=1000;
 let W=0,H=0,U=1,X0=0,TY=0;
 const X=u=>X0+u*U;
 const rand=Math.random,pick=a=>a[Math.floor(rand()*a.length)],sgn=()=>rand()<.5?-1:1,clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rand()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 function randn(){let u=0,v=0;while(!u)u=rand();while(!v)v=rand();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
-const GRID_MISS=[0.25,1,2,3.5,5.5],GRID_HIT=[0.3,0.8];
+const GRID_MISS=[0.25,1,2,3.5,5.5,8],GRID_HIT=[0.3,0.8];
 function schedOffset(){return rand()<10/90?pick(GRID_HIT)*sgn():(1+pick(GRID_MISS))*sgn()}
 function describe(o){return Math.abs(o)<=1?'on target':(Math.abs(o)-1).toFixed(1)+(o<0?' short':' long')}
-const S={game:'fling',envMode:'mix',windCalm:0.3,windGusty:1.0,win:100,cost1:20,diff:0.6,maxTries:4,pChance:0.3,forced:0.25,sched:true,labels:false,showPull:true,showTraj:true,fx:true};
-const SESSION={rounds:3,perRun:8};
+const S={game:'fling',envMode:'mix',windCalm:0.3,windGusty:1.0,win:100,cost1:40,randPrice:true,reveal:'off',diff:0.6,maxTries:3,pChance:0.45,forced:0.2,sched:true,labels:false,showPull:true,showTraj:true,fx:true};
+const SESSION={wind2:0.8,prices:[20,40,60],step:20};
+function invNorm(p){const x=2*p-1,a=.147,ln=Math.log(1-x*x),t=2/(Math.PI*a)+ln/2;return Math.sign(x)*Math.sqrt(Math.sqrt(t*t-ln/a)-t)*Math.SQRT2}
 const ENV={
  calm:{fling:['Calm air','Light wind. Where a shot lands mostly reflects your pull.'],stop:['Calm track','Light wind. Where it stops mostly reflects your braking.']},
  gusty:{fling:['Gusty air','Strong wind. It can carry a shot well off course, either way.'],stop:['Gusty track','Strong wind. It can push the slide well off, either way.']},
@@ -194,7 +198,7 @@ const TUT={
 const game=()=>games[S.game];
 
 /* ---------- engine ---------- */
-const E={mode:'start',phase:'card',n:0,bank:BANK0,streak:0,log:[],lvl:null,shot:null,prev:null,moveT:0,flashT:0,flashMsg:'',decT:0,queue:[],total:0,streaks:[],shake:0,shakeAmp:0,parts:[],pulse:0,lastEnv:null,bannerT:0};
+const E={mode:'start',phase:'card',n:0,bank:BANK0,streak:0,log:[],lvl:null,shot:null,prev:null,moveT:0,flashT:0,flashMsg:'',decT:0,queue:[],total:0,exp:0,ratings:[],streaks:[],shake:0,shakeAmp:0,parts:[],pulse:0,lastEnv:null,bannerT:0};
 const aiming=()=>E.phase==='aim1'||E.phase==='aim2';
 const last=()=>E.lvl.shots[E.lvl.shots.length-1];
 function flash(m){E.flashMsg=m;E.flashT=performance.now()+3200;renderPrompt()}
@@ -202,22 +206,25 @@ function money(d){E.bank+=d;const a=$('amt');a.firstChild.nodeValue='₹'+E.bank
   const f=document.createElement('span');f.className='float '+(d>0?'g':'l');f.textContent=(d>0?'+₹':'−₹')+Math.abs(d);a.appendChild(f);setTimeout(()=>f.remove(),1100)}
 function setBank(v){E.bank=v;$('amt').firstChild.nodeValue='₹'+v}
 
-function buildSession(){const q=[{env:'calm',tut:1},{card:'go'}];
-  for(let r=0;r<SESSION.rounds;r++)for(const env of shuffle(['calm','gusty','chance'])){
-    const n=SESSION.perRun,offs=shuffle(GRID_MISS.concat([pick(GRID_MISS),pick(GRID_MISS)])).slice(0,n-1).map((d,i)=>(1+d)*(i%2?1:-1)*sgn()).concat([pick(GRID_HIT)*sgn()]);
-    const fo=shuffle(Array.from({length:n},(_,i)=>i<2));shuffle(offs.map((off,i)=>({env,off,forced:fo[i]}))).forEach(x=>q.push(x))}
-  E.total=SESSION.rounds*3*SESSION.perRun;q.push({card:'end'});return q}
-function freeSpec(){return {env:S.envMode==='mix'?pick(['calm','gusty','chance']):S.envMode,forced:rand()<S.forced}}
+function block(env,exp,reveal){const offs=GRID_MISS.flatMap(d=>[-(1+d),1+d]).concat([pick(GRID_HIT),-pick(GRID_HIT)]),n=offs.length;
+  const fo=shuffle(offs.map((_,i)=>i<Math.round(n*.2))),rv=shuffle(offs.map((_,i)=>reveal&&i<n/2));
+  return shuffle(offs.map((off,i)=>({env,exp,off,forced:fo[i],reveal:rv[i]})))}
+function buildSession(exp){const q=[{env:'calm',tut:1},{card:'go'}];
+  if(exp===1){for(let r=0;r<3;r++)for(const env of shuffle(['calm','gusty','chance'])){block(env,1,false).forEach(x=>q.push(x));q.push({card:'rate',env})}}
+  else{const all=[];for(let i=0;i<8;i++)all.push(...block('gusty',2,true));
+    const z=shuffle(all.map((_,i)=>(i+.5)/all.length));all.forEach((x,i)=>{x.eps=SESSION.wind2*invNorm(z[i]);q.push(x)})}
+  E.total=q.filter(x=>x.off!=null).length;q.push({card:'end'});return q}
+function freeSpec(){return {env:S.envMode==='mix'?pick(['calm','gusty','chance']):S.envMode,forced:rand()<S.forced,reveal:S.reveal==='always'||(S.reveal==='half'&&rand()<.5)}}
 function advance(){E.shot=null;
-  if(E.mode==='session'){const x=E.queue.shift();if(!x||x.card){showCard(x?x.card:'end');return}startLevel(x)}
+  if(E.mode==='session'){const x=E.queue.shift();if(!x||x.card){showCard(x?x.card:'end',x);return}startLevel(x)}
   else startLevel(freeSpec())}
 function startLevel(sp){E.n++;const g=game(),tut=sp.tut||0;
-  E.lvl={n:E.n,game:S.game,mode:E.mode,env:sp.env,tut,forced:!!sp.forced&&!tut,off:sp.off,sched:tut?false:(E.mode==='session'?true:S.sched),
-    wind:tut?0:sp.env==='gusty'?S.windGusty:S.windCalm,pChance:S.pChance,win:tut?0:S.win,cost1:tut?0:S.cost1,diff:S.diff,maxTries:tut?4:S.maxTries,shots:[],spent:0,won:false,bankStart:E.bank};
+  E.lvl={n:E.n,game:S.game,mode:E.mode,exp:sp.exp||0,env:sp.env,tut,reveal:!!sp.reveal&&!tut&&sp.env!=='chance',epsS:sp.eps,forced:!!sp.forced&&!tut,off:sp.off,sched:tut?false:(E.mode==='session'?true:S.sched),
+    wind:tut?0:sp.exp===2?SESSION.wind2:sp.env==='gusty'?S.windGusty:S.windCalm,pChance:S.pChance,win:tut?0:S.win,cost1:tut?0:(E.mode==='session'||S.randPrice?pick(SESSION.prices):S.cost1),diff:S.diff,maxTries:tut?4:S.maxTries,shots:[],spent:0,won:false,bankStart:E.bank};
   E.phase='aim1';E.shot=null;E.prev=null;$('card').hidden=true;$('bank').hidden=!!tut;makeStreaks();g.reset();
   if(!tut&&sp.env!==E.lastEnv){const t=ENV[sp.env][S.game];$('banner').innerHTML=`<b>${t[0]}</b><span>${t[1]}</span>`;$('banner').hidden=false;E.bannerT=performance.now()+4200;E.lastEnv=sp.env}
   renderAll()}
-function fire(a,meta){const L=E.lvl,g=game(),eps=randn()*L.wind,ch=L.env==='chance';let nom;
+function fire(a,meta){const L=E.lvl,g=game(),eps=L.epsS!=null&&!L.shots.length?L.epsS:randn()*L.wind,ch=L.env==='chance';let nom;
   if(!L.shots.length){const want=(L.off!=null?L.off:schedOffset())-eps;let th=L.sched&&!ch?g.schedule(a,want):null;
     if(ch&&L.sched){nom=want;th=1}
     else{if(th==null){th=g.randTheta(L);if(L.sched)L.note='not schedulable'}nom=g.landing(a,th);if(L.sched&&Math.abs(nom-want)>.01&&!L.note)L.note='clamped'}
@@ -227,10 +234,9 @@ function fire(a,meta){const L=E.lvl,g=game(),eps=randn()*L.wind,ch=L.env==='chan
   const sh={a,nom,eps,obs:nom+eps,t0:performance.now(),s:0};
   if(S.game==='fling'){if(ch||a.dud||!(a.al>0))sh.a={...a,al:Math.PI/4};sh.apex=g.apex(sh)}
   sh.dur=g.dur(sh);L.shots.push(sh);E.prev=meta;E.shot=sh;E.phase=L.shots.length===1?'fly1':'fly2';renderAll()}
-function nextCost(){const L=E.lvl,r=L.shots.length;if((L.forced&&r===1)||!L.cost1)return 0;return L.cost1*r}
+function nextCost(){const L=E.lvl,r=L.shots.length;if((L.forced&&r===1)||!L.cost1)return 0;return L.cost1+SESSION.step*(r-1)}
 function landed(){const L=E.lvl,n=L.shots.length,x=last(),hit=Math.abs(x.obs)<=1;E.shot=null;
   if(hit){L.won=true;if(L.win)money(L.win);E.streak++;boom(x.obs)}
-  else{const c=clamp(1-(Math.abs(x.obs)-1)/2.5,0,1);if(c>0)shake(2+7*c,260)}
   if(n===1&&!L.tut){E.phase='decide';E.decT=performance.now()}
   else if(hit||n-1>=L.maxTries){if(!hit)E.streak=0;E.phase='done';record();E.moveT=performance.now()+(L.tut?2200:1500)}
   else E.phase='decide';
@@ -246,23 +252,29 @@ function boom(u){if(!S.fx)return;shake(11,420);E.pulse=performance.now();if(redu
   for(let i=0;i<34;i++){const an=-Math.PI*rand(),v=2+rand()*6;E.parts.push({x:X(u),y:TY,vx:Math.cos(an)*v,vy:Math.sin(an)*v,t:performance.now(),sq:rand()<.5})}}
 
 /* ---------- cards ---------- */
-function showCard(kind){E.phase='card';$('dec').innerHTML='';$('prompt').textContent='';$('banner').hidden=true;$('bank').hidden=true;const c=$('cardIn'),g=S.game,name=games[g].name;let h='';
+function showCard(kind,x){E.phase='card';$('dec').innerHTML='';$('prompt').textContent='';$('banner').hidden=true;$('bank').hidden=true;const c=$('cardIn'),g=S.game,name=games[g].name,thing=g==='fling'?'sling':'slider';let h='';
   if(kind==='start'){E.mode='start';
     h=`<h1>${name}</h1><p>${g==='fling'?'Fling a dot onto the target.':'Brake a sliding dot so it stops on the target.'} You start with <span class="money">₹${BANK0}</span>. Every hit pays <span class="money">₹${S.win}</span>. Missing is free, but trying again costs money.</p>
-    <div class="btns"><button class="btn solid" id="cGo" type="button">Play</button><button class="btn" id="cFree" type="button">Free play (skip the warm-up)</button></div>`}
-  else if(kind==='tutorial')h=`<h1>First, a quick warm-up</h1><p>Three practice ${g==='fling'?'slings':'sliders'} with no wind and no money at stake. Keep trying until you land each one.</p><div class="btns"><button class="btn solid" id="cNext" type="button">Begin</button></div>`;
-  else if(kind==='go'){setBank(BANK0);E.streak=0;E.lastEnv=null;const c1=S.cost1;
-    h=`<h1>Now for real</h1><p>You have <span class="money">₹${BANK0}</span>.</p><p>Your first shot with each new ${g==='fling'?'sling':'slider'} is free. A hit pays <span class="money">₹${S.win}</span>.</p>
-    <p>If you miss, you can pay to try again with the same one, or move on to a new one. Each extra try costs more: ₹${c1}, then ₹${c1*2}, ₹${c1*3}, ₹${c1*4}.</p>
-    <p class="sub">The air changes as you go: calm, gusty, or a loose ${g==='fling'?'sling':'brake'} that is pure chance. You will be told each time.</p><div class="btns"><button class="btn solid" id="cNext" type="button">Start</button></div>`}
-  else{const rows=['calm','gusty','chance'].map(e=>{const r=E.log.filter(l=>l.mode==='session'&&l.env===e&&l.game===g),f=r.filter(l=>!l.forced&&!l.hit1),near=f.filter(l=>Math.abs(l.obs1)<=2.5),far=f.filter(l=>Math.abs(l.obs1)>2.5),
-      pc=a=>a.length?Math.round(100*a.filter(l=>l.choice==='retry').length/a.length)+'%':'–';return `<tr><td>${ENV[e][g][0]}</td><td>${r.length}</td><td>${pc(near)}</td><td>${pc(far)}</td><td>${r.length?(r.reduce((s,l)=>s+l.tries,0)/r.length).toFixed(1):'–'}</td></tr>`}).join('');
-    h=`<h1>Finished</h1><p>You end with <span class="money">₹${E.bank}</span> (started with ₹${BANK0}).</p><table><thead><tr><th>environment</th><th>slings</th><th>retried after near miss</th><th>after far miss</th><th>shots each</th></tr></thead><tbody>${rows}</tbody></table>
-    <p class="sub">Near means within 1.5 of the target edge. The full log is under Conditions.</p><div class="btns"><button class="btn solid" id="cFree" type="button">Free play</button><button class="btn" id="cHome" type="button">Start screen</button></div>`;E.mode='free'}
+    <div class="btns"><button class="btn solid" id="cGo1" type="button">Experiment 1: calm, gusty, chance</button>${g==='fling'?'<button class="btn solid" id="cGo2" type="button">Experiment 2: wind revealed</button>':''}<button class="btn" id="cFree" type="button">Free play</button></div>`}
+  else if(kind==='go'){setBank(BANK0);E.streak=0;E.lastEnv=null;
+    h=`<h1>Now for real</h1><p>You have <span class="money">₹${BANK0}</span>. Your first shot with each new ${thing} is free, and a hit pays <span class="money">₹${S.win}</span>.</p>
+    <p>After your first shot you can pay to shoot again with the same ${thing}, or move on to a new one. The price changes from round to round and is shown on the button. Each further try costs ₹${SESSION.step} more.</p>
+    <p class="sub">${E.exp===2?'The air is gusty throughout. On some rounds a dashed path and a ring show where your shot would have landed without wind.':'The air changes as you go: calm, gusty, or a loose '+(g==='fling'?'sling':'brake')+' that is pure chance. You will be told each time.'}</p><div class="btns"><button class="btn solid" id="cNext" type="button">Start</button></div>`}
+  else if(kind==='rate'){const t=ENV[x.env][g];
+    h=`<h1>${t[0]}</h1><p>In the rounds you just played, how much did where it landed depend on what you did?</p><input type="range" id="rate" min="0" max="100" step="1" value="50" aria-label="Percent" style="width:min(360px,80vw)"><p class="sub" id="rateOut">50%: half me, half luck</p><div class="btns"><button class="btn solid" id="cRate" type="button">Continue</button></div>`}
+  else{let tbl;const ses=E.log.filter(l=>l.mode==='session'&&l.exp===E.exp&&l.game===g),pc=a=>a.length?Math.round(100*a.filter(l=>l.choice==='retry').length/a.length)+'%':'–',free=l=>!l.forced&&!l.hit1&&!l.unaffordable,nr=v=>Math.abs(v)<=2.5;
+    if(E.exp===2){const f=ses.filter(free),row=(lab,r)=>`<tr><td>${lab}</td><td>${r.length}</td><td>${pc(r.filter(l=>nr(l.obs1)))}</td><td>${pc(r.filter(l=>!nr(l.obs1)))}</td><td>${pc(r.filter(l=>nr(l.nom1)))}</td><td>${pc(r.filter(l=>!nr(l.nom1)))}</td></tr>`;
+      tbl=`<table><thead><tr><th>rounds</th><th>n</th><th>landed near</th><th>landed far</th><th>near without wind</th><th>far without wind</th></tr></thead><tbody>${row('wind shown',f.filter(l=>l.reveal))}${row('wind hidden',f.filter(l=>!l.reveal))}</tbody></table>`}
+    else tbl=`<table><thead><tr><th>environment</th><th>rounds</th><th>retried after near miss</th><th>after far miss</th><th>shots each</th></tr></thead><tbody>${['calm','gusty','chance'].map(e=>{const r=ses.filter(l=>l.env===e),f=r.filter(free);return `<tr><td>${ENV[e][g][0]}</td><td>${r.length}</td><td>${pc(f.filter(l=>nr(l.obs1)))}</td><td>${pc(f.filter(l=>!nr(l.obs1)))}</td><td>${r.length?(r.reduce((s,l)=>s+l.tries,0)/r.length).toFixed(1):'–'}</td></tr>`}).join('')}</tbody></table>`;
+    h=`<h1>Finished</h1><p>You end with <span class="money">₹${E.bank}</span> (started with ₹${BANK0}).</p><p class="sub">Share of rounds where you paid to shoot again. Near means within 1.5 of the target edge.</p>${tbl}
+    <p class="sub">The full log is under Conditions.</p><div class="btns"><button class="btn solid" id="cFree" type="button">Free play</button><button class="btn" id="cHome" type="button">Start screen</button></div>`;E.mode='free'}
   c.innerHTML=h;$('card').hidden=false;renderHud();
-  if($('cGo'))$('cGo').onclick=()=>{E.mode='session';E.n=0;E.queue=buildSession();advance()};
-  if($('cFree'))$('cFree').onclick=()=>{E.mode='free';if(kind==='start'){setBank(BANK0);E.streak=0;E.lastEnv=null}advance()};
+  const go=e=>()=>{E.mode='session';E.exp=e;E.n=0;E.queue=buildSession(e);advance()};
+  if($('cGo1'))$('cGo1').onclick=go(1);if($('cGo2'))$('cGo2').onclick=go(2);
+  if($('cFree'))$('cFree').onclick=()=>{E.mode='free';E.exp=0;if(kind==='start'){setBank(BANK0);E.streak=0;E.lastEnv=null}advance()};
   if($('cNext'))$('cNext').onclick=advance;
+  if($('rate')){const lab=v=>v+'%: '+(v<20?'almost all luck':v<40?'mostly luck':v<=60?'half me, half luck':v<=80?'mostly me':'almost all me');$('rate').oninput=()=>$('rateOut').textContent=lab(+$('rate').value);
+    $('cRate').onclick=()=>{E.ratings.push({game:g,exp:E.exp,env:x.env,control:+$('rate').value});advance()}}
   if($('cHome'))$('cHome').onclick=()=>showCard('start')}
 
 /* ---------- drawing ---------- */
@@ -271,8 +283,8 @@ function dash(x,y1,y2){ctx.save();ctx.setLineDash([3,3]);ctx.strokeStyle=C.fg;ct
 function objPx(x,y,sq,alpha,col){x=clamp(x,8,W-8);ctx.globalAlpha=alpha==null?1:alpha;ctx.fillStyle=col||C.fg;
   if(sq)ctx.fillRect(x-6,y-6,12,12);else{ctx.beginPath();ctx.arc(x,y,6.5,0,7);ctx.fill()}ctx.globalAlpha=1}
 const obj=(u,sq,alpha,col)=>objPx(X(u),TY,sq,alpha,col);
-function arc(sh,alpha){ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle=C.soft;ctx.lineWidth=1;ctx.beginPath();
-  for(let i=0;i<=40;i++){const s=i/40,x=X(START+s*(sh.nom-START)+sh.eps*s*s),y=TY-4*sh.apex*s*(1-s);i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke();ctx.restore()}
+function arc(sh,alpha,free){ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle=free?C.fg:C.soft;if(free)ctx.setLineDash([3,4]);ctx.lineWidth=1;ctx.beginPath();const e=free?0:sh.eps;
+  for(let i=0;i<=40;i++){const s=i/40,x=X(START+s*(sh.nom-START)+e*s*s),y=TY-4*sh.apex*s*(1-s);i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke();ctx.restore()}
 function makeStreaks(){const w=E.lvl.wind,n=w?Math.round(3+w*16):0;E.streaks=Array.from({length:n},()=>({x:rand(),y:rand(),d:sgn(),v:.3+rand()*.7,l:.5+rand()}))}
 function drawWind(now){const w=E.lvl.wind;ctx.strokeStyle=C.faint;ctx.lineWidth=1;const top=Math.max(150,TY-250),hgt=Math.max(40,TY-50-top);
   for(const s of E.streaks){const x=((s.x+s.d*s.v*w*now/9000)%1+1)%1*W,y=top+s.y*hgt,len=(8+w*26)*s.l;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+len*s.d,y);ctx.stroke()}}
@@ -291,7 +303,8 @@ function draw(now){
   const sh=L.shots,flying=!!E.shot,past=flying?sh.slice(0,-1):ph==='aim2'?sh:sh.slice(0,-1);
   past.forEach((x,i)=>obj(x.obs,sq,.12+.18*(i+1)/Math.max(1,past.length)));
   if(S.game==='fling'&&S.showTraj&&sh.length){if(ph==='aim2')arc(last(),.5);else if(!flying)arc(last(),1)}
-  if(sh.length&&!flying&&ph!=='aim2'){const x=last(),hit=Math.abs(x.obs)<=1;obj(x.obs,sq,1,hit?C.gain:null);text(X(x.obs),TY-18,describe(x.obs),hit?C.gain:C.fg,hit?600:400)}
+  if(sh.length&&!flying&&ph!=='aim2'){const x=last(),hit=Math.abs(x.obs)<=1;obj(x.obs,sq,1,hit?C.gain:null);text(X(x.obs),TY-18,describe(x.obs),hit?C.gain:C.fg,hit?600:400);
+    if(L.reveal){if(S.game==='fling')arc(x,1,true);ctx.strokeStyle=C.fg;ctx.lineWidth=1;ctx.beginPath();ctx.arc(X(x.nom),TY,8,0,7);ctx.stroke();text(X(x.nom),TY-36,'without wind',C.soft)}}
   if(aiming())g.drawAim(sq,ph==='aim2'?E.prev:null);
   if(E.shot){const s=E.shot.s;objPx(X(g.path(E.shot,s)),TY-(g.height?g.height(E.shot,s):0),sq)}
   E.parts=E.parts.filter(p=>now-p.t<900);ctx.fillStyle=C.gain;
@@ -303,13 +316,13 @@ function renderHud(){const L=E.lvl,g=game();$('streak').textContent=E.streak>1?`
   if(E.phase==='card'||!L){$('hudName').textContent=g.name;$('hudMeta').textContent='';return}
   $('hudName').textContent=g.name+(L.tut?' · warm-up':'');
   const bits=[L.tut?'no wind':ENV[L.env][S.game][0].toLowerCase()];
-  if(S.labels&&!L.tut){bits.push('wind sd '+L.wind.toFixed(1));if(L.forced)bits.push('free retry');if(!L.sched)bits.push('unscheduled');if(E.mode==='session')bits.push(`${E.total-E.queue.length+1} of ${E.total}`)}
+  if(S.labels&&!L.tut){bits.push('wind sd '+L.wind.toFixed(1));if(L.forced)bits.push('free retry');if(L.reveal)bits.push('wind shown');bits.push('price ₹'+L.cost1);if(!L.sched)bits.push('unscheduled');if(E.mode==='session')bits.push(`${E.total-E.queue.length+1} of ${E.total}`)}
   $('hudMeta').textContent=bits.join(' · ')}
 function renderPrompt(){const now=performance.now(),L=E.lvl;$('prompt').textContent=!L||E.phase==='card'?'':E.flashT>now?E.flashMsg:(E.phase==='aim1'?game().hint(false,L):E.phase==='aim2'?game().hint(true,L):'')}
 function renderDec(){const L=E.lvl,d=$('dec'),ph=E.phase,thing=S.game==='fling'?'sling':'slider';
-  if(ph==='decide'){const x=last(),n=L.shots.length,c=nextCost(),hit=Math.abs(x.obs)<=1,left=L.maxTries-(n-1),poor=c>E.bank;
+  if(ph==='decide'){const x=last(),n=L.shots.length,c=nextCost(),hit=Math.abs(x.obs)<=1,left=L.maxTries-(n-1),poor=c>E.bank;if(poor&&n===1)L.unaffordable=true;
     const lab=L.tut?'Try again':L.forced&&n===1?'Free retry':(hit?'Shoot again':'Try again')+(c?` (−₹${c})`:'');
-    d.innerHTML=`<div class="res${hit?' win':''}">${hit?'On target'+(L.win?' · +₹'+L.win:''):describe(x.obs)}</div><div class="sub">${L.tut?'':poor?'Not enough money for another try.':`A hit pays ₹${L.win}. ${left} ${left===1?'try':'tries'} left with this ${thing}.`}</div><div class="btns"><button class="btn solid" id="bRetry" type="button"${poor?' disabled':''}>${lab}</button>`+
+    d.innerHTML=`<div class="res${hit?' win':''}">${hit?'On target'+(L.win?' · +₹'+L.win:''):describe(x.obs)}</div><div class="sub">${L.tut?'':poor?'Not enough money for another try.':`${L.reveal?'Without wind: '+describe(x.nom)+'. ':''}A hit pays ₹${L.win}. ${left} ${left===1?'try':'tries'} left with this ${thing}.`}</div><div class="btns"><button class="btn solid" id="bRetry" type="button"${poor?' disabled':''}>${lab}</button>`+
       (L.tut||(L.forced&&n===1)?'':`<button class="btn${hit?'':' quit'}" id="bMove" type="button">${hit?'Next '+thing:n===1?'Move on':'Give up'}</button>`)+`</div>`;
     $('bRetry').onclick=retry;if($('bMove'))$('bMove').onclick=moveOn}
   else if(ph==='done'){const x=last(),hit=Math.abs(x.obs)<=1;d.innerHTML=`<div class="res${hit?' win':''}">${hit?'On target'+(L.win?' · +₹'+L.win:''):describe(x.obs)+' · out of tries'}</div>`}
@@ -318,8 +331,8 @@ function renderAll(){renderHud();renderPrompt();renderDec()}
 const f2=v=>v==null?'':v.toFixed(2);
 function renderLog(){$('logTitle').textContent=`Log (${E.log.length})`;
   document.querySelector('#log tbody').innerHTML=E.log.slice(-12).reverse().map(r=>`<tr><td>${r.n}</td><td>${r.env}</td><td>${f2(r.obs1)}</td><td>${r.choice||''}</td><td>${r.rt==null?'':(r.rt/1000).toFixed(1)}</td><td>${r.tries}</td><td>${r.won?'yes':'no'}</td></tr>`).join('')}
-function csv(){const cols=['n','game','mode','env','forced','sched','wind','win','cost1','diff','maxTries','pChance','obs1','nom1','eps1','hit1','choice','rt','tries','spent','won','bankStart','bankEnd','obsAll','note'];
-  return cols.join(',')+'\n'+E.log.map(r=>cols.map(c=>r[c]==null?'':typeof r[c]==='number'?Math.round(r[c]*1000)/1000:r[c]).join(',')).join('\n')}
+function csv(){const cols=['n','game','mode','exp','env','forced','reveal','unaffordable','sched','wind','win','cost1','diff','maxTries','pChance','obs1','nom1','eps1','hit1','choice','rt','tries','spent','won','bankStart','bankEnd','obsAll','note'];
+  return cols.join(',')+'\n'+E.log.map(r=>cols.map(c=>r[c]==null?'':typeof r[c]==='number'?Math.round(r[c]*1000)/1000:r[c]).join(',')).join('\n')+(E.ratings.length?'\n\ngame,exp,env,control_rating\n'+E.ratings.map(r=>[r.game,r.exp,r.env,r.control].join(',')).join('\n'):'')}
 
 /* ---------- input ---------- */
 const pt=e=>({x:e.clientX,y:e.clientY}),live=()=>E.lvl&&E.phase!=='card';
@@ -341,10 +354,10 @@ function frame(now){const g=game(),L=E.lvl;
 /* ---------- controls ---------- */
 function bindRange(id,fmt){const el=$(id),out=$(id+'Out');el.value=S[id];const sh=()=>out.textContent=fmt(+el.value);sh();el.addEventListener('input',()=>{S[id]=+el.value;sh()})}
 bindRange('windCalm',v=>v.toFixed(1));bindRange('windGusty',v=>v.toFixed(1));bindRange('pChance',v=>v.toFixed(2));bindRange('forced',v=>Math.round(v*100)+'%');bindRange('diff',v=>v.toFixed(1));bindRange('maxTries',v=>String(v));bindRange('win',v=>'₹'+v);bindRange('cost1',v=>'₹'+v);
-$('envMode').value=S.envMode;$('envMode').addEventListener('change',()=>S.envMode=$('envMode').value);
-['sched','labels','showPull','showTraj','fx'].forEach(k=>{$(k).checked=S[k];$(k).addEventListener('change',()=>{S[k]=$(k).checked;renderHud();renderPrompt()})});
+['envMode','reveal'].forEach(k=>{$(k).value=S[k];$(k).addEventListener('change',()=>S[k]=$(k).value)});
+['sched','labels','showPull','showTraj','fx','randPrice'].forEach(k=>{$(k).checked=S[k];$(k).addEventListener('change',()=>{S[k]=$(k).checked;renderHud();renderPrompt()})});
 $('toggle').onclick=()=>{const p=$('panel'),open=p.hidden;p.hidden=!open;$('toggle').setAttribute('aria-expanded',String(open))};
-$('clearLog').onclick=()=>{E.log=[];renderLog();$('csv').hidden=true};
+$('clearLog').onclick=()=>{E.log=[];E.ratings=[];renderLog();$('csv').hidden=true};
 $('restart').onclick=()=>{$('panel').hidden=true;$('toggle').setAttribute('aria-expanded','false');showCard('start')};
 $('copyCsv').onclick=()=>{const t=csv(),ta=$('csv');ta.value=t;const fall=()=>{ta.hidden=false;ta.focus();ta.select()};
   try{navigator.clipboard.writeText(t).then(()=>{$('copyCsv').textContent='Copied';setTimeout(()=>$('copyCsv').textContent='Copy CSV',1500)},fall)}catch(e){fall()}};
