@@ -142,7 +142,7 @@ function invNorm(p){const x=2*p-1,a=.147,ln=Math.log(1-x*x),t=2/(Math.PI*a)+ln/2
 const ENV={
  calm:{fling:['Calm air','Light wind. Where a shot lands mostly reflects your pull.'],stop:['Calm track','Light wind. Where it stops mostly reflects your braking.']},
  gusty:{fling:['Gusty air','Strong wind. It can carry a shot well off course, either way.'],stop:['Gusty track','Strong wind. It can push the slide well off, either way.']},
- chance:{fling:['Loose sling','It fires at a random strength, whatever your pull. Marked by a square.'],stop:['Faulty brake','It brakes by itself, wherever it likes. You only release it. Marked by a square.']}};
+ chance:{fling:['Loose sling','It fires in the direction you aim, but at a random strength. Marked by a square.'],stop:['Faulty brake','It brakes by itself, wherever it likes. You only release it. Marked by a square.']}};
 const reduce=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}};
 
 let C={};
@@ -158,14 +158,15 @@ addEventListener('resize',resize);resize();
 const TH=[.45,2.0];
 const games={
  fling:{name:'Fling',maxPull:4,gam:1.5,R:20,
-  hint(s,L){return L.tut?TUT.fling[0][s?1:0]():L.env==='chance'?'Pull and let go. This sling fires at random.':s?(S.showPull?'The dashed ring is your last pull. Adjust and let go.':'Adjust your pull and let go.'):'New sling. Pull the dot back and let go.'},
+  hint(s,L){return L.tut?TUT.fling[0][s?1:0]():L.env==='chance'?'Pull and let go. This sling fires at a random strength.':s?(S.showPull?'The dashed ring is your last pull. Adjust and let go.':'Adjust your pull and let go.'):'New sling. Pull the dot back and let go.'},
   reset(){this.drag=false;this.pv=null;if(E.phase==='aim1'){const L=E.lvl;this.gam=L.tut?1.5:1+rand()*2.2*L.diff;this.R=-START/Math.pow(.7,this.gam)}},
   /* a pull is read as a real launch: direction opposite to the pull, power from its length */
   read(pv){const l=Math.hypot(pv.x,pv.y),p=clamp(l/(this.maxPull*U),0,1),ux=-pv.x/l,uy=pv.y/l;
     if(uy<.04)return {p,s:0,al:0,dud:true};const al=Math.atan2(uy,ux);return {p,s:Math.sin(2*al),al}},
   reach(a){return Math.pow(a.p,this.gam)*this.R*a.s},
   landing(a,th){return START+th*this.reach(a)},
-  schedule(a,want){const r=this.reach(a);if(a.dud||a.s<.25||a.p<.2)return null;return clamp((want-START)/r,TH[0],TH[1])},
+  ok(a){return !a.dud&&a.s>=.25&&a.p>=.2},
+  schedule(a,want){return this.ok(a)?clamp((want-START)/this.reach(a),TH[0],TH[1]):null},
   randTheta(L){return L.tut?1.15:.7+rand()*.8},
   down(p){if(!aiming())return;if(Math.hypot(p.x-X(START),p.y-TY)<48){this.drag=true;this.move(p)}},
   move(p){if(!this.drag)return;let dx=p.x-X(START),dy=p.y-TY;const l=Math.hypot(dx,dy),mx=this.maxPull*U;if(l>mx){dx*=mx/l;dy*=mx/l}this.pv={x:dx,y:dy}},
@@ -181,7 +182,7 @@ const games={
   hint(s,L){return L.tut?TUT.stop[0][s?1:0]():L.env==='chance'?'Press anywhere (or Space) to release it. It brakes by itself.':s?(S.showPull?'The dashed tick is where you braked last time. Press to brake.':'Press to brake.'):'New slider. Press anywhere (or Space) to brake.'},
   reset(){const L=E.lvl,ch=L.env==='chance';this.x=START;this.pressed=false;if(E.phase==='aim1')this.v=L.tut?6:4.5+(6+rand()*6)*L.diff;
     this.selfAt=ch?START+1.5+rand()*4.5:null;this.go=!ch;this.t0=performance.now()+700},
-  landing(a,th){return a+th*this.K},schedule(a,want){const th=(want-a)/this.K;return th<.1?null:clamp(th,.1,2.7)},
+  ok(){return true},landing(a,th){return a+th*this.K},schedule(a,want){const th=(want-a)/this.K;return th<.1?null:clamp(th,.1,2.7)},
   randTheta(L){return L.tut?1.3:.5+rand()*1.2},
   tick(now){if(!aiming()||this.pressed||!this.go)return;this.x=now<this.t0?START:START+this.v*(now-this.t0)/1000;
     if(this.selfAt!=null&&this.x>=this.selfAt){this.x=this.selfAt;this.press()}
@@ -226,13 +227,13 @@ function startLevel(sp){E.n++;const g=game(),tut=sp.tut||0;
   renderAll()}
 function fire(a,meta){const L=E.lvl,g=game(),eps=L.epsS!=null&&!L.shots.length?L.epsS:randn()*L.wind,ch=L.env==='chance';let nom;
   if(!L.shots.length){const want=(L.off!=null?L.off:schedOffset())-eps;let th=L.sched&&!ch?g.schedule(a,want):null;
-    if(ch&&L.sched){nom=want;th=1}
+    if(ch&&L.sched&&g.ok(a)){nom=want;th=1}
     else{if(th==null){th=g.randTheta(L);if(L.sched)L.note='not schedulable'}nom=g.landing(a,th);if(L.sched&&Math.abs(nom-want)>.01&&!L.note)L.note='clamped'}
     Object.assign(L,{theta:th,nom1:nom,eps1:eps,obs1:nom+eps,hit1:Math.abs(nom+eps)<=1});
-  }else if(!ch)nom=g.landing(a,L.theta);
+  }else if(!ch||!g.ok(a))nom=g.landing(a,ch?g.randTheta(L):L.theta);
   else{const obs=rand()<L.pChance?(rand()*1.8-.9):sgn()*(1.25+rand()*5.25);nom=obs-eps}
   const sh={a,nom,eps,obs:nom+eps,t0:performance.now(),s:0};
-  if(S.game==='fling'){if(ch||a.dud||!(a.al>0))sh.a={...a,al:Math.PI/4};sh.apex=g.apex(sh)}
+  if(S.game==='fling'){if(a.dud||!(a.al>0))sh.a={...a,al:Math.PI/4};sh.apex=g.apex(sh)}
   sh.dur=g.dur(sh);L.shots.push(sh);E.prev=meta;E.shot=sh;E.phase=L.shots.length===1?'fly1':'fly2';renderAll()}
 function nextCost(){const L=E.lvl,r=L.shots.length;if((L.forced&&r===1)||!L.cost1)return 0;return L.cost1+SESSION.step*(r-1)}
 function landed(){const L=E.lvl,n=L.shots.length,x=last(),hit=Math.abs(x.obs)<=1;E.shot=null;
