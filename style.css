@@ -1147,7 +1147,7 @@ figure.fig figcaption .dim{ opacity: .72; }
     --text: #222222;
     --link: #1a4f8b;
 }
-body { font-size: 17px; line-height: 1.35; color: var(--text); }
+body { font-size: 16px; line-height: 1.35; color: var(--text); }
 .wrap { width: min(var(--page-width), calc(100% - 40px)); }
 a, a:hover { color: var(--link); text-decoration: underline; text-decoration-color: currentColor; }
 
@@ -1166,7 +1166,7 @@ a, a:hover { color: var(--link); text-decoration: underline; text-decoration-col
 .site-footer .wrap { padding-left: 0; }
 
 @media (max-width: 700px) {
-    body { font-size: 17px; line-height: 1.35; }
+    body { font-size: 16px; line-height: 1.35; }
     .wrap { width: 100%; }
     .site-header { padding-top: 32px; }
     .site-name { font-size: 26px; }
