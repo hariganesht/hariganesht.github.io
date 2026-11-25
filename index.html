@@ -5,46 +5,41 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Hariganesh Tangirala">
 <title>Hariganesh Tangirala</title>
-<style>
-  body {
-    max-width: 640px;
-    margin: 48px auto;
-    padding: 0 20px;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    line-height: 1.35;
-    color: #222;
-    background: #fff;
-  }
-  h1 { font-weight: 500; font-size: 30px; margin: 0 0 20px; }
-  img.photo { width: 200px; float: right; margin: 4px 0 16px 24px; }
-  @media (max-width: 520px) { img.photo { float: none; display: block; margin: 0 0 20px; } }
-  a { color: #1a4f8b; text-decoration: underline; }
-  .links p { margin: 0 0 14px; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Hariganesh Tangirala</h1>
+<header class="site-header">
+  <div class="wrap">
+    <a class="site-name" href="index.html">Hariganesh Tangirala</a>
+    <nav class="site-nav">
+      <a href="index.html" class="active">Home</a>
+      <a href="writing.html">Writing</a>
+      <a href="photos.html">Photos</a>
+    </nav>
+  </div>
+</header>
 
-<img class="photo" src="desktop.jpeg" alt="Hariganesh Tangirala">
+<main class="wrap home-grid">
+  <div class="home-text">
+    <p>I'm interested in using Bayesian models to understand decision-making in intelligent systems.</p>
 
-<p>I'm interested in using Bayesian models to understand decision-making in intelligent systems.</p>
+    <p>I am a visiting student with the <a href="https://cosilab.github.io/">Cooperative Systems and Intelligence Lab</a> at NUS, advised by Prof. Tan Zhi Xuan. I am also advised by Prof. Nandan Sudarsanam at the <a href="https://wsai.iitm.ac.in/">Wadhwani School of Data Science and AI</a>, IIT Madras.</p>
 
-<p>I am a visiting student with the <a href="https://cosilab.github.io/">Cooperative Systems and Intelligence Lab</a> at NUS, advised by Prof. Tan Zhi Xuan. I am also advised by Prof. Nandan Sudarsanam at the <a href="https://wsai.iitm.ac.in/">Wadhwani School of Data Science and AI</a>, IIT Madras.</p>
+    <p>Prior to this, I worked on a UIUC-IIT Madras project improving models for the early detection of dementia in Alzheimer's patients.</p>
 
-<p>Prior to this, I worked on a UIUC-IIT Madras project improving models for the early detection of dementia in Alzheimer's patients.</p>
+    <p>In my free time, I debate competitively, play chess, and take <a href="photos.html">photos</a>. I also <a href="writing.html">write</a> sometimes.</p>
+  </div>
 
-<p>In my free time, I debate competitively, play chess, and take <a href="photos.html">photos</a>. I also <a href="writing.html">write</a> sometimes.</p>
-
-<p>Contact: hariganeshtangirala [at] gmail [dot] com</p>
-
-<div class="links">
-  <p>
-    <a href="https://www.linkedin.com/in/hariganeshtangirala/">LinkedIn</a><br>
-    <a href="https://x.com/bayesianhouse">Twitter</a>
-  </p>
-</div>
+  <aside class="home-side">
+    <img class="headshot" src="desktop.jpeg" alt="Hariganesh Tangirala">
+    <p class="contact">
+      hariganeshtangirala [at] gmail [dot] com<br>
+      <a href="https://www.linkedin.com/in/hariganeshtangirala/">LinkedIn</a><br>
+      <a href="https://x.com/bayesianhouse">Twitter</a>
+    </p>
+  </aside>
+</main>
 
 </body>
 </html>

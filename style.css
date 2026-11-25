@@ -1138,36 +1138,66 @@ figure.fig figcaption .dim{ opacity: .72; }
 #ng .hint{ font-size:.9rem; color:var(--faint); padding:6px 0; }
 
 /* ==========================================================================
-   SIMPLE THEME — matches the homepage (plain Times, narrow column, blue links)
+   SIMPLE THEME — shared by every page
    ========================================================================== */
 :root {
     --serif: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    --page-width: 640px;
-    --text-width: 640px;
+    --page-width: 760px;
+    --text-width: 760px;
     --text: #222222;
-    --link: #1a4f8b;
+    --muted: #666666;
+    --link: #6b4fd8;
 }
-body { font-size: 16px; line-height: 1.35; color: var(--text); }
+body { font-size: 16px; line-height: 1.4; color: var(--text); }
 .wrap { width: min(var(--page-width), calc(100% - 40px)); }
-a, a:hover { color: var(--link); text-decoration: underline; text-decoration-color: currentColor; }
+p { margin: 0 0 0.8em; }
 
-.site-header { padding: 48px 0 0; text-align: left; }
-.site-header .wrap { padding-bottom: 0; }
-.site-name, .site-name:hover { color: var(--text); font-size: 30px; font-weight: 500; text-decoration: none; }
-.site-nav { justify-content: flex-start; gap: 1rem; margin-top: 0.4rem; font-size: 1rem; }
-.site-nav a, .site-nav a.active { color: var(--link); text-decoration: underline; }
-.site-nav a.active { color: var(--text); text-decoration: none; }
+/* Links: purple, underlined, external ones get an arrow-out-of-box icon */
+a, a:hover { color: var(--link); text-decoration: underline; text-decoration-color: currentColor; text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
+a[href^="http"]::after {
+    content: "";
+    display: inline-block;
+    width: 0.7em; height: 0.7em;
+    margin-left: 0.2em;
+    background-color: currentColor;
+    opacity: 0.6;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 4h6v6'/%3E%3Cpath d='M20 4l-9 9'/%3E%3Cpath d='M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5'/%3E%3C/svg%3E") no-repeat center / contain;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 4h6v6'/%3E%3Cpath d='M20 4l-9 9'/%3E%3Cpath d='M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5'/%3E%3C/svg%3E") no-repeat center / contain;
+}
 
-.writing, .writings, .photos-page, article, .post { padding-top: 1.5rem; }
-.post-list li, .writing-list li { padding: 0.7rem 0; border: 0; }
+/* Header: name with section links beside it */
+.site-header { padding: 28px 0 0; text-align: left; }
+.site-header .wrap { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.3rem 1.5rem; padding-bottom: 0.6rem; border-bottom: 1px solid #e5e5e5; }
+.site-name, .site-name:hover { color: var(--text); font-size: 24px; font-weight: 600; text-decoration: none; }
+.site-nav { display: flex; gap: 1.1rem; margin: 0; font-size: 15px; }
+.site-nav a { color: var(--muted); text-decoration: none; }
+.site-nav a:hover { color: var(--text); }
+.site-nav a.active { color: var(--text); text-decoration: underline; text-underline-offset: 0.3em; }
+
+/* Homepage: text left, photo + contact right */
+.home-grid { display: grid; grid-template-columns: 1fr 190px; gap: 2rem; padding: 1.4rem 0 2rem; }
+.home-side .headshot { display: block; width: 100%; height: auto; margin: 0.2rem 0 0.8rem; }
+.home-side .contact { font-size: 14px; line-height: 1.5; color: var(--muted); overflow-wrap: anywhere; }
+
+/* Inner pages: same spacing */
+main.wrap { padding-top: 1.4rem; }
+.writing, .writings, .photos-page, article, .post { padding-top: 1.4rem; padding-bottom: 2.5rem; }
+.writing-intro h1, .writing h1, .writings h1, .photos-page h1 { font-size: 22px; font-weight: 600; margin: 0 0 0.8rem; }
+article h1, .post-title, .post-header h1 { font-size: 24px; font-weight: 600; }
+.post-header { margin-bottom: 1.4rem; }
+.post-list li, .writing-list li { padding: 0.5rem 0; border: 0; }
 .post-list li:first-child, .writing-list li:first-child { border: 0; }
 .post-list .p-desc { margin: 0.1rem 0 0; }
-.site-footer { text-align: left; }
+.photo-grid { column-gap: 1.2rem; row-gap: 1.4rem; }
+.site-footer { text-align: left; padding: 1rem 0 2rem; }
 .site-footer .wrap { padding-left: 0; }
 
 @media (max-width: 700px) {
-    body { font-size: 16px; line-height: 1.35; }
+    body { font-size: 16px; line-height: 1.4; }
     .wrap { width: 100%; }
-    .site-header { padding-top: 32px; }
-    .site-name { font-size: 26px; }
+    .site-header { padding-top: 20px; }
+    .site-name { font-size: 22px; }
+    .home-grid { grid-template-columns: 1fr; gap: 0.5rem; padding-left: 1.15rem; padding-right: 1.15rem; }
+    .home-side { order: -1; display: flex; gap: 1rem; align-items: flex-start; }
+    .home-side .headshot { width: 120px; flex: none; margin: 0; }
 }
