@@ -1167,7 +1167,7 @@ a[href^="http"]::after {
 
 /* Header: name with section links beside it */
 .site-header { padding: 28px 0 0; text-align: left; }
-.site-header .wrap { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.3rem 1.5rem; padding-bottom: 0.6rem; border-bottom: 1px solid #e5e5e5; }
+.site-header .wrap { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.3rem 1.5rem; padding-bottom: 0.6rem; }
 .site-name, .site-name:hover { color: var(--text); font-size: 24px; font-weight: 600; text-decoration: none; }
 .site-nav { display: flex; gap: 1.1rem; margin: 0; font-size: 15px; }
 .site-nav a { color: var(--muted); text-decoration: none; }
@@ -1175,7 +1175,7 @@ a[href^="http"]::after {
 .site-nav a.active { color: var(--text); text-decoration: underline; text-underline-offset: 0.3em; }
 
 /* Homepage: text left, photo + contact right */
-.home-grid { display: grid; grid-template-columns: 1fr 190px; gap: 2rem; padding: 1.4rem 0 2rem; }
+.home-grid { display: grid; grid-template-columns: 1fr 190px; gap: 2rem; padding: 2.2rem 0 2rem; }
 .home-side .headshot { display: block; width: 100%; height: auto; margin: 0.2rem 0 0.8rem; }
 .home-side .contact { font-size: 14px; line-height: 1.5; color: var(--muted); overflow-wrap: anywhere; }
 
