@@ -1142,8 +1142,8 @@ figure.fig figcaption .dim{ opacity: .72; }
    ========================================================================== */
 :root {
     --serif: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    --page-width: 760px;
-    --text-width: 760px;
+    --page-width: 680px;
+    --text-width: 680px;
     --text: #222222;
     --muted: #666666;
     --link: #6b4fd8;
@@ -1175,7 +1175,7 @@ a[href^="http"]::after {
 .site-nav a.active { color: var(--text); text-decoration: underline; text-underline-offset: 0.3em; }
 
 /* Homepage: text left, photo + contact right */
-.home-grid { display: grid; grid-template-columns: 1fr 190px; gap: 2rem; padding: 2.2rem 0 2rem; }
+.home-grid { display: grid; grid-template-columns: 1fr 170px; gap: 1.8rem; padding: 2.2rem 0 2rem; }
 .home-side .headshot { display: block; width: 100%; height: auto; margin: 0.2rem 0 0.8rem; }
 .home-side .contact { font-size: 14px; line-height: 1.5; color: var(--muted); overflow-wrap: anywhere; }
 
